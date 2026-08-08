@@ -53,7 +53,7 @@ export function landingPageHtml(): string {
   </p>
 
   <h2>Connect</h2>
-  <div class="mono">https://sbi-mcp.workers.dev/mcp</div>
+  <div class="mono">https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp</div>
   <p>No authentication required. Add it as a connector in Claude, or any MCP-compatible client.</p>
 
   <h2>The eight tools</h2>

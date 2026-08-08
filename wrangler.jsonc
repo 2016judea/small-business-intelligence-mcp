@@ -8,12 +8,10 @@
     "enabled": true
   },
   // Usage ledger for the (currently dormant) metered policy — free KV tier.
-  // Placeholder id: run `wrangler kv namespace create USAGE_LEDGER` once
-  // authenticated, then replace "id" below with the real namespace id.
   "kv_namespaces": [
     {
       "binding": "USAGE_LEDGER",
-      "id": "REPLACE_WITH_REAL_KV_NAMESPACE_ID"
+      "id": "8d17fe9122bd4e1090f7b82780c644ae"
     }
   ],
   "vars": {

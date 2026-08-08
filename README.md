@@ -10,8 +10,8 @@ search. This server never calls an external API, a database, or any data
 provider on your behalf. Your own AI subscription pays for all the inference;
 our marginal cost per call is effectively zero.
 
-Live endpoint: `https://sbi-mcp.<your-account>.workers.dev/mcp` (no auth
-required — see [Deploy](#deploy) for standing up your own copy).
+Live endpoint: **`https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp`**
+(no auth required — see [Deploy](#deploy) for standing up your own copy).
 
 ## The eight tools
 
