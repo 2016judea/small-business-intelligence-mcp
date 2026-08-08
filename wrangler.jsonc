@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sbi-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  // Usage ledger for the (currently dormant) metered policy — free KV tier.
+  // Placeholder id: run `wrangler kv namespace create USAGE_LEDGER` once
+  // authenticated, then replace "id" below with the real namespace id.
+  "kv_namespaces": [
+    {
+      "binding": "USAGE_LEDGER",
+      "id": "REPLACE_WITH_REAL_KV_NAMESPACE_ID"
+    }
+  ],
+  "vars": {
+    // "allow_all" (shipped default) never denies. "metered" enforces
+    // POLICY_METERED_DAILY_LIMIT per identity/day — implemented, not active.
+    "POLICY_MODE": "allow_all",
+    "POLICY_METERED_DAILY_LIMIT": "50",
+    "POLICY_UPGRADE_URL": "https://brickandmortar.dev"
+  }
+}
