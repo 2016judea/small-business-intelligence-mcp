@@ -48,14 +48,25 @@ ledger works out of the box with no Cloudflare account needed for local dev.
 
 ### Testing with MCP Inspector
 
+With `wrangler dev` running in a separate terminal:
+
 ```bash
-npm run inspector
+# list all 8 tools
+npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp \
+  --transport http --method tools/list --format json
+
+# call one
+npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp \
+  --transport http --method tools/call --tool-name business_teardown \
+  --tool-args-json '{"business_name":"Example Cafe","city_metro":"Saint Paul, MN"}' \
+  --format json
 ```
 
-Point the Inspector at `http://localhost:8787/mcp` (Streamable HTTP
-transport, no auth) with `wrangler dev` running in a separate terminal.
-Confirm all 8 tools list, and that a `tools/call` against each returns a
-result matching its `outputSchema`.
+Or drop `--cli --format json` for the interactive web UI (`npm run inspector`).
+Confirm all 8 tools list with `readOnlyHint: true` and an `outputSchema`, and
+that a `tools/call` against each returns `structuredContent` matching it —
+verified this way during the build (no `isError`, no protocol-level
+rejection, `tools/list` count = 8).
 
 ### Manual smoke test (no Inspector needed)
 
