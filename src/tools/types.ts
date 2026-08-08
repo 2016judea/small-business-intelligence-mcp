@@ -20,6 +20,12 @@ export const QualityRubricSchema = z.object({
   common_failure_modes: z.array(z.string()),
 });
 
+export const NoticeSchema = z.object({
+  status: z.literal("usage_limit_reached"),
+  message: z.string(),
+  upgrade_url: z.string(),
+});
+
 export const FrameworkPayloadSchema = z.object({
   tool: z.string(),
   subject: z
@@ -31,6 +37,9 @@ export const FrameworkPayloadSchema = z.object({
   output_schema: z.record(z.string(), z.unknown()).describe("Exact structure of the finished deliverable."),
   quality_rubric: QualityRubricSchema,
   caveats: z.array(z.string()),
+  notice: NoticeSchema.optional().describe(
+    "Present only when the request was denied by usage policy (see src/middleware/policy.ts) instead of executed — every other field is a harmless empty placeholder in that case.",
+  ),
 });
 
 export type FrameworkPayload = z.infer<typeof FrameworkPayloadSchema>;

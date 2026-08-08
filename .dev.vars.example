@@ -1,0 +1,8 @@
+# Copy to .dev.vars for local `wrangler dev` overrides (gitignored).
+# Nothing here is required — wrangler.jsonc's "vars" already ship working
+# defaults (POLICY_MODE=allow_all). This file exists so a future OAuth or
+# metered-policy activation has a documented place to put local secrets.
+
+# POLICY_MODE=metered
+# POLICY_METERED_DAILY_LIMIT=50
+# POLICY_UPGRADE_URL=https://brickandmortar.dev
