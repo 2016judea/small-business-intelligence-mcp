@@ -48,6 +48,32 @@ vendor info) for admins deciding whether to approve it.
 2. "I'm evaluating [a restaurant] as a buyer — run broker_diligence_prep and review_intelligence on it, then compose_report the results for a buyer audience."
 3. "Scan the nail salon market in [a mid-size city] for whitespace with market_opportunity_scan."
 
+**"Use cases" step copy (main tasks + data access + example prompts — the
+portal's internal-review-facing field, separate from the public listing
+description above):**
+
+> Main tasks: users point their AI at a real small business (or a category +
+> metro, for market-level questions) and get back a rigorous research
+> framework for one of 8 analysis types: full business teardown, competitor
+> mapping, review mining, local-search visibility audit, pricing
+> benchmarking, broker/buyer diligence prep, market-gap scanning, or
+> assembling several of the above into one client-ready report. The AI then
+> executes that framework with its own web search and presents the finished
+> analysis.
+>
+> What it needs access to: nothing. No account access, no permissions, no
+> data from the user's Claude account, files, or other connected services.
+> Every tool call is stateless — it receives only the arguments the user's AI
+> passes in directly (a business name, a city/metro, a category) and returns
+> a static research framework. It never reads, writes, or stores anything
+> about the user or their account.
+>
+> Example prompts:
+> 1. "Run a business_teardown on [a local coffee shop] in [city, state]."
+> 2. "Map the competitive landscape for nail salons in [metro] with competitor_landscape."
+> 3. "I'm evaluating [a restaurant] as a buyer — run broker_diligence_prep and review_intelligence, then compose_report it for a buyer audience."
+> 4. "Scan [category] in [metro] for underserved demand with market_opportunity_scan."
+
 (Bracketed placeholders are intentional — a reviewer should substitute a real
 business/category/city they can independently verify the output against,
 since this server's whole design is that Claude does live research, not a
