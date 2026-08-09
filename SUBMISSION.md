@@ -21,7 +21,7 @@
 
 **Server name:** Small Business Intelligence
 
-**Tagline (≤10 words):** Free analytical frameworks for tearing down any small business.
+**Tagline (55 characters max):** Free frameworks for tearing down any small business.
 
 **Use-case description (2-3 sentences):**
 

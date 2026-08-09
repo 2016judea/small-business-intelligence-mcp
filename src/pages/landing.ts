@@ -6,6 +6,9 @@ export function landingPageHtml(): string {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Small Business Intelligence by Brick &amp; Mortar</title>
 <meta name="description" content="A free remote MCP server that ships analytical methodology for tearing down small businesses — owners, brokers, and analysts point their own AI at it." />
+<link rel="icon" href="https://brickandmortar.dev/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="https://brickandmortar.dev/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="https://brickandmortar.dev/apple-touch-icon.png" />
 <style>
   :root { color-scheme: light dark; }
   body {

@@ -24,6 +24,12 @@ export default {
       return new Response(privacyPageHtml(), { headers: HTML_HEADERS });
     }
 
+    if (url.pathname === "/favicon.ico") {
+      // Some crawlers (directory listings included) check this path
+      // directly instead of parsing <link rel="icon"> out of the HTML.
+      return Response.redirect("https://brickandmortar.dev/favicon-32.png", 302);
+    }
+
     if (url.pathname === "/mcp") {
       // Per the SDK's own guidance: put Origin/Host validation in front of a
       // bare-mounted handler on a fetch-native runtime. localhost + this
