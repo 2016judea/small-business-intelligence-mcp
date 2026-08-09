@@ -79,6 +79,14 @@ business/category/city they can independently verify the output against,
 since this server's whole design is that Claude does live research, not a
 canned demo.)
 
+**"Connection requirements" step copy (what accounts/permissions/setup a
+user needs before connecting):**
+
+> No accounts, permissions, or setup required. This connector uses no
+> authentication — connecting is just adding the server URL. There's nothing
+> to sign up for, no API key to generate, and no prerequisite plan or
+> subscription on the user's end.
+
 ---
 
 ## OpenAI Apps/plugin submission — separate path, verify at submission time
