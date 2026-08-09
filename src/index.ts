@@ -9,6 +9,7 @@ import type { Env } from "./env.js";
 import { createServer } from "./server.js";
 import { landingPageHtml } from "./pages/landing.js";
 import { privacyPageHtml } from "./pages/privacy.js";
+import { docsPageHtml } from "./pages/docs.js";
 
 const HTML_HEADERS = { "content-type": "text/html; charset=utf-8" } as const;
 
@@ -22,6 +23,10 @@ export default {
 
     if (url.pathname === "/privacy") {
       return new Response(privacyPageHtml(), { headers: HTML_HEADERS });
+    }
+
+    if (url.pathname === "/docs") {
+      return new Response(docsPageHtml(), { headers: HTML_HEADERS });
     }
 
     if (url.pathname === "/favicon.ico") {

@@ -75,7 +75,7 @@ export function landingPageHtml(): string {
   <p>"Run a business_teardown on [a real local business] in [city]."</p>
 
   <footer>
-    <a href="/privacy">Privacy</a> · Built by <a href="https://brickandmortar.dev">Brick &amp; Mortar AI</a>
+    <a href="/docs">Documentation</a> · <a href="/privacy">Privacy</a> · Built by <a href="https://brickandmortar.dev">Brick &amp; Mortar AI</a>
   </footer>
 </body>
 </html>`;

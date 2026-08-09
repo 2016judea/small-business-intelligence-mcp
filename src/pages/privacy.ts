@@ -66,7 +66,7 @@ export function privacyPageHtml(): string {
   <h2>Contact</h2>
   <p>Brick &amp; Mortar AI — <a href="https://brickandmortar.dev">brickandmortar.dev</a></p>
 
-  <p><a href="/">&larr; Back</a></p>
+  <p><a href="/">&larr; Back</a> · <a href="/docs">Documentation</a></p>
 </body>
 </html>`;
 }

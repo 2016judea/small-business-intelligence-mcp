@@ -23,6 +23,14 @@
 
 **Tagline (55 characters max):** Free frameworks for tearing down any small business.
 
+**Documentation URL:** https://sbi-mcp.small-business-intelligence-mcp.workers.dev/docs
+— covers connecting, all 8 tools, how the "methodology not data" mechanism
+actually works, and a dedicated "For IT & security reviewers" section (data
+collection, outbound network access, auth, tool safety, transport/hosting,
+vendor info) for admins deciding whether to approve it.
+
+**Privacy Policy URL:** https://sbi-mcp.small-business-intelligence-mcp.workers.dev/privacy
+
 **Use-case description (2-3 sentences):**
 
 > Small Business Intelligence gives Claude a senior analyst's toolkit for evaluating
