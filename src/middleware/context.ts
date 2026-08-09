@@ -4,6 +4,7 @@ import { frameworkResult } from "../tools/types.js";
 import { resolveIdentity } from "./identity.js";
 import { KVUsageLedger } from "./ledger.js";
 import { checkPolicy } from "./policy.js";
+import { KVToolStats } from "./stats.js";
 
 type ToolResult = CallToolResult | InputRequiredResult;
 type ToolHandler<Args> = (args: Args, ctx: ServerContext) => ToolResult | Promise<ToolResult>;
@@ -46,6 +47,9 @@ export function withPolicy<Args>(toolName: string, env: Env, handler: ToolHandle
 
     const result = await handler(args, ctx);
     await ledger.increment(identity);
+    // Aggregate-only, non-identifying — see stats.ts's docstring. Recorded
+    // regardless of POLICY_MODE; this is product signal, not rate limiting.
+    await new KVToolStats(env.USAGE_LEDGER).recordCall(toolName);
     return result;
   };
 }

@@ -132,10 +132,16 @@ export function docsPageHtml(): string {
   <h3>Data collection</h3>
   <p>
     We log a <strong>one-way hashed</strong> representation of the caller's IP address, rotated
-    every UTC day, paired with a per-day call count. That's it — no request bodies, no tool
-    arguments, no business names or search queries, no conversation content. Full detail in the
-    <a href="/privacy">privacy policy</a>. This exists only to support a metered free-usage tier
-    that is <strong>not currently active</strong> — every call is allowed today, unlimited.
+    every UTC day, paired with a per-day call count. That's it for anything identity-shaped — no
+    request bodies, no tool arguments, no business names or search queries, no conversation
+    content. Full detail in the <a href="/privacy">privacy policy</a>. This exists only to support
+    a metered free-usage tier that is <strong>not currently active</strong> — every call is allowed
+    today, unlimited.
+  </p>
+  <p>
+    Separately, we keep an aggregate, non-identifying count of calls per tool per day (e.g.
+    "business_teardown: 340 calls on 2026-08-09"), used only to understand which tools are useful.
+    It has no connection to the hashed-IP counter and carries no identity of any kind.
   </p>
 
   <h3>Outbound network access</h3>

@@ -89,6 +89,19 @@ Ships to the free `*.workers.dev` subdomain by default — no DNS work, no
 paid plan. A custom domain is a one-line `routes` addition in
 `wrangler.jsonc` later.
 
+## Usage stats
+
+Every real tool call increments an aggregate, non-identifying counter
+(`stats:{tool_name}:{date}` in the `USAGE_LEDGER` KV namespace — see
+`src/middleware/stats.ts`, disclosed in `/privacy` and `/docs`). To see
+which tools actually get used:
+
+```bash
+export $(grep -v ^# .env | xargs)
+python3 scripts/usage_stats.py            # last 30 days
+python3 scripts/usage_stats.py --days 7    # last 7 days
+```
+
 ## Monetization (built, not active)
 
 Every tool passes through a single middleware seam

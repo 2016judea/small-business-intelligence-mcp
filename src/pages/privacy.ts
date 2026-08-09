@@ -39,8 +39,17 @@ export function privacyPageHtml(): string {
     A <strong>hashed</strong> representation of your IP address, rotated daily (a new hash every UTC
     day, computed with a one-way hash — we cannot reverse it back to your real IP), paired with a
     per-tool call count. This exists solely so a future paid tier (not active today) can enforce a
-    daily free-usage limit without storing anything that identifies you across days. Nothing else —
-    no request bodies, tool arguments, business names, conversation content, or tracking pixels.
+    daily free-usage limit without storing anything that identifies you across days.
+  </p>
+  <p>
+    Separately, we keep an <strong>aggregate, non-identifying</strong> count of how many times each
+    tool is called per day — e.g. "business_teardown: 340 calls on 2026-08-09." This count has no
+    connection to the hashed-IP counter above, carries no identity of any kind, and is used only to
+    understand which tools are actually useful.
+  </p>
+  <p>
+    Nothing else is logged — no request bodies, tool arguments, business names, conversation
+    content, or tracking pixels.
   </p>
 
   <h2>What we never see</h2>
