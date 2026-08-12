@@ -1,5 +1,22 @@
 # Submission checklist — Anthropic Connectors Directory
 
+## Status
+
+**2026-08-09 — submitted, blocked on an Anthropic-side portal bug.** The
+submission form's own validator rejected its own payload:
+`submission_data.server_snapshot.tools.0.visibility: Extra inputs are not
+permitted`. A raw `tools/list` pull confirms this server never emits a
+`visibility` field on any tool, and Anthropic's published review criteria never
+mention one either — so this is the portal adding a field its backend rejects,
+not something fixable here. Escalated by email to `mcp-review@anthropic.com`
+with the exact error and the `tools/list` proof; awaiting a response.
+Everything below is complete and ready to resubmit unchanged.
+
+**2026-08-12 — the server now has a production consumer.** Brick & Mortar AI at
+`brickandmortar.dev` calls this endpoint as its methodology layer via the
+Messages API `mcp_servers` connector. Relevant to review only as evidence the
+server is live and exercised in the open; no submission answer below changes.
+
 ## Requirements → where satisfied
 
 | Requirement | Where |

@@ -13,6 +13,11 @@ our marginal cost per call is effectively zero.
 Live endpoint: **`https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp`**
 (no auth required — see [Deploy](#deploy) for standing up your own copy).
 
+In production since 2026-08-12: [Brick & Mortar AI](https://brickandmortar.dev)
+calls this server as its methodology layer, over the Anthropic Messages API
+`mcp_servers` connector (beta `mcp-client-2025-11-20`). It connects to the same
+public endpoint above — there is no private build or forked copy.
+
 ## The eight tools
 
 | Tool | What it does |
@@ -118,13 +123,13 @@ ARCHITECTURE.md's "OAuth: stubbed, not mounted" section.
 
 ```
 src/
-├── index.ts          # Worker entry — routes / , /privacy, /mcp
+├── index.ts          # Worker entry — routes / , /docs, /privacy, /mcp
 ├── server.ts          # createServer(): builds McpServer, registers all 8 tools
 ├── env.ts              # Env (Worker bindings/vars) type
 ├── middleware/          # identity resolution, KV usage ledger, policy, withPolicy seam
 ├── oauth/                # OAuth 2.1 discovery handlers — written, not mounted (see above)
 ├── tools/                  # one file per tool, all sharing the FrameworkPayload shape in types.ts
-└── pages/                    # landing (/) and privacy (/privacy) page HTML
+└── pages/                    # landing (/), docs (/docs), privacy (/privacy) page HTML
 ```
 
 ## License

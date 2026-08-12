@@ -9,9 +9,19 @@ itself with its own web search. Marginal cost per call to us is ~zero — no
 outbound API calls from the server, ever.
 
 Working brand: **Small Business Intelligence by Brick & Mortar**. Standalone
-product, not a funnel into the report business — different tech stack
-(TypeScript/Workers vs. the `bricks` repo's Python pipeline), different repo,
-deliberately not nested inside `bricks`.
+product with its own repo and stack (TypeScript/Workers), deliberately not
+nested inside `bricks`.
+
+**It has a production consumer as of 2026-08-12.** Brick & Mortar AI — the
+restaurant-owner chat that is now the whole of `brickandmortar.dev` — uses this
+server as its methodology layer, one of three alongside a precomputed
+review-data substrate and server-side web search, reached over the Anthropic
+Messages API `mcp_servers` connector (beta `mcp-client-2025-11-20`). That
+consumer connects to the same public, unauthenticated endpoint as everyone
+else: nothing was forked, gated, or special-cased for it, which is the payoff
+of the stateless design. The one operational consequence: tool names and
+schemas now have a downstream caller (`website/api/chat.js` in the `bricks`
+repo), so a breaking change here breaks that.
 
 ## SDK / transport decision
 
@@ -61,7 +71,7 @@ small-business-intelligence-mcp/
 ├── package.json / tsconfig.json / wrangler.jsonc
 ├── .dev.vars.example
 ├── src/
-│   ├── index.ts                # Worker fetch handler: routes / , /privacy, /mcp
+│   ├── index.ts                # Worker fetch handler: routes / , /docs, /privacy, /mcp
 │   ├── server.ts                # createServer(): builds McpServer, registers all 8 tools
 │   ├── middleware/
 │   │   ├── context.ts            # withPolicy() wrapper — the single seam every tool passes through
@@ -82,6 +92,7 @@ small-business-intelligence-mcp/
 │   │   └── compose_report.ts
 │   └── pages/
 │       ├── landing.ts             # HTML for /
+│       ├── docs.ts                # HTML for /docs — the submission Documentation URL
 │       └── privacy.ts             # HTML for /privacy
 ```
 
@@ -161,17 +172,23 @@ both key off.
 
 ## Deploy
 
-Default target: the free `*.workers.dev` subdomain — zero DNS work, ships
-today. `wrangler.jsonc` names the worker `sbi-mcp`, so the live endpoint
-will be `https://sbi-mcp.<account-subdomain>.workers.dev/mcp`. A custom
-domain (e.g. `mcp.brickandmortar.dev`) is a one-line `routes` addition
-later, but brickandmortar.dev's DNS currently lives on Vercel, so pointing a
-subdomain at this Worker needs a Cloudflare-side custom hostname or a DNS
-change on the Vercel side first — deliberately deferred out of this build so
-launch isn't blocked on it.
+Shipped 2026-08-08 to the free `*.workers.dev` subdomain — zero DNS work.
+`wrangler.jsonc` names the worker `sbi-mcp`, so the live endpoint is
+`https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp`.
 
-**Deploy needs Cloudflare auth that doesn't exist on this machine yet** (`wrangler
-whoami` → not authenticated, no `CLOUDFLARE_API_TOKEN` in env). Everything
-through `wrangler dev` (local testing, MCP Inspector) doesn't need it. The
-actual `wrangler deploy` step is the one place this build will stop and ask
-Aidan to either run `wrangler login` or hand me a `CLOUDFLARE_API_TOKEN`.
+Cloudflare credentials (`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`) are in
+the repo's gitignored `.env` — `export $(grep -v ^# .env | xargs)` before any
+wrangler command. `wrangler dev` (local testing, MCP Inspector) needs neither.
+
+**Custom domain — considered and declined, 2026-08-09.**
+`mcp.brickandmortar.dev` would satisfy the Connectors Directory's soft "server
+domain should match your service" line, but it is not the one-line `routes`
+addition it looks like. brickandmortar.dev's DNS lives fully on Vercel's
+nameservers, including live Zoho email (MX + SPF), so a full nameserver
+migration to Cloudflare risks mail; Cloudflare's subdomain-only NS delegation —
+the clean middle path — is Enterprise-plan only; and Cloudflare for SaaS custom
+hostnames would need a separate, already-Cloudflare-native domain as
+scaffolding, which we don't have. Ownership is already established by the
+cross-linked `/`, `/docs`, and `/privacy` pages naming Brick & Mortar, plus
+brickandmortar.dev/mcp/. Revisit only if a reviewer flags domain mismatch as an
+actual rejection reason — not preemptively.
