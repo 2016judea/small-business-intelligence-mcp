@@ -4,6 +4,7 @@ import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
 import { BLS_CYCLE_METHOD, BLS_DEMAND_CAVEATS, BLS_METRO_ACCESS } from "./federal_sources.js";
+import { CENSUS_ACCESS, CENSUS_TRAPS, STATE_LOCAL_ACCESS } from "./sources.js";
 
 const InputSchema = z.object({
   category: z.string().describe("The business category/vertical to scan for whitespace, e.g. 'coffee shop', 'massage spa'."),
@@ -34,7 +35,10 @@ const PAYLOAD: FrameworkPayload = {
       instruction:
         "Enumerate every existing business in-category (plus the close substitutes flagged in step 1) within the trade area via multiple Google Maps/Places searches run from different points within the metro — not one search from the geographic center.",
       guidance:
-        "Google's local-pack results shift by query origin. A single central search systematically under-counts businesses in outlying neighborhoods, which will bias the whole scan toward finding false whitespace at the edges. Search from at least 3-4 distinct points spread across the trade area.",
+        "Google's local-pack results shift by query origin. A single central search systematically under-counts businesses in outlying neighborhoods, which will bias the whole scan toward finding false whitespace at the edges. Search from at least 3-4 distinct points spread across the trade area. " +
+        "THEN CORROBORATE THE COUNT AGAINST AN ADMINISTRATIVE ONE, because a map-search tally measures that product's ranking and radius, not the market. " +
+        CENSUS_ACCESS +
+        " Reconcile the two explicitly: if County Business Patterns reports materially more establishments than you enumerated, the gap is your search coverage, not whitespace — and that is the single most common way a scan invents an opportunity that is not there. A licence roster (see below) is often an even more complete list than either.",
     },
     {
       step: 4,
@@ -120,6 +124,14 @@ const PAYLOAD: FrameworkPayload = {
         "For any candidate requiring real capital, state what this metro's last two downturns actually did to it. " + BLS_CYCLE_METHOD,
       guidance:
         "This is the difference between a generic recession caveat and a local one. Two metros can look identical today and have completely different recovery records, and the recovery record is the thing an operator is underwriting when they sign a five-year lease.",
+    },
+    {
+      step: 17,
+      instruction:
+        "Finally, check whether anyone is already acting on this opportunity, using records that lead the market rather than reflect it: new building permits in the trade area, new business registrations in the category, and the licence roster for the category if one exists. " +
+        STATE_LOCAL_ACCESS,
+      guidance:
+        "Everything before this step measures the market as it is. Permits and registrations are money already committed to the market as it will be in twelve months, and they are the only cheap way to notice that three other people found the same gap first. A candidate that survives every prior step and has two competitors already permitted nearby is not whitespace.",
     },
   ],
   output_schema: {
@@ -228,6 +240,7 @@ const PAYLOAD: FrameworkPayload = {
     "A zone can look like genuine whitespace today and already have a signed, not-yet-announced lease behind it by the time anyone acts on this scan. The near-term supply risk check (step 12) only surfaces what's publicly visible — announced openings, visible permits, social posts — not private deals in progress.",
     "This tool describes market conditions, not execution risk. A genuine, well-validated gap can still fail in the hands of an operator who lacks the specific capital, skill, or differentiation the category actually needs — a market gap is necessary but never sufficient for a good outcome, and this framework should never be read as a guarantee.",
     ...BLS_DEMAND_CAVEATS,
+    ...CENSUS_TRAPS,
   ],
 };
 

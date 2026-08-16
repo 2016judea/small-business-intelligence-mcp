@@ -3,6 +3,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
+import { CENSUS_ACCESS, CENSUS_TRAPS } from "./sources.js";
 
 const InputSchema = z.object({
   category: z.string().describe("The business category/vertical, e.g. 'nail salon', 'brewery taproom'."),
@@ -33,6 +34,10 @@ const PAYLOAD: FrameworkPayload = {
       step: 3,
       instruction:
         "Pull the raw candidate pool: run the category + city/metro search on Google Maps and Google Search (add Yelp if the category skews toward it, e.g. restaurants), and list every result that falls inside the trade-area boundary from step 2. Don't stop at the first 5 map-pack results — pull 15-25 raw candidates so there's enough to filter meaningfully.",
+      guidance:
+        "A map search is a discovery tool, not a census — it returns what that product ranks, in a radius it chose. Before treating your pool as complete, check it against a count that does not depend on ranking. " +
+        CENSUS_ACCESS +
+        " If County Business Patterns reports substantially more establishments in the category than you found, the missing ones are disproportionately the newest and the smallest — exactly the entrants a positioning read most needs to see. Where the category is licensed, the licence roster is a more complete list than either source.",
     },
     {
       step: 4,
@@ -180,6 +185,7 @@ const PAYLOAD: FrameworkPayload = {
     "Review counts and ratings are self-selected, platform-specific signals, not verified market share or revenue — a competitor with fewer reviews may still transact more volume through repeat or word-of-mouth business the review platforms never capture.",
     "This tool maps the field; it doesn't score a specific business's own position within it. Pair with business_teardown to place a named business onto this map, or with review_intelligence and pricing_benchmark for deeper per-competitor review and pricing reads than the brief signals captured here.",
     "New openings and closures can outpace how current search results are — always check listed businesses' operating status rather than assuming a Maps result is still trading.",
+    ...CENSUS_TRAPS,
   ],
 };
 

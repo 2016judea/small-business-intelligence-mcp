@@ -12,17 +12,28 @@ not something fixable here. Escalated by email to `mcp-review@anthropic.com`
 with the exact error and the `tools/list` proof; awaiting a response.
 Everything below is complete and ready to resubmit unchanged.
 
-**2026-08-12 — the server now has a production consumer.** Brick & Mortar AI at
-`brickandmortar.dev` calls this endpoint as its methodology layer via the
-Messages API `mcp_servers` connector. Relevant to review only as evidence the
-server is live and exercised in the open; no submission answer below changes.
+**2026-08-16 — the production consumer is gone, on purpose, and the tool count
+is now 9.** Between 2026-08-12 and 2026-08-16 Brick & Mortar AI at
+`brickandmortar.dev` called this endpoint as its methodology layer via the
+Messages API `mcp_servers` connector, and the site carried a `/mcp/` page. Both
+were retired when the server was reframed as an open source gift rather than a
+product surface — see "It is a gift, not a product" in ARCHITECTURE.md for the
+two reasons.
+
+What changes for review: nothing about transport, safety, schemas or hosting.
+What a reviewer should know is that there is now a ninth tool,
+`data_source_atlas`, registered first, and that the server's distinguishing
+value is the measured public-record access knowledge in `src/tools/sources.ts`
+and `src/tools/federal_sources.ts` rather than the frameworks alone. The
+"Documentation URL" and "Privacy Policy URL" below are unaffected — both were
+always the worker's own routes, never the retired site page.
 
 ## Requirements → where satisfied
 
 | Requirement | Where |
 |---|---|
 | Streamable HTTP transport at `/mcp` | `src/index.ts` — `createMcpHandler` from `agents/mcp/server`, mounted at `/mcp` |
-| Every tool has a `title` and correct `annotations` | All 8 tool registrations in `src/tools/*.ts` set `annotations: { title, readOnlyHint: true, openWorldHint: true }` — every tool here only reads/reasons, none mutate anything, so `readOnlyHint: true` is correct across the board |
+| Every tool has a `title` and correct `annotations` | All 9 tool registrations in `src/tools/*.ts` set `annotations: { title, readOnlyHint: true, openWorldHint: true }` — every tool here only reads/reasons, none mutate anything, so `readOnlyHint: true` is correct across the board |
 | Zod-validated input schemas, few-shot description hints | Every tool's `inputSchema` is a `z.object(...)`; every `description` carries 2-3 example invocations a reviewer can try verbatim |
 | Clean, actionable error messages (no generic 500s) | Input validation errors are shaped by the SDK itself from the zod schema; usage-policy denials return a normal successful tool result (never `isError`, never an HTTP error) — see `src/middleware/context.ts` |
 | Scoped, reasonably sized responses | Each tool's `output_schema` covers only that tool's own responsibility — cross-tool duplication was explicitly avoided during the build (e.g. `competitor_landscape` doesn't re-derive `pricing_benchmark`'s full pricing depth) |
@@ -38,10 +49,10 @@ server is live and exercised in the open; no submission answer below changes.
 
 **Server name:** Small Business Intelligence
 
-**Tagline (55 characters max):** Free frameworks for tearing down any small business.
+**Tagline (55 characters max):** Find the public records behind any small business.
 
 **Documentation URL:** https://sbi-mcp.small-business-intelligence-mcp.workers.dev/docs
-— covers connecting, all 8 tools, how the "methodology not data" mechanism
+— covers connecting, all 9 tools, how the "methodology not data" mechanism
 actually works, and a dedicated "For IT & security reviewers" section (data
 collection, outbound network access, auth, tool safety, transport/hosting,
 vendor info) for admins deciding whether to approve it.
@@ -51,19 +62,22 @@ vendor info) for admins deciding whether to approve it.
 **Use-case description (2-3 sentences):**
 
 > Small Business Intelligence gives Claude a senior analyst's toolkit for evaluating
-> any small business — teardowns, competitive landscapes, review mining, local
-> visibility audits, pricing benchmarks, broker diligence prep, market-gap scans,
-> and report assembly. Every tool returns a rigorous research procedure that Claude
-> executes with its own web search, so the analysis is always current and grounded
-> in real sources rather than a stale cached dataset. Built for owners auditing
-> their own presence, brokers and buyers doing pre-diligence, and analysts sizing
-> up a local market.
+> any small business, and — more unusually — a map of where the underlying public
+> records actually live. `data_source_atlas` turns a plain-English question into a
+> research plan naming the specific administrative record that settles it: the
+> county's parcel layer, Census County Business Patterns, a state licence roster,
+> a BLS series. The other eight tools cover teardowns, competitive landscapes,
+> review mining, visibility audits, pricing benchmarks, broker diligence prep,
+> market-gap scans and report assembly. Every tool returns a research procedure
+> Claude executes with its own tools, so the analysis is current and grounded in
+> real sources rather than a stale cached dataset — and each carries the specific
+> ways its sources produce a plausible wrong answer instead of an error.
 
 **Three example prompts a reviewer can try:**
 
-1. "Run a business_teardown of [a real local coffee shop near you] in [city, state]."
-2. "I'm evaluating [a restaurant] as a buyer — run broker_diligence_prep and review_intelligence on it, then compose_report the results for a buyer audience."
-3. "Scan the nail salon market in [a mid-size city] for whitespace with market_opportunity_scan."
+1. "Where would I actually find what [a real address you know] last sold for?" — exercises `data_source_atlas`, including the disclosure/non-disclosure fork that decides whether the answer exists at all.
+2. "Run a business_teardown of [a real local coffee shop near you] in [city, state]."
+3. "I'm evaluating [a restaurant] as a buyer — run broker_diligence_prep and review_intelligence on it, then compose_report the results for a buyer audience."
 
 **"Use cases" step copy (main tasks + data access + example prompts — the
 portal's internal-review-facing field, separate from the public listing
@@ -71,11 +85,12 @@ description above):**
 
 > Main tasks: users point their AI at a real small business (or a category +
 > metro, for market-level questions) and get back a rigorous research
-> framework for one of 8 analysis types: full business teardown, competitor
-> mapping, review mining, local-search visibility audit, pricing
-> benchmarking, broker/buyer diligence prep, market-gap scanning, or
+> framework for one of 9 analysis types: a public-records research plan for a
+> question they can only phrase in English (data_source_atlas), full business
+> teardown, competitor mapping, review mining, local-search visibility audit,
+> pricing benchmarking, broker/buyer diligence prep, market-gap scanning, or
 > assembling several of the above into one client-ready report. The AI then
-> executes that framework with its own web search and presents the finished
+> executes that framework with its own tools and presents the finished
 > analysis.
 >
 > What it needs access to: nothing. No account access, no permissions, no
@@ -86,10 +101,11 @@ description above):**
 > about the user or their account.
 >
 > Example prompts:
-> 1. "Run a business_teardown on [a local coffee shop] in [city, state]."
-> 2. "Map the competitive landscape for nail salons in [metro] with competitor_landscape."
-> 3. "I'm evaluating [a restaurant] as a buyer — run broker_diligence_prep and review_intelligence, then compose_report it for a buyer audience."
-> 4. "Scan [category] in [metro] for underserved demand with market_opportunity_scan."
+> 1. "Where would I actually find what [an address] last sold for, and who owns it?"
+> 2. "Run a business_teardown on [a local coffee shop] in [city, state]."
+> 3. "Map the competitive landscape for nail salons in [metro] with competitor_landscape."
+> 4. "I'm evaluating [a restaurant] as a buyer — run broker_diligence_prep and review_intelligence, then compose_report it for a buyer audience."
+> 5. "Scan [category] in [metro] for underserved demand with market_opportunity_scan."
 
 (Bracketed placeholders are intentional — a reviewer should substitute a real
 business/category/city they can independently verify the output against,

@@ -2,26 +2,65 @@
 
 ## What this is
 
-A free, standalone remote MCP server. It ships **methodology, not data**: every
+A free, open source remote MCP server. It ships **methodology, not data**: every
 tool returns a structured analytical framework (research procedure, output
-schema, quality rubric, caveats) and the calling model executes the research
-itself with its own web search. Marginal cost per call to us is ~zero — no
+schema, quality rubric, caveats) plus the knowledge of **where the underlying
+public record lives and how it lies**, and the calling model executes the
+research itself with its own tools. Marginal cost per call is ~zero — no
 outbound API calls from the server, ever.
 
 Working brand: **Small Business Intelligence by Brick & Mortar**. Standalone
-product with its own repo and stack (TypeScript/Workers), deliberately not
-nested inside `bricks`.
+repo and stack (TypeScript/Workers), deliberately not nested inside `bricks`.
 
-**It has a production consumer as of 2026-08-12.** Brick & Mortar AI — the
-restaurant-owner chat that is now the whole of `brickandmortar.dev` — uses this
-server as its methodology layer, one of three alongside a precomputed
-review-data substrate and server-side web search, reached over the Anthropic
-Messages API `mcp_servers` connector (beta `mcp-client-2025-11-20`). That
-consumer connects to the same public, unauthenticated endpoint as everyone
-else: nothing was forked, gated, or special-cased for it, which is the payoff
-of the stateless design. The one operational consequence: tool names and
-schemas now have a downstream caller (`website/api/chat.js` in the `bricks`
-repo), so a breaking change here breaks that.
+## It is a gift, not a product — 2026-08-16
+
+**It had a production consumer and deliberately no longer does.** From
+2026-08-12 to 2026-08-16, `brickandmortar.dev`'s restaurant agent attached this
+server as a methodology layer over the Messages API `mcp_servers` connector, and
+brickandmortar.dev carried a `/mcp/` page advertising it. Both are gone. Aidan's
+call:
+
+> "lets retire it from the brickandmortar.dev site. We can always keep iterating
+> on the MCP repo on my github if people find it that way. I just want our MCP to
+> be an open source thing we do for humanity. Not necessarily a product."
+
+Two things decided it, and both are worth keeping written down:
+
+1. **The site was promising something this server does not do.** The property
+   agent's handoff offered "the same county records, as an MCP server you connect
+   once," and this server ships zero county records — it ships frameworks. A
+   wrong *capability*, asserted to a customer, is the same failure class as a
+   wrong number and harder to notice because the link resolved.
+2. **Six tool calls in thirty days**, across every caller including that agent.
+   The connector was costing a round trip on every request to offer eight generic
+   frameworks a specialised agent almost never chose.
+
+**The operational consequence, which is the good news:** tool names and schemas
+no longer have a downstream caller in production. This repo is free to change
+shape — rename tools, restructure payloads, add and remove things — without
+breaking anyone's site. Design for the stranger who finds it, not for a
+first-party integration that no longer exists.
+
+## What makes it worth installing
+
+The frameworks are the reasoning; a capable model has most of that already. The
+differentiator is `src/tools/sources.ts` and `src/tools/federal_sources.ts` —
+the operational knowledge of where each public record actually is and the
+specific way each one produces a *plausible wrong answer* rather than an error:
+projection units that differ by county, an Esri spatial predicate that returns
+an empty list instead of adjacency, states that never record a sale price,
+suppressed Census cells that read as zero, a reviews API that caps at five
+relevance-ranked rows.
+
+Every access pattern and trap in those two files was measured live against the
+agency's own endpoint while building a real two-metro corpus (2026-08-14 to
+2026-08-16), not recalled from training data. That distinction is load-bearing:
+a plausible-looking ArcGIS layer id or BLS series id does not error, it returns
+an empty result that reads exactly like a place with no data.
+
+`data_source_atlas` is registered FIRST in `server.ts` for this reason — clients
+render tools in registration order, and it is the tool that changes what the
+others are worth.
 
 ## SDK / transport decision
 
@@ -72,7 +111,7 @@ small-business-intelligence-mcp/
 ├── .dev.vars.example
 ├── src/
 │   ├── index.ts                # Worker fetch handler: routes / , /docs, /privacy, /mcp
-│   ├── server.ts                # createServer(): builds McpServer, registers all 8 tools
+│   ├── server.ts                # createServer(): builds McpServer, registers all 9 tools
 │   ├── middleware/
 │   │   ├── context.ts            # withPolicy() wrapper — the single seam every tool passes through
 │   │   ├── identity.ts           # resolveIdentity(): hashed-IP today, OAuth subject later
@@ -81,7 +120,11 @@ small-business-intelligence-mcp/
 │   ├── oauth/
 │   │   └── stub.ts                # AS metadata + PRM handlers — written, NOT mounted (see below)
 │   ├── tools/
-│   │   ├── types.ts               # shared FrameworkPayload shape + zod helpers all 8 tools use
+│   │   ├── types.ts               # shared FrameworkPayload shape + zod helpers all 9 tools use
+│   │   ├── sources.ts             # WHERE THE RECORDS ARE — parcel GIS, recorded sales,
+│   │   │                          #   Census, state/local, review platforms + measured traps
+│   │   ├── federal_sources.ts     # BLS series construction + six measured traps
+│   │   ├── data_source_atlas.ts   # the flagship — registered FIRST, see above
 │   │   ├── business_teardown.ts
 │   │   ├── competitor_landscape.ts
 │   │   ├── review_intelligence.ts
@@ -212,6 +255,10 @@ migration to Cloudflare risks mail; Cloudflare's subdomain-only NS delegation �
 the clean middle path — is Enterprise-plan only; and Cloudflare for SaaS custom
 hostnames would need a separate, already-Cloudflare-native domain as
 scaffolding, which we don't have. Ownership is already established by the
-cross-linked `/`, `/docs`, and `/privacy` pages naming Brick & Mortar, plus
-brickandmortar.dev/mcp/. Revisit only if a reviewer flags domain mismatch as an
-actual rejection reason — not preemptively.
+cross-linked `/`, `/docs`, and `/privacy` pages naming Brick & Mortar and
+linking back to it. NOTE, 2026-08-16: brickandmortar.dev/mcp/ was part of that
+ownership evidence and has been deleted (see "It is a gift, not a product"
+above), so the worker's own three pages are now the whole of it. That is
+sufficient — they name the org, link to it, and the repo is public — but if a
+reviewer ever does flag domain mismatch, this is the paragraph to re-read.
+Revisit only then, not preemptively.

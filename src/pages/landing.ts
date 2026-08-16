@@ -5,7 +5,7 @@ export function landingPageHtml(): string {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Small Business Intelligence by Brick &amp; Mortar</title>
-<meta name="description" content="A free remote MCP server that ships analytical methodology for tearing down small businesses — owners, brokers, and analysts point their own AI at it." />
+<meta name="description" content="A free, open source MCP server that knows where the public records are — county parcel layers, Census counts, BLS series, licence rosters — and the specific ways each one lies. Nine research frameworks, no account, no data held." />
 <link rel="icon" href="https://brickandmortar.dev/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="https://brickandmortar.dev/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="https://brickandmortar.dev/apple-touch-icon.png" />
@@ -45,22 +45,31 @@ export function landingPageHtml(): string {
 </head>
 <body>
   <h1>Small Business Intelligence</h1>
-  <p class="tagline">by Brick &amp; Mortar — free methodology for tearing down small businesses, run by your own AI.</p>
+  <p class="tagline">A free, open source MCP server that knows where the public records are.</p>
 
   <p>
-    This is a remote <a href="https://modelcontextprotocol.io">MCP server</a>. It doesn't hold a database
-    of businesses and it never calls out to any data provider on your behalf — it ships eight rigorous
-    analytical frameworks (research procedures, output schemas, quality rubrics) and your own AI executes
-    the research itself, with its own web search, on whatever business you point it at. Free, no account,
-    no API key.
+    A capable AI already knows how to reason about a small business. What it doesn't know is that
+    Kansas never records a sale price, that Google's API hands back five relevance-ranked reviews and
+    calls it a corpus, or that a county's parcel data arrives in feet on one side of a state line and
+    metres on the other. Each of those returns a <em>plausible wrong answer</em> rather than an error.
+  </p>
+  <p>
+    This <a href="https://modelcontextprotocol.io">MCP server</a> ships nine rigorous research
+    frameworks and, more usefully, the map: which public record actually settles a question, how to
+    reach it, and the specific way it lies. It holds no database and never calls any data provider on
+    your behalf — your own AI does the digging, with its own keys. Free, no account, nothing reports back.
   </p>
 
   <h2>Connect</h2>
   <div class="mono">https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp</div>
   <p>No authentication required. Add it as a connector in Claude, or any MCP-compatible client.</p>
 
-  <h2>The eight tools</h2>
+  <h2>Try it</h2>
+  <p class="mono">"Where would I actually find what [an address you know] last sold for?"</p>
+
+  <h2>The nine tools</h2>
   <ul>
+    <li><strong>data_source_atlas</strong> — a plain question becomes a research plan naming the record that settles it, and what no record can</li>
     <li><strong>business_teardown</strong> — full structured teardown of one named business</li>
     <li><strong>competitor_landscape</strong> — map the local competitive set for a category + metro</li>
     <li><strong>review_intelligence</strong> — mine public reviews for complaint/compliment themes and red flags</li>
@@ -71,11 +80,19 @@ export function landingPageHtml(): string {
     <li><strong>compose_report</strong> — assemble prior tool outputs into one client-ready report</li>
   </ul>
 
-  <h2>Try it</h2>
-  <p>"Run a business_teardown on [a real local business] in [city]."</p>
+  <h2>Why it's free</h2>
+  <p>
+    We maintain real local-market corpora — county parcel records, recorded sales, review panels,
+    federal series — for our own products. The frameworks here are what we learned building those,
+    including the traps that silently return a plausible wrong number. It costs us nothing to run,
+    because it makes no outbound calls, so it's a gift rather than a funnel. Nothing is gated and
+    nothing here reports back to us.
+  </p>
 
   <footer>
-    <a href="/docs">Documentation</a> · <a href="/privacy">Privacy</a> · Built by <a href="https://brickandmortar.dev">Brick &amp; Mortar AI</a>
+    <a href="/docs">Documentation</a> · <a href="/privacy">Privacy</a> ·
+    <a href="https://github.com/2016judea/small-business-intelligence-mcp">Source (MIT)</a> ·
+    Built by <a href="https://brickandmortar.dev">Brick &amp; Mortar</a>
   </footer>
 </body>
 </html>`;

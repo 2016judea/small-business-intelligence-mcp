@@ -1,141 +1,178 @@
 # Small Business Intelligence
 
-**by Brick & Mortar** — a free, standalone remote [MCP](https://modelcontextprotocol.io)
-server for tearing down small businesses.
+A free, open source [MCP](https://modelcontextprotocol.io) server that teaches
+any AI how to research a small business — and, more usefully, **where the public
+records actually are**.
 
-It ships analytical **methodology, not data**. Every tool returns a rigorously
-structured framework — a research procedure, an output schema, a quality rubric,
-caveats — and the calling model executes the research itself, with its own web
-search. This server never calls an external API, a database, or any data
-provider on your behalf. Your own AI subscription pays for all the inference;
-our marginal cost per call is effectively zero.
+It ships **methodology, not data**. Every tool returns a rigorously structured
+framework — a research procedure, an output schema, a quality rubric, the traps
+— and the calling model executes the research itself, with its own tools and its
+own keys. This server never calls an external API, a database, or a data
+provider on your behalf. It holds nothing about you and nothing about the
+businesses you ask about.
 
 Live endpoint: **`https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp`**
-(no auth required — see [Deploy](#deploy) for standing up your own copy).
+No auth, no account, no key. Add it as a custom connector and ask.
 
-In production since 2026-08-12: [Brick & Mortar AI](https://brickandmortar.dev)
-calls this server as its methodology layer, over the Anthropic Messages API
-`mcp_servers` connector (beta `mcp-client-2025-11-20`). It connects to the same
-public endpoint above — there is no private build or forked copy.
+## Why this exists
 
-## The eight tools
+A capable model already knows how to reason about a small business. What it
+does not know is the operational trivia that lives in nobody's training data:
+
+- that a county's parcel geometry arrives in **survey feet in Kansas and metres
+  in Minnesota**, so a hard-coded threshold silently triples;
+- that Esri's `Touches` predicate returns **zero touching parcels** rather than
+  an error, so adjacency quietly becomes "this parcel touches nothing";
+- that **Kansas never records a sale price at all**, so an hour spent looking
+  for one is an hour spent looking for something that does not exist;
+- that Google's Places API returns **at most five reviews, relevance-ranked**,
+  so a sentiment trend computed from them is a real-looking number from a
+  sample somebody else chose;
+- that County Business Patterns **suppresses small cells**, so reading one as
+  zero turns a thin market into an empty one.
+
+Every one of those produces a *plausible wrong answer* rather than a failure.
+That is the whole problem with public data, and it is what this server is for.
+
+The frameworks are the reasoning. [`src/tools/sources.ts`](./src/tools/sources.ts)
+is the map — where each record lives, how to reach it, and the specific way it
+lies. Every access pattern and trap in it was measured live against the agency's
+own endpoint while building a real two-metro property and review corpus, not
+recalled from training data.
+
+## The nine tools
+
+Start with `data_source_atlas`. It is the one that changes what the rest are worth.
 
 | Tool | What it does |
 |---|---|
-| `business_teardown` | Full structured teardown of one named business — digital presence, review signal, competitive position, pricing posture, visibility gaps, prioritized recommendations. The flagship tool. |
-| `competitor_landscape` | Maps the local competitive set for a category + metro: true competitors vs. adjacent players, positioning matrix, saturation signals. |
-| `review_intelligence` | Mines public reviews: complaint taxonomy, theme extraction, sentiment trajectory, differentiators customers actually cite, red flags for buyers. |
+| **`data_source_atlas`** | **Given a real question and a place, returns a source-first research plan: which public record settles it, how to reach it, and what the public record cannot answer at all.** Handles the jurisdictional fork (does this state even record sale prices?) before anything else. |
+| `business_teardown` | Full structured teardown of one named business — presence, review signal, competitive position, pricing posture, visibility gaps, prioritized evidence-cited recommendations. |
+| `competitor_landscape` | Maps the local competitive set: true competitors vs. adjacent players, positioning matrix, saturation signals — corroborated against an administrative establishment count, not just map results. |
+| `review_intelligence` | Mines public reviews: complaint taxonomy, theme extraction, sentiment trajectory, red flags for buyers. Rates, never raw counts. |
 | `local_visibility_audit` | Local search presence audit: map-pack factors, listing consistency, category selection, site fundamentals — a scored checklist. |
-| `pricing_benchmark` | Builds a defensible local pricing comparison, including how to normalize across service bundles and what to do when prices aren't published. |
-| `broker_diligence_prep` | Pre-diligence framework for brokers/buyers: SDE framing, multiple ranges (caveated, verify-live), red-flag checklist, seller questions. |
-| `market_opportunity_scan` | Gap analysis for a category × metro: underserved demand, oversaturation, whitespace — from public signals only. |
-| `compose_report` | Assembles the outputs of prior tool calls into one polished, client-ready report, matched to the audience. |
+| `pricing_benchmark` | A defensible local pricing comparison, including how to normalize across bundles and what to do when nobody publishes prices. |
+| `broker_diligence_prep` | Pre-diligence for brokers and buyers: SDE framing, multiple ranges, red-flag checklist, seller questions — plus the county's own record on the real property. |
+| `market_opportunity_scan` | Gap analysis for a category × metro: underserved demand vs. a spot that is empty for a reason. |
+| `compose_report` | Assembles prior tool outputs into one client-ready report, matched to the audience. |
 
-## Why this architecture
+## What it will not do
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full write-up. Short version:
-[`@modelcontextprotocol/server`](https://www.npmjs.com/package/@modelcontextprotocol/server)
-v2 (`McpServer`) + [`agents`](https://www.npmjs.com/package/agents)' stateless
-`createMcpHandler`, mounted as a plain Cloudflare Worker `fetch` handler at
-`/mcp`. No Durable Objects, no database, no external API calls — genuinely
-zero marginal cost per call.
+Stated plainly, because the boundary is the design:
 
-## Local development
+- **No remote calls to us.** Every endpoint the tools name is reached by *your*
+  model, directly, with your own keys. Nothing routes through this server.
+- **No data.** There is no corpus here, nothing cached, nothing to go stale.
+- **No account, no telemetry about you.** The only thing recorded is an
+  aggregate per-tool call counter with no identity attached. See
+  [PRIVACY.md](./PRIVACY.md).
+- **No claim to do financial diligence.** Revenue, margin, private lease terms
+  and the terms of a private sale are not public anywhere in the United States.
+  The tools say so rather than substituting a proxy.
+
+## Connect it
+
+Add the endpoint as a custom connector in Claude, or any MCP-compatible client:
+
+```
+https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp
+```
+
+Then ask something real:
+
+> "Where would I actually find what 1420 Grand Ave in Saint Paul last sold for?"
+
+> "I want to know if Wichita has room for another dog daycare — what should I pull?"
+
+> "Run a business_teardown on Mucci's Italian in Saint Paul, MN."
+
+## Run your own
 
 ```bash
 npm install
 npm run typecheck    # tsc --noEmit
-npm run dev           # wrangler dev — serves http://localhost:8787
+npm run dev          # wrangler dev — serves http://localhost:8787
 ```
 
-`wrangler dev` runs against Miniflare's local KV simulation, so the usage
-ledger works out of the box with no Cloudflare account needed for local dev.
+`wrangler dev` runs against Miniflare's local KV simulation, so the usage ledger
+works out of the box with no Cloudflare account needed.
 
-### Testing with MCP Inspector
-
-With `wrangler dev` running in a separate terminal:
+### Verify it
 
 ```bash
-# list all 8 tools
+# list all 9 tools
 npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp \
-  --transport http --method tools/list --format json
+  --method tools/list
 
 # call one
 npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp \
-  --transport http --method tools/call --tool-name business_teardown \
-  --tool-args-json '{"business_name":"Example Cafe","city_metro":"Saint Paul, MN"}' \
-  --format json
+  --method tools/call --tool-name data_source_atlas \
+  --tool-arg question="what did this building last sell for" \
+  --tool-arg place="Wichita, KS"
 ```
 
-Or drop `--cli --format json` for the interactive web UI (`npm run inspector`).
-Confirm all 8 tools list with `readOnlyHint: true` and an `outputSchema`, and
-that a `tools/call` against each returns `structuredContent` matching it —
-verified this way during the build (no `isError`, no protocol-level
-rejection, `tools/list` count = 8).
+Or drop `--cli` for the interactive web UI (`npm run inspector`). All 9 tools
+should list with `readOnlyHint: true` and an `outputSchema`, and a `tools/call`
+against each should return `structuredContent` matching it, with no `isError`.
 
-### Manual smoke test (no Inspector needed)
+### Deploy
 
 ```bash
-curl -s -X POST http://localhost:8787/mcp \
-  -H "content-type: application/json" \
-  -H "accept: application/json, text/event-stream" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"business_teardown","arguments":{"business_name":"Example Cafe","city_metro":"Saint Paul, MN"}}}'
-```
-
-## Deploy
-
-```bash
-wrangler login                                   # or set CLOUDFLARE_API_TOKEN
-wrangler kv namespace create USAGE_LEDGER          # once — copy the id into wrangler.jsonc
+wrangler login                              # or set CLOUDFLARE_API_TOKEN
+wrangler kv namespace create USAGE_LEDGER   # once — copy the id into wrangler.jsonc
 npm run deploy
 ```
 
-Ships to the free `*.workers.dev` subdomain by default — no DNS work, no
-paid plan. A custom domain is a one-line `routes` addition in
-`wrangler.jsonc` later.
+Ships to the free `*.workers.dev` subdomain — no DNS work, no paid plan.
 
-## Usage stats
+## A note on context cost
 
-Every real tool call increments an aggregate, non-identifying counter
-(`stats:{tool_name}:{date}` in the `USAGE_LEDGER` KV namespace — see
-`src/middleware/stats.ts`, disclosed in `/privacy` and `/docs`). To see
-which tools actually get used:
-
-```bash
-export $(grep -v ^# .env | xargs)
-python3 scripts/usage_stats.py            # last 30 days
-python3 scripts/usage_stats.py --days 7    # last 7 days
-```
-
-## Monetization (built, not active)
-
-Every tool passes through a single middleware seam
-(`src/middleware/context.ts`). Today, `POLICY_MODE=allow_all` (the shipped
-default in `wrangler.jsonc`) never denies a call. Flipping it to `metered`
-activates a per-identity daily call limit (`POLICY_METERED_DAILY_LIMIT`),
-backed by a Workers KV usage ledger, with clean, plain-language denials
-(never a broken-looking protocol error) that include an upgrade link. No
-authentication is required at launch; the seam is architected so OAuth 2.1 +
-PKCE can be added later without restructuring — see `src/oauth/stub.ts` and
-ARCHITECTURE.md's "OAuth: stubbed, not mounted" section.
+`tools/list` is ~43 KB (~10.8K tokens) and sits in the client's context for the
+whole session whether or not a tool is ever called. Most of that is the shared
+`outputSchema` serialised once per tool. If you fork this and add tools, read the
+comment at the top of [`src/tools/types.ts`](./src/tools/types.ts) first — every
+`.describe()` in that schema is paid for once per tool, forever.
 
 ## Repo structure
 
 ```
 src/
-├── index.ts          # Worker entry — routes / , /docs, /privacy, /mcp
-├── server.ts          # createServer(): builds McpServer, registers all 8 tools
-├── env.ts              # Env (Worker bindings/vars) type
-├── middleware/          # identity resolution, KV usage ledger, policy, withPolicy seam
-├── oauth/                # OAuth 2.1 discovery handlers — written, not mounted (see above)
-├── tools/                  # one file per tool, all sharing the FrameworkPayload shape in types.ts
-└── pages/                    # landing (/), docs (/docs), privacy (/privacy) page HTML
+├── index.ts        # Worker entry — routes /, /docs, /privacy, /mcp
+├── server.ts       # createServer(): builds McpServer, registers all 9 tools
+├── env.ts          # Env (Worker bindings/vars) type
+├── middleware/     # identity resolution, KV usage ledger, policy, withPolicy seam
+├── oauth/          # OAuth 2.1 discovery handlers — written, not mounted
+├── tools/
+│   ├── sources.ts          # WHERE THE RECORDS ARE — parcel GIS, Census, state/local, reviews
+│   ├── federal_sources.ts  # BLS series construction + six measured traps
+│   └── *.ts                # one file per tool, sharing FrameworkPayload from types.ts
+└── pages/          # landing (/), docs (/docs), privacy (/privacy)
 ```
+
+Architecture and the SDK/transport decision: [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## Contributing
+
+The most valuable contribution is **a measured trap**. If you pull a public
+source and it lies to you in a way that returns a plausible number instead of an
+error, that belongs in `sources.ts` — with how you measured it and when. Access
+patterns rot as agencies reorganise; a correction with a date on it is worth more
+than a new framework.
+
+Please don't add anything that makes the server call an external service. The
+no-outbound-calls property is what makes it free to run and safe to trust.
+
+## Who made this
+
+Built by [Brick & Mortar](https://brickandmortar.dev) — a small team in Saint
+Paul that maintains real local-market corpora (county parcel records, recorded
+sales, review panels, federal series) for its own products. The frameworks here
+are what we learned building those, including the traps that silently return a
+plausible wrong number.
+
+This is a gift, not a funnel. It is not a demo of a paid product, there is
+nothing gated, and nothing here reports back to us.
 
 ## License
 
 MIT — see [LICENSE](./LICENSE).
-
-## Privacy
-
-See [PRIVACY.md](./PRIVACY.md) (or `/privacy` on the live deploy).

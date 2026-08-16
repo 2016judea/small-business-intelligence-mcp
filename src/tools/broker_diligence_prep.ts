@@ -4,6 +4,12 @@ import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
 import { BLS_CYCLE_METHOD, BLS_DEMAND_CAVEATS, BLS_METRO_ACCESS } from "./federal_sources.js";
+import {
+  PARCEL_GIS_ACCESS,
+  RECORDED_SALE_ACCESS,
+  SALE_AND_VALUE_TRAPS,
+  STATE_LOCAL_ACCESS,
+} from "./sources.js";
 
 const InputSchema = z.object({
   business_name: z.string().describe("The target business's name."),
@@ -93,7 +99,9 @@ const PAYLOAD: FrameworkPayload = {
     {
       step: 12,
       instruction:
-        "Check licensing and public-record signals appropriate to the category: health inspection scores/violations for a food business, liquor license status and any pending transfer or violation for an alcohol-serving business, and a basic county court record search for pending litigation naming the business or owner.",
+        "Check licensing and public-record signals appropriate to the category: health inspection scores/violations for a food business, liquor license status and any pending transfer or violation for an alcohol-serving business, and a basic county court record search for pending litigation naming the business or owner. " +
+        STATE_LOCAL_ACCESS +
+        " Check the Secretary of State registry specifically for entity standing and FORMATION DATE — a formation date that contradicts the listing's claimed operating history is a cheap, decisive finding, and lapsed standing is a real flag.",
       guidance:
         "Treat one old, resolved violation as noise; treat a pattern of repeat violations or a currently-open license issue as a real flag worth naming explicitly.",
     },
@@ -116,6 +124,16 @@ const PAYLOAD: FrameworkPayload = {
         BLS_METRO_ACCESS + " " + BLS_CYCLE_METHOD,
       guidance:
         "A buyer signing a note and a lease is taking local cycle risk for years, and 'there could be a recession' is not diligence. What this metro's last two contractions actually cost it, in depth and in months to recover, is a checkable number and belongs in the deal file — two markets that look identical today can have recovery records that differ by a decade.",
+    },
+    {
+      step: 16,
+      instruction:
+        "If real property is part of the deal — the business owns its building, or the buyer is being offered it alongside the business — pull the county's own record on that parcel rather than accepting the seller's number. Establish first whether the state discloses sale prices at all, because it decides what is knowable. " +
+        RECORDED_SALE_ACCESS +
+        " " +
+        PARCEL_GIS_ACCESS,
+      guidance:
+        "This is the one number in a small-business sale that is independently checkable for free, and it is routinely taken on trust. In a disclosure state you can see what the seller themselves paid and when — which reframes an asking price faster than any multiple comparison. Also confirm whether the site is one parcel or several before quoting any value, and treat the assessor's figure as a lagging floor rather than as market value.",
     },
   ],
   output_schema: {
@@ -201,6 +219,7 @@ const PAYLOAD: FrameworkPayload = {
     "A franchise or licensed-concept unit's real economics are driven by the franchise or license agreement itself — royalty percentage, marketing fund contribution, territory protection, remaining term, and transfer approval rights — far more than by the generic category multiple this framework points toward. Flag explicitly if the target is a franchise unit and treat the category range as a rougher starting point than usual.",
     "If web search access returns thin, contradictory, or clearly outdated results for the multiple research or the red-flag scan, report that limitation explicitly in the output rather than filling the gap with a plausible-sounding but unverified number — a stated 'insufficient data' is more useful to a buyer than false confidence.",
     ...BLS_DEMAND_CAVEATS,
+    ...SALE_AND_VALUE_TRAPS,
   ],
 };
 

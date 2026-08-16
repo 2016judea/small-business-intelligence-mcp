@@ -3,6 +3,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
+import { REVIEW_PLATFORM_ACCESS, REVIEW_TRAPS } from "./sources.js";
 
 const InputSchema = z.object({
   business_name: z.string().describe("The business's name as it appears on its own signage/website."),
@@ -20,7 +21,9 @@ const PAYLOAD: FrameworkPayload = {
       instruction:
         "Inventory every platform carrying a review corpus for this business — Google, Yelp, Facebook, TripAdvisor, and the sector-specific platform if one exists (OpenTable/Resy for restaurants, Booksy/StyleSeat for salons, Untappd for breweries). For each, record total review count and the date range covered.",
       guidance:
-        "Google's default view often surfaces a 'most relevant' sort, not 'newest' — switch to newest explicitly, or the chronological work in steps 3 and 8 will be built on a helpfulness-ranked sample instead of a time-ordered one.",
+        "Google's default view often surfaces a 'most relevant' sort, not 'newest' — switch to newest explicitly, or the chronological work in steps 3 and 8 will be built on a helpfulness-ranked sample instead of a time-ordered one. " +
+        "IF YOU ARE PULLING PROGRAMMATICALLY RATHER THAN READING THE PAGE, establish your ceiling before designing the analysis. " +
+        REVIEW_PLATFORM_ACCESS,
     },
     {
       step: 2,
@@ -165,6 +168,7 @@ const PAYLOAD: FrameworkPayload = {
     "Trajectory comparisons are unreliable on thin corpora — under roughly 25 total reviews, or under ~10 in either window, state that explicitly instead of forcing an improving/declining verdict the sample can't support.",
     "A reviewer's mention of 'new management' or 'new owners' is a lead worth flagging for the buyer to verify independently, not confirmation that an actual ownership or leadership change occurred.",
     "Short-text sentiment is imperfect — sarcasm, a 4-star review with a buried complaint, or translated text can mis-classify. When a classification is uncertain, quote the text directly in the output rather than asserting a sentiment label on top of it.",
+    ...REVIEW_TRAPS,
   ],
 };
 

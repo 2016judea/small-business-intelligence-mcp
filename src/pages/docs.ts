@@ -5,7 +5,7 @@ export function docsPageHtml(): string {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Documentation — Small Business Intelligence</title>
-<meta name="description" content="How to connect Small Business Intelligence, what its 8 tools do, and what IT/security reviewers need to know before approving it." />
+<meta name="description" content="How to connect Small Business Intelligence, what its 9 tools do, and what IT/security reviewers need to know before approving it." />
 <link rel="icon" href="https://brickandmortar.dev/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="https://brickandmortar.dev/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="https://brickandmortar.dev/apple-touch-icon.png" />
@@ -70,7 +70,8 @@ export function docsPageHtml(): string {
   <nav class="toc">
     <ul>
       <li><a href="#connect">Connect</a></li>
-      <li><a href="#tools">The 8 tools</a></li>
+      <li><a href="#tools">The 9 tools</a></li>
+      <li><a href="#sources">Where the records are</a></li>
       <li><a href="#how-it-works">How it actually works</a></li>
       <li><a href="#for-reviewers">For IT &amp; security reviewers</a></li>
       <li><a href="#support">Support</a></li>
@@ -85,17 +86,19 @@ export function docsPageHtml(): string {
     Nothing to sign in to, no API key to generate.
   </p>
   <p>Try it once connected:</p>
-  <div class="mono">"Run a business_teardown on [a real local business you know] in [city, state]."</div>
+  <div class="mono">"Where would I actually find what [an address you know] last sold for?"</div>
 
-  <h2 id="tools">The 8 tools</h2>
+  <h2 id="tools">The 9 tools</h2>
   <p>
     Each tool covers a distinct piece of small-business analysis. They're designed to be used
     individually or chained — run a few, then hand the results to <code>compose_report</code> to
-    assemble one polished write-up.
+    assemble one polished write-up. Start with <code>data_source_atlas</code>: it's the one that
+    changes what the others are worth.
   </p>
   <table>
     <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
     <tbody>
+      <tr><td><code>data_source_atlas</code></td><td><strong>Turns a plain-English question about a place into a research plan naming the exact public record that settles it</strong> — the county parcel layer, Census establishment counts, a state licence roster, a BLS series — plus what the public record cannot answer at all. Resolves the jurisdictional fork (does this state even record sale prices?) before anything else.</td></tr>
       <tr><td><code>business_teardown</code></td><td>Full structured teardown of one named business — presence, review signal, competitive position, pricing, visibility gaps, prioritized recommendations. Start here for a single-business question.</td></tr>
       <tr><td><code>competitor_landscape</code></td><td>Maps the true competitive set for a category + metro — who's a real competitor vs. an adjacent player, positioning, saturation.</td></tr>
       <tr><td><code>review_intelligence</code></td><td>Mines public reviews for complaint/compliment themes, sentiment trajectory over time, and buyer-relevant red flags.</td></tr>
@@ -106,6 +109,28 @@ export function docsPageHtml(): string {
       <tr><td><code>compose_report</code></td><td>Assembles the outputs of prior tool calls into one client-ready report, tone- and structure-matched to the audience (owner, broker, buyer, investor).</td></tr>
     </tbody>
   </table>
+
+  <h2 id="sources">Where the records are</h2>
+  <p>
+    A capable model already knows how to reason about a small business. What it doesn't know is the
+    operational trivia that lives in nobody's training data — and every item below produces a
+    <em>plausible wrong answer</em> rather than an error, which is the whole problem with public data:
+  </p>
+  <ul>
+    <li>County parcel geometry arrives in <strong>survey feet in Kansas and metres in Minnesota</strong>, so one hard-coded threshold silently triples.</li>
+    <li>Esri's <code>Touches</code> predicate returns <strong>zero touching parcels</strong> instead of an error, so adjacency quietly becomes "this parcel touches nothing."</li>
+    <li><strong>Kansas never records a sale price at all</strong> — roughly a dozen states don't — so the hour spent looking for one was spent looking for something that does not exist.</li>
+    <li>Google's Places API returns <strong>at most five reviews, relevance-ranked</strong>, so a sentiment trend computed from them is a real-looking number from a sample somebody else chose.</li>
+    <li>Census County Business Patterns <strong>suppresses small cells</strong>, so reading one as zero turns a thin market into an empty one.</li>
+  </ul>
+  <div class="callout">
+    <strong>These were measured, not remembered.</strong> Every access pattern and trap the tools
+    carry was verified live against the agency's own endpoint while building a real two-metro
+    property and review corpus in August 2026. That distinction is load-bearing: a plausible-looking
+    ArcGIS layer id or BLS series id doesn't error, it returns an empty result that reads exactly
+    like a place with no data. The source map is open —
+    <code>src/tools/sources.ts</code> and <code>src/tools/federal_sources.ts</code> in the repo.
+  </div>
 
   <h2 id="how-it-works">How it actually works</h2>
   <p>
@@ -162,7 +187,7 @@ export function docsPageHtml(): string {
 
   <h3>Tool safety</h3>
   <p>
-    All 8 tools are marked <code>readOnlyHint: true</code> in their MCP tool annotations and are
+    All 9 tools are marked <code>readOnlyHint: true</code> in their MCP tool annotations and are
     read-only in practice — none of them write, delete, or modify anything anywhere. A tool call
     cannot take any action outside of returning a JSON framework object; every actual write action
     (sending a search query, browsing the web) is performed by the calling AI using its own tools,
