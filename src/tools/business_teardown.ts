@@ -3,6 +3,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
+import { BLS_METRO_ACCESS, BLS_PRICE_CAVEATS } from "./federal_sources.js";
 
 const InputSchema = z.object({
   business_name: z.string().describe("The business's name as it appears on its own signage/website, not a guess."),
@@ -90,6 +91,14 @@ const PAYLOAD: FrameworkPayload = {
       instruction:
         "Prioritize recommendations by (evidence strength x likely impact) / effort. Every recommendation must cite the specific evidence from steps 1-11 that motivated it — never issue a recommendation with no citation behind it.",
     },
+    {
+      step: 14,
+      instruction:
+        "Before any recommendation that costs the owner money — raise prices, hire, extend hours — establish what this metro actually pays and what category prices have done, from federal series rather than from national impressions. " +
+        BLS_METRO_ACCESS,
+      guidance:
+        "The two recommendations most often issued blind are 'raise your prices' and 'add staff.' Both depend on local numbers the review corpus cannot see: a metro whose average private hourly earnings run well above the regional norm has a different staffing math than one that does not, and a price rise that merely matches category inflation is not a real increase. Quote the metro figure with its period, and if BLS publishes no local CPI say plainly that the price figure is regional.",
+    },
   ],
   output_schema: {
     exec_summary: "2-4 sentences: the single most important thing true about this business right now, stated plainly.",
@@ -150,6 +159,7 @@ const PAYLOAD: FrameworkPayload = {
     "Google's Popular Times data is itself modeled from historical aggregated signals and can be stale or wrong for a recently reopened, newly opened, or highly seasonal business.",
     "A franchise or multi-location brand's review corpus may blend sentiment about a different location — verify quotes are about the specific location in scope wherever the platform allows it.",
     "If web search access returns thin, stale, or contradictory results, report that limitation explicitly instead of presenting a low-confidence read as settled fact.",
+    ...BLS_PRICE_CAVEATS,
   ],
 };
 

@@ -163,6 +163,29 @@ handler returns the same top-level shape (defined once in `types.ts`):
 (rubric written like a senior analyst who's done 200 of these) that the
 other seven match.
 
+### Shared source methodology: `src/tools/federal_sources.ts`
+
+Added 2026-08-15. Not a dataset — this server still makes **zero outbound
+calls** — but the knowledge of how to reach the free federal labour and price
+series, and the specific ways they mislead. Four tools compose it:
+`pricing_benchmark` and `business_teardown` take the price/pay fragments,
+`market_opportunity_scan` and `broker_diligence_prep` take the demand and
+cycle fragments.
+
+It exists as a shared module rather than as text copied into four tools
+because the traps are properties of the SOURCE, not of any one analysis, and
+a trap corrected in one tool and not the others is how a fixed number goes
+back to being wrong.
+
+Every series-ID template and availability claim in it was verified against the
+live BLS API on 2026-08-15 while backfilling the `bricks` federal layer for
+CBSA 33460 and 48620 — not recalled. That precision is load-bearing and its
+absence is dangerous: a plausible-looking BLS series ID that does not exist
+returns an empty series, not an error, and an empty series reads exactly like
+a market with no data. Two claims worth knowing before editing it: metro
+seasonal adjustment (`SMS`) exists for Total Nonfarm and **no** industry, and
+metro hours/earnings exist for Total Private and **no** industry.
+
 Every `registerTool()` call sets `title` (human-facing name) and
 `annotations: { readOnlyHint: true, openWorldHint: true }` (all eight tools
 only read/reason, none mutate anything) alongside the zod `inputSchema`, and

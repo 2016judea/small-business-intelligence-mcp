@@ -3,6 +3,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
+import { BLS_METRO_ACCESS, BLS_PRICE_CAVEATS } from "./federal_sources.js";
 
 const InputSchema = z.object({
   category: z.string().describe("The business category/vertical, e.g. 'massage spa', 'full-service restaurant'."),
@@ -108,6 +109,14 @@ const PAYLOAD: FrameworkPayload = {
       instruction:
         "Sanity-check outliers before finalizing: any converted price that sits far outside the rest of the range should be re-examined for a normalization miss (a wrong unit conversion, a missed add-on, a stale price) before being reported as a genuine market outlier. Only call it a real outlier once the unit definition has been re-verified specifically for that business.",
     },
+    {
+      step: 15,
+      instruction:
+        "Anchor the table against two public series the comp set cannot show you: category price inflation and local labour cost. Pull the CPI item nearest this category (SEFV 'food away from home' for restaurants and bars, SAF11 'food at home' for grocery/prepared retail, SA0 all items otherwise) for the metro if BLS publishes one and the census region if it does not, and pull metro average hourly earnings for Total Private. " +
+        BLS_METRO_ACCESS,
+      guidance:
+        "This converts a static table into a decision. A comp set that is uniformly 4% above last year's prices in a market where category inflation ran 4% has not raised real prices at all, and telling an owner they are 'priced at the top of the market' without that context invites a cut that gives away margin. Local pay matters for the same reason in the other direction: it is the single biggest cost behind a service price, and a metro paying materially above the regional average cannot hold the regional price. Quote the rate of change, never the index level.",
+    },
   ],
   output_schema: {
     exec_summary: "2-4 sentences: what the pricing picture actually says for this category/metro, stated plainly, with an explicit confidence caveat if the comp set leans qualitative-only.",
@@ -181,6 +190,7 @@ const PAYLOAD: FrameworkPayload = {
     "A cleanly converted per-unit price strips out real differences in ambiance, service level, and overhead that can legitimately justify a price gap even when the underlying unit is identical — a 5oz pour at a destination taproom and a 5oz pour at a strip-mall taproom are the same comparable unit and a legitimately different price.",
     "Public pricing signal shows list price, not effective price — it can't see happy-hour windows, loyalty discounts, first-time-customer promos, or negotiated pricing, any of which can materially change what a typical customer actually pays.",
     "A thin comp set (fewer than roughly four businesses with real numeric data) should be reported as a low-confidence read regardless of how clean the individual unit conversions look — a well-normalized two-business comparison should never be presented with market-level certainty.",
+    ...BLS_PRICE_CAVEATS,
   ],
 };
 

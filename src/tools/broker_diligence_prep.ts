@@ -3,6 +3,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
+import { BLS_CYCLE_METHOD, BLS_DEMAND_CAVEATS, BLS_METRO_ACCESS } from "./federal_sources.js";
 
 const InputSchema = z.object({
   business_name: z.string().describe("The target business's name."),
@@ -108,6 +109,14 @@ const PAYLOAD: FrameworkPayload = {
       guidance:
         "Every question on the final list should trace to a specific unresolved item earlier in the procedure. If a question doesn't map to a gap you actually found, cut it.",
     },
+    {
+      step: 15,
+      instruction:
+        "Underwrite the market the business sits in, not just the business. Pull metro employment for the buyer's hold period context: current direction, the category's nearest industry line against its own historical peak, and the metro's own downturn record. " +
+        BLS_METRO_ACCESS + " " + BLS_CYCLE_METHOD,
+      guidance:
+        "A buyer signing a note and a lease is taking local cycle risk for years, and 'there could be a recession' is not diligence. What this metro's last two contractions actually cost it, in depth and in months to recover, is a checkable number and belongs in the deal file — two markets that look identical today can have recovery records that differ by a decade.",
+    },
   ],
   output_schema: {
     exec_summary: "2-4 sentences: the single most important thing a buyer should know before spending another hour on this target.",
@@ -191,6 +200,7 @@ const PAYLOAD: FrameworkPayload = {
     "Public red flags are necessary to check but nowhere near sufficient — the absence of a visible red flag is not evidence of a healthy business, only evidence that nothing bad happened to surface on a public platform. Plenty of businesses fail diligence for reasons no review or listing ever mentions (customer concentration, a handshake vendor deal, unrecorded cash practices).",
     "A franchise or licensed-concept unit's real economics are driven by the franchise or license agreement itself — royalty percentage, marketing fund contribution, territory protection, remaining term, and transfer approval rights — far more than by the generic category multiple this framework points toward. Flag explicitly if the target is a franchise unit and treat the category range as a rougher starting point than usual.",
     "If web search access returns thin, contradictory, or clearly outdated results for the multiple research or the red-flag scan, report that limitation explicitly in the output rather than filling the gap with a plausible-sounding but unverified number — a stated 'insufficient data' is more useful to a buyer than false confidence.",
+    ...BLS_DEMAND_CAVEATS,
   ],
 };
 

@@ -3,6 +3,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { FrameworkPayloadSchema, frameworkResult, type FrameworkPayload } from "./types.js";
+import { BLS_CYCLE_METHOD, BLS_DEMAND_CAVEATS, BLS_METRO_ACCESS } from "./federal_sources.js";
 
 const InputSchema = z.object({
   category: z.string().describe("The business category/vertical to scan for whitespace, e.g. 'coffee shop', 'massage spa'."),
@@ -104,6 +105,21 @@ const PAYLOAD: FrameworkPayload = {
       instruction:
         "For each top-ranked candidate, write an explicit genuine-gap-vs-correctly-empty verdict that cites which specific Demand-Support Sanity Check factors it passed and which (if any) it failed or couldn't confirm.",
       guidance: "Never let a candidate reach the output with an unstated or implied sanity-check result — every ranked opportunity needs its pass/fail shown, not just asserted.",
+    },
+    {
+      step: 15,
+      instruction:
+        "Before any candidate is called an opportunity, test the metro's demand base itself against federal employment data rather than against the impression left by recent local news. Pull metro Total Nonfarm employment and the category's nearest industry line, and check two things: whether the metro is adding or shedding jobs now, and whether the relevant industry is still below its own historical peak. " +
+        BLS_METRO_ACCESS,
+      guidance:
+        "A category can look structurally thin because the demand that once supported it left and did not come back — which is a correctly-empty market wearing whitespace's clothes, and precisely what the Sanity Check exists to catch. The signal is specific and checkable: measured 2026-08-15, Wichita's aerospace employment sat 37.2% below its 1998 peak and Minneapolis's Information sector 49.1% below its 2001 peak, neither of which is visible in any current-year figure. State the industry's position against its own peak, with the peak year, for every candidate that survives.",
+    },
+    {
+      step: 16,
+      instruction:
+        "For any candidate requiring real capital, state what this metro's last two downturns actually did to it. " + BLS_CYCLE_METHOD,
+      guidance:
+        "This is the difference between a generic recession caveat and a local one. Two metros can look identical today and have completely different recovery records, and the recovery record is the thing an operator is underwriting when they sign a five-year lease.",
     },
   ],
   output_schema: {
@@ -211,6 +227,7 @@ const PAYLOAD: FrameworkPayload = {
     "Zoning, permitting, and actual commercial lease availability — the factors that determine whether a business can physically open in a candidate zone — are usually not resolvable via general web search. Flag any geographic candidate as needing a local commercial real estate / city planning check before real capital moves on it.",
     "A zone can look like genuine whitespace today and already have a signed, not-yet-announced lease behind it by the time anyone acts on this scan. The near-term supply risk check (step 12) only surfaces what's publicly visible — announced openings, visible permits, social posts — not private deals in progress.",
     "This tool describes market conditions, not execution risk. A genuine, well-validated gap can still fail in the hands of an operator who lacks the specific capital, skill, or differentiation the category actually needs — a market gap is necessary but never sufficient for a good outcome, and this framework should never be read as a guarantee.",
+    ...BLS_DEMAND_CAVEATS,
   ],
 };
 
