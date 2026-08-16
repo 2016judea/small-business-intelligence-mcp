@@ -11,7 +11,22 @@ import { landingPageHtml } from "./pages/landing.js";
 import { privacyPageHtml } from "./pages/privacy.js";
 import { docsPageHtml } from "./pages/docs.js";
 
-const HTML_HEADERS = { "content-type": "text/html; charset=utf-8" } as const;
+// `cache-control` is NOT decoration. Without it these three pages ship with no
+// caching directive at all, and the edge is free to serve a stale copy for an
+// unbounded time: measured 2026-08-16, immediately after a deploy that changed
+// the landing copy, `/` returned the PREVIOUS tagline while `/?cb=<random>`
+// returned the new one — same worker, same version, different answer depending
+// on whether the URL had been seen before. The /mcp endpoint was correct
+// throughout, so the failure is invisible in exactly the way that matters: the
+// protocol looks fine and the human-readable documentation is a version behind.
+//
+// `must-revalidate` with a short max-age rather than `no-store`: these pages are
+// cheap and static, so letting the edge hold them briefly is right — it just has
+// to ask before reusing anything older than that.
+const HTML_HEADERS = {
+  "content-type": "text/html; charset=utf-8",
+  "cache-control": "public, max-age=300, must-revalidate",
+} as const;
 
 export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
