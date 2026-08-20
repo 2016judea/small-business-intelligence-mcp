@@ -2,8 +2,9 @@ import { z } from "zod";
 import type { CallToolResult } from "@modelcontextprotocol/server";
 
 /**
- * Every one of the 8 tools returns this shape. The server ships
- * methodology, not data: `research_procedure` is what the calling model
+ * The nine METHODOLOGY tools return this shape. The two Twin Cities tools do not
+ * — they return real records and carry their own schema in tools/twin_cities.ts.
+ * For the nine, the server ships methodology rather than data: `research_procedure` is what the calling model
  * executes with its own web search; `output_schema` is the exact structure
  * of the finished deliverable the model should produce from that research;
  * `quality_rubric` and `caveats` are what separate a rigorous pass from a
@@ -11,7 +12,7 @@ import type { CallToolResult } from "@modelcontextprotocol/server";
  */
 /**
  * EVERY `.describe()` BELOW IS PAID FOR NINE TIMES. This schema is attached as
- * `outputSchema` to all nine tools, so each string is serialised into
+ * `outputSchema` to all nine methodology tools, so each string is serialised into
  * tools/list once per tool and sits in the client's context for the whole
  * session whether or not any tool is ever called. Measured 2026-08-16: the
  * envelope is ~2.0 KB per tool and tools/list ~47 KB total, of which the great

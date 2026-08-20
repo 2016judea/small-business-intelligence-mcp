@@ -1,3 +1,4 @@
+import { TOOL_COUNT } from "../server.js";
 export function docsPageHtml(): string {
   return `<!doctype html>
 <html lang="en">
@@ -5,7 +6,7 @@ export function docsPageHtml(): string {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Documentation — Small Business Intelligence</title>
-<meta name="description" content="How to connect Small Business Intelligence, what its 9 tools do, and what IT/security reviewers need to know before approving it." />
+<meta name="description" content="How to connect Small Business Intelligence, what its ${TOOL_COUNT} tools do, and what IT/security reviewers need to know before approving it." />
 <link rel="icon" href="https://brickandmortar.dev/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="https://brickandmortar.dev/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="https://brickandmortar.dev/apple-touch-icon.png" />
@@ -70,7 +71,7 @@ export function docsPageHtml(): string {
   <nav class="toc">
     <ul>
       <li><a href="#connect">Connect</a></li>
-      <li><a href="#tools">The 9 tools</a></li>
+      <li><a href="#tools">The ${TOOL_COUNT} tools</a></li>
       <li><a href="#sources">Where the records are</a></li>
       <li><a href="#how-it-works">How it actually works</a></li>
       <li><a href="#for-reviewers">For IT &amp; security reviewers</a></li>
@@ -88,7 +89,7 @@ export function docsPageHtml(): string {
   <p>Try it once connected:</p>
   <div class="mono">"Where would I actually find what [an address you know] last sold for?"</div>
 
-  <h2 id="tools">The 9 tools</h2>
+  <h2 id="tools">The ${TOOL_COUNT} tools</h2>
   <p>
     Each tool covers a distinct piece of small-business analysis. They're designed to be used
     individually or chained — run a few, then hand the results to <code>compose_report</code> to
@@ -134,7 +135,9 @@ export function docsPageHtml(): string {
 
   <h2 id="how-it-works">How it actually works</h2>
   <p>
-    This server ships <strong>analytical methodology, not data</strong>. Every tool call returns a
+    Nine of these tools ship <strong>analytical methodology, not data</strong>; the two Twin Cities
+    tools return real public records for the Minneapolis-St. Paul metro and are described under
+    their own entries above. For the nine, every tool call returns a
     structured research framework — a named analytical lens, an ordered set of concrete research
     steps, the exact shape the finished deliverable should take, a quality rubric, and honest
     caveats. Your AI assistant reads that framework and then does the actual work itself: it runs
@@ -187,7 +190,7 @@ export function docsPageHtml(): string {
 
   <h3>Tool safety</h3>
   <p>
-    All 9 tools are marked <code>readOnlyHint: true</code> in their MCP tool annotations and are
+    All ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool annotations and are
     read-only in practice — none of them write, delete, or modify anything anywhere. A tool call
     cannot take any action outside of returning a JSON framework object; every actual write action
     (sending a search query, browsing the web) is performed by the calling AI using its own tools,

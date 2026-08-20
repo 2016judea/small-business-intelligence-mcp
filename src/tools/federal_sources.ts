@@ -1,7 +1,8 @@
 /**
  * Shared federal-data methodology.
  *
- * This server ships methodology, not data, and makes no outbound calls — so
+ * The tools that consume this module ship methodology, not data, and make no
+ * outbound calls — so
  * what lives here is not a dataset but the knowledge of how to reach one and
  * how to avoid the specific ways it lies. The calling model executes these
  * steps with its own tools.

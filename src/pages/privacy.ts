@@ -25,13 +25,31 @@ export function privacyPageHtml(): string {
 </head>
 <body>
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: 2026-08-08</p>
+  <p class="updated">Last updated: 2026-08-20</p>
 
   <p>
-    This is a free <a href="https://modelcontextprotocol.io">MCP</a> server. It ships analytical
-    frameworks, not data — every research step is executed by <em>your own</em> AI assistant, using
-    <em>your own</em> web search. This server never performs research on your behalf, and never calls
-    any external API, data provider, or third-party service itself.
+    This is a free <a href="https://modelcontextprotocol.io">MCP</a> server. Most of its tools ship
+    analytical frameworks rather than data — every research step in those is executed by <em>your
+    own</em> AI assistant, using <em>your own</em> web search, and they call nothing at all.
+  </p>
+
+  <p>
+    <strong>Two tools are different, and this section is here because of them.</strong>
+    <code>twin_cities_datasets</code> and <code>twin_cities_records</code> return real public
+    records, and to do that they call one external service:
+    <a href="https://brickandmortar.dev/api/export">brickandmortar.dev/api/export</a>, which is run
+    by us. No other tool calls anything, and no tool calls any third party.
+  </p>
+
+  <p>
+    <strong>What those two send:</strong> the dataset you named, the filter (“scope”) and columns you
+    asked for, and — only if you supply one — the street address you asked about. Nothing else from
+    your conversation is transmitted. <strong>The address is not stored:</strong> those tools request
+    a bounded preview, and the export service writes its download log only for actual file
+    downloads, which a preview is not. If you then follow a download link yourself, that fetch is
+    logged as: the dataset, filter, format, row and byte count, whether the caller looked like a
+    browser or a script, the referring host, the channel that sent you, and a daily-rotated one-way
+    hash of the calling IP. No address, and no file contents.
   </p>
 
   <h2>What we log</h2>
@@ -54,15 +72,18 @@ export function privacyPageHtml(): string {
 
   <h2>What we never see</h2>
   <p>
-    The actual research your AI assistant performs after calling a tool — that happens entirely in
-    your own AI session. Your real IP address. Any account information — there is no account, and no
-    authentication is required to use this server.
+    The actual research your AI assistant performs after calling a framework tool — that happens
+    entirely in your own AI session. Your real IP address. Any account information — there is no
+    account, and no authentication is required to use this server. For the two Twin Cities tools,
+    everything they transmit is listed above and nothing beyond it: not your conversation, not your
+    other questions, not who you are.
   </p>
 
   <h2>No sale of data</h2>
   <p>
-    We don't have data to sell. The hashed-IP usage counters above are the entirety of what this
-    server retains.
+    The public records these tools return are free to anyone, with no account and no rate limit —
+    that is deliberate, not a trial. We have no personal data to sell: the hashed usage counters
+    above are the entirety of what is retained about callers.
   </p>
 
   <h2>Monetization</h2>

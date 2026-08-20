@@ -156,7 +156,7 @@ const PAYLOAD: FrameworkPayload = {
     ],
   },
   caveats: [
-    "This tool returns a research plan, not research. Every endpoint here is reached by the calling model directly, with its own tools and its own keys — this server makes no outbound calls and holds no data.",
+    "This tool returns a research plan, not research. Every endpoint here is reached by the calling model directly, with its own tools and its own keys — this tool makes no outbound calls and holds no data. (The twin_cities_* tools on this server do fetch records, for that one metro only.)",
     "Access patterns were measured live in mid-2026 against two metros. Agencies reorganise their endpoints; if a path 404s, enumerate the service root with `?f=json` and re-find the layer rather than concluding the data is gone.",
     "Coverage and field names vary by county even where the platform is identical. A layer id that is correct in one county is meaningless in the next — discovery is per-jurisdiction, every time.",
     "Nothing in the public record reveals revenue, margin, private lease terms, or the terms of a private sale, in any US jurisdiction. No combination of the sources here adds up to financial diligence.",

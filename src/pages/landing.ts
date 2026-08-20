@@ -1,3 +1,4 @@
+import { TOOL_COUNT } from "../server.js";
 export function landingPageHtml(): string {
   return `<!doctype html>
 <html lang="en">
@@ -67,7 +68,7 @@ export function landingPageHtml(): string {
   <h2>Try it</h2>
   <p class="mono">"Where would I actually find what [an address you know] last sold for?"</p>
 
-  <h2>The nine tools</h2>
+  <h2>The ${TOOL_COUNT} tools</h2>
   <ul>
     <li><strong>data_source_atlas</strong> — a plain question becomes a research plan naming the record that settles it, and what no record can</li>
     <li><strong>business_teardown</strong> — full structured teardown of one named business</li>
@@ -84,9 +85,10 @@ export function landingPageHtml(): string {
   <p>
     We maintain real local-market corpora — county parcel records, recorded sales, review panels,
     federal series — for our own products. The frameworks here are what we learned building those,
-    including the traps that silently return a plausible wrong number. It costs us nothing to run,
-    because it makes no outbound calls, so it's a gift rather than a funnel. Nothing is gated and
-    nothing here reports back to us.
+    including the traps that silently return a plausible wrong number. For the Twin Cities we go
+    further and hand over the records themselves, free and without an account, because the join is
+    the moat and the data is not. Nothing is gated, nothing is upsold, and the only thing kept is a
+    daily-rotated hash used to count calls — see <a href="/privacy">privacy</a>.
   </p>
 
   <footer>

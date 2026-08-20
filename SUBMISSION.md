@@ -52,7 +52,7 @@ always the worker's own routes, never the retired site page.
 **Tagline (55 characters max):** Find the public records behind any small business.
 
 **Documentation URL:** https://sbi-mcp.small-business-intelligence-mcp.workers.dev/docs
-— covers connecting, all 9 tools, how the "methodology not data" mechanism
+— covers connecting, every tool, how the "methodology not data" mechanism
 actually works, and a dedicated "For IT & security reviewers" section (data
 collection, outbound network access, auth, tool safety, transport/hosting,
 vendor info) for admins deciding whether to approve it.
@@ -66,7 +66,7 @@ vendor info) for admins deciding whether to approve it.
 > records actually live. `data_source_atlas` turns a plain-English question into a
 > research plan naming the specific administrative record that settles it: the
 > county's parcel layer, Census County Business Patterns, a state licence roster,
-> a BLS series. The other eight tools cover teardowns, competitive landscapes,
+> a BLS series. Nine more cover teardowns, competitive landscapes,
 > review mining, visibility audits, pricing benchmarks, broker diligence prep,
 > market-gap scans and report assembly. Every tool returns a research procedure
 > Claude executes with its own tools, so the analysis is current and grounded in

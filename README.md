@@ -4,12 +4,25 @@ A free, open source [MCP](https://modelcontextprotocol.io) server that teaches
 any AI how to research a small business — and, more usefully, **where the public
 records actually are**.
 
-It ships **methodology, not data**. Every tool returns a rigorously structured
-framework — a research procedure, an output schema, a quality rubric, the traps
-— and the calling model executes the research itself, with its own tools and its
-own keys. This server never calls an external API, a database, or a data
-provider on your behalf. It holds nothing about you and nothing about the
-businesses you ask about.
+**Nine of its tools ship methodology, not data.** Each returns a rigorously
+structured framework — a research procedure, an output schema, a quality rubric,
+the traps — and the calling model executes the research itself, with its own
+tools and its own keys. Those nine call nothing at all.
+
+**Two ship the records.** `twin_cities_datasets` and `twin_cities_records` answer
+from joined public records for the seven-county Minneapolis-St. Paul metro —
+parcels and lot lines, recorded sale prices, owners, rental licences,
+contamination files, business counts by trade, census tracts. Ask about one
+address and they answer about that address. They call
+[brickandmortar.dev/api/export](https://brickandmortar.dev/api/export), which we
+run; no tool here calls any third party. Every answer is a true row count, at
+most six example rows, and a link to the complete file — never a file inline.
+See [`/privacy`](#privacy) for exactly what those two transmit and what is kept.
+
+That split is deliberate and dated: the server was built on "no remote calls to
+our servers" (2026-08-16), which rested on a thesis retired the next day — *the
+join is the moat, and the data ships*. Confirmed 2026-08-20; the nine are
+untouched.
 
 Live endpoint: **`https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp`**
 No auth, no account, no key. Add it as a custom connector and ask.
@@ -40,7 +53,7 @@ lies. Every access pattern and trap in it was measured live against the agency's
 own endpoint while building a real two-metro property and review corpus, not
 recalled from training data.
 
-## The nine tools
+## The tools
 
 Start with `data_source_atlas`. It is the one that changes what the rest are worth.
 
@@ -100,7 +113,7 @@ works out of the box with no Cloudflare account needed.
 ### Verify it
 
 ```bash
-# list all 9 tools
+# list every tool
 npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp \
   --method tools/list
 
@@ -111,7 +124,7 @@ npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp
   --tool-arg place="Wichita, KS"
 ```
 
-Or drop `--cli` for the interactive web UI (`npm run inspector`). All 9 tools
+Or drop `--cli` for the interactive web UI (`npm run inspector`). All tools
 should list with `readOnlyHint: true` and an `outputSchema`, and a `tools/call`
 against each should return `structuredContent` matching it, with no `isError`.
 
@@ -138,7 +151,7 @@ comment at the top of [`src/tools/types.ts`](./src/tools/types.ts) first — eve
 ```
 src/
 ├── index.ts        # Worker entry — routes /, /docs, /privacy, /mcp
-├── server.ts       # createServer(): builds McpServer, registers all 9 tools
+├── server.ts       # createServer(): builds McpServer; TOOL_NAMES is the one list
 ├── env.ts          # Env (Worker bindings/vars) type
 ├── middleware/     # identity resolution, KV usage ledger, policy, withPolicy seam
 ├── oauth/          # OAuth 2.1 discovery handlers — written, not mounted

@@ -2,7 +2,7 @@
   "name": "small-business-intelligence-mcp",
   "version": "0.1.0",
   "private": true,
-  "description": "Small Business Intelligence by Brick & Mortar — a free remote MCP server that ships analytical methodology for tearing down small businesses, not data.",
+  "description": "Small Business Intelligence by Brick & Mortar — a free remote MCP server: analytical methodology for tearing down small businesses anywhere, plus the joined public records themselves for the Twin Cities.",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
