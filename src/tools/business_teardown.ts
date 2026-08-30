@@ -176,7 +176,7 @@ export function registerBusinessTeardown(server: McpServer, env: Env): void {
         '- "I\'m thinking about buying Sunrise Nails in Denver, CO — give me a teardown before I look deeper"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Business Teardown", readOnlyHint: true, openWorldHint: true },
+      annotations: { title: "Business Teardown", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     withPolicy("business_teardown", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

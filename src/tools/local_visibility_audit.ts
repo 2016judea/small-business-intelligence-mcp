@@ -219,7 +219,7 @@ export function registerLocalVisibilityAudit(server: McpServer, env: Env): void 
         '- "Give me a scored GBP/NAP checklist for a hair salon in Aurora, CO before I redo their listing"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Local Visibility Audit", readOnlyHint: true, openWorldHint: true },
+      annotations: { title: "Local Visibility Audit", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     withPolicy("local_visibility_audit", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

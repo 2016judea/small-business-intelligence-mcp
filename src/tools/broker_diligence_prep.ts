@@ -237,7 +237,7 @@ export function registerBrokerDiligencePrep(server: McpServer, env: Env): void {
         '- "I\'m looking at a nail salon in Tampa, FL asking $310K — sanity-check that against category multiples before I meet the seller"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Broker Diligence Prep", readOnlyHint: true, openWorldHint: true },
+      annotations: { title: "Broker Diligence Prep", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     withPolicy("broker_diligence_prep", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

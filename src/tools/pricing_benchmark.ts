@@ -207,7 +207,7 @@ export function registerPricingBenchmark(server: McpServer, env: Env): void {
         '- "Build a pricing comparison for full-service restaurants in Wichita, KS when most don\'t list prices online"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Pricing Benchmark", readOnlyHint: true, openWorldHint: true },
+      annotations: { title: "Pricing Benchmark", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     withPolicy("pricing_benchmark", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

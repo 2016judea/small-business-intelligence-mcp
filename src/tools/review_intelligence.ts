@@ -185,7 +185,7 @@ export function registerReviewIntelligence(server: McpServer, env: Env): void {
         '- "I\'m evaluating The Anchor Room (bar) in Saint Paul, MN as a buyer — what do the reviews show about staffing turnover or an ownership change that the rating alone doesn\'t?"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Review Intelligence", readOnlyHint: true, openWorldHint: true },
+      annotations: { title: "Review Intelligence", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     withPolicy("review_intelligence", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

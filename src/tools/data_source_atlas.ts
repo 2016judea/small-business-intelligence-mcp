@@ -182,7 +182,7 @@ export function registerDataSourceAtlas(server: McpServer, env: Env): void {
         '- "What public data would tell me if this neighborhood is actually growing?"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Data Source Atlas", readOnlyHint: true, openWorldHint: true },
+      annotations: { title: "Data Source Atlas", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     withPolicy("data_source_atlas", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

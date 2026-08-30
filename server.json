@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.2016judea/small-business-intelligence",
+  "title": "Small Business Intelligence by Brick & Mortar",
+  "description": "Free public-record intelligence for small business and commercial real estate: analytical frameworks for tearing down a business anywhere, plus the joined Twin Cities records themselves — parcels, recorded sales, assessor values, licences, permits and reviews.",
+  "version": "0.1.0",
+  "websiteUrl": "https://brickandmortar.dev",
+  "repository": {
+    "url": "https://github.com/2016judea/small-business-intelligence-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp"
+    }
+  ]
+}
