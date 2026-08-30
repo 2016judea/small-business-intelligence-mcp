@@ -7,6 +7,25 @@ Cline and the aggregators read — one publish, a dozen surfaces, no portal. The
 Anthropic escalation was re-sent to mcp-review@anthropic.com the same day, three
 weeks after the first, asking whether that address is still right.
 
+**ONE THING IS UNFINISHED AND IT NEEDS AIDAN'S GITHUB.** The registry entry is
+published but still says `0.1.0` and still points at the workers.dev address.
+`server.json` in this repo is already at `0.2.0` with the brickandmortar.dev
+endpoint — it just needs a publish, and publishing needs a device login the
+session could not do on his behalf:
+
+    cd ~/Desktop/small-business-intelligence-mcp
+    mcp-publisher login github     # prints a code; enter it at github.com/login/device
+    mcp-publisher publish
+
+The JWT expires fast — well under an hour — so log in and publish in one sitting.
+Verify with:
+
+    curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=small-business-intelligence"
+
+Nothing else is blocked on it: brickandmortar.dev/mcp and /connect/ are live and
+working. The stale registry row only means a client that finds us through the
+registry gets the workers.dev address, which still answers.
+
 Two things changed here that matter to any reviewer:
   * The endpoint is **https://brickandmortar.dev/mcp** now, proxied to this Worker
     by a rewrite in the bricks repo. workers.dev still answers and always will.
