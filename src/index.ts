@@ -44,6 +44,32 @@ export default {
       return new Response(docsPageHtml(), { headers: HTML_HEADERS });
     }
 
+    // ── ChatGPT app-directory domain verification ──────────────────────────
+    //
+    // OpenAI proves you control the host before it will list an app: it issues a
+    // token in the submission portal and fetches it back as PLAIN TEXT from
+    // /.well-known/openai-apps-challenge. Not JSON, not HTML — a body that is
+    // anything else fails the check with no explanation.
+    //
+    // IT IS FETCHED FROM THE ROOT OF THE HOST, not from beside the MCP path.
+    // Developers submitting a server at example.com/api/mcp have the challenge
+    // requested at example.com/.well-known/... and fail, which is why this sits
+    // in the top-level router rather than under the /mcp handler.
+    //
+    // The token lives in a secret because it is per-submission and rotating it
+    // must not need a code change:  wrangler secret put OPENAI_APPS_CHALLENGE
+    // Unset, this 404s exactly as it did before the route existed — an empty
+    // 200 would fail verification while looking like it worked.
+    if (url.pathname === "/.well-known/openai-apps-challenge") {
+      const token = env.OPENAI_APPS_CHALLENGE;
+      if (!token) {
+        return new Response("no challenge token configured", { status: 404 });
+      }
+      return new Response(token, {
+        headers: { "content-type": "text/plain; charset=utf-8" },
+      });
+    }
+
     if (url.pathname === "/favicon.ico") {
       // Some crawlers (directory listings included) check this path
       // directly instead of parsing <link rel="icon"> out of the HTML.

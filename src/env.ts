@@ -11,4 +11,10 @@ export interface Env {
    * production, which is what ships.
    */
   BRICKS_ORIGIN?: string;
+  /**
+   * Per-submission token OpenAI issues to prove we control this host, served
+   * verbatim as text/plain at /.well-known/openai-apps-challenge. A SECRET
+   * rather than a var so rotating it is `wrangler secret put`, not a deploy.
+   */
+  OPENAI_APPS_CHALLENGE?: string;
 }
