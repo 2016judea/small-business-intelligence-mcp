@@ -1,5 +1,20 @@
 # Submission checklist — Anthropic Connectors Directory
 
+**2026-08-30 — THIS IS NO LONGER THE ONLY DOOR, AND IT IS THE ONLY BLOCKED ONE.**
+The server is published in the official MCP Registry as
+`io.github.2016judea/small-business-intelligence`, which is what Cursor, VS Code,
+Cline and the aggregators read — one publish, a dozen surfaces, no portal. The
+Anthropic escalation was re-sent to mcp-review@anthropic.com the same day, three
+weeks after the first, asking whether that address is still right.
+
+Two things changed here that matter to any reviewer:
+  * The endpoint is **https://brickandmortar.dev/mcp** now, proxied to this Worker
+    by a rewrite in the bricks repo. workers.dev still answers and always will.
+  * Every tool states `destructiveHint` explicitly, which ChatGPT's Apps SDK
+    requires and we were missing. `/.well-known/openai-apps-challenge` serves
+    OpenAI's domain-verification token from a Worker secret.
+
+
 ## Status
 
 **2026-08-09 — submitted, blocked on an Anthropic-side portal bug.** The

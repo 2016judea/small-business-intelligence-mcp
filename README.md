@@ -24,7 +24,7 @@ our servers" (2026-08-16), which rested on a thesis retired the next day — *th
 join is the moat, and the data ships*. Confirmed 2026-08-20; the nine are
 untouched.
 
-Live endpoint: **`https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp`**
+Live endpoint: **`https://brickandmortar.dev/mcp`**
 No auth, no account, no key. Add it as a custom connector and ask.
 
 ## Why this exists
@@ -88,7 +88,7 @@ Stated plainly, because the boundary is the design:
 Add the endpoint as a custom connector in Claude, or any MCP-compatible client:
 
 ```
-https://sbi-mcp.small-business-intelligence-mcp.workers.dev/mcp
+https://brickandmortar.dev/mcp
 ```
 
 Then ask something real:
