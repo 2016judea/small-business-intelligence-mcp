@@ -79,6 +79,9 @@ export function landingPageHtml(): string {
     <li><strong>broker_diligence_prep</strong> — pre-diligence framework for brokers and buyers</li>
     <li><strong>market_opportunity_scan</strong> — gap analysis: underserved demand, oversaturation, whitespace</li>
     <li><strong>compose_report</strong> — assemble prior tool outputs into one client-ready report</li>
+    <li><strong>twin_cities_datasets</strong> — what joined public records we hold for the seven-county Minneapolis&ndash;St. Paul metro</li>
+    <li><strong>twin_cities_records</strong> — ask those records about one property or the whole market</li>
+    <li><strong>request_a_feature</strong> — tell us what this should do and does not; it reaches a person</li>
   </ul>
 
   <h2>Why it's free</h2>

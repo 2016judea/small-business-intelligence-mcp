@@ -6,3 +6,11 @@
 # POLICY_MODE=metered
 # POLICY_METERED_DAILY_LIMIT=50
 # POLICY_UPGRADE_URL=https://brickandmortar.dev
+
+# The credential brickandmortar.dev/api/mcp-feedback requires before it will
+# file anything from `request_a_feature`. In production it is a Worker secret
+# (`wrangler secret put MCP_FEEDBACK_TOKEN`) and must match the Vercel env var
+# of the same name on the brick-and-mortar project. Unset, the tool files
+# nothing and reports that it failed — it never claims a send that did not
+# happen.
+# MCP_FEEDBACK_TOKEN=

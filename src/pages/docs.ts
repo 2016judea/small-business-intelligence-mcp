@@ -108,6 +108,9 @@ export function docsPageHtml(): string {
       <tr><td><code>broker_diligence_prep</code></td><td>Pre-diligence framework for brokers/buyers — SDE framing, current-multiple research method, red-flag checklist, seller questions.</td></tr>
       <tr><td><code>market_opportunity_scan</code></td><td>Gap analysis for a category × metro — underserved demand, oversaturation, and genuine whitespace vs. structurally-empty ground.</td></tr>
       <tr><td><code>compose_report</code></td><td>Assembles the outputs of prior tool calls into one client-ready report, tone- and structure-matched to the audience (owner, broker, buyer, investor).</td></tr>
+      <tr><td><code>twin_cities_datasets</code></td><td>Lists the joined public-records datasets we publish for the seven-county Minneapolis&ndash;St. Paul metro &mdash; real row counts, column names, the cuts available, and the counties each one actually covers.</td></tr>
+      <tr><td><code>twin_cities_records</code></td><td>Answers a question about one Twin Cities property or the whole market from those records &mdash; what it sold for, who owns it, what shares its lot line, whether it has a contamination file. Returns the true row count, six example rows and a link to the whole file.</td></tr>
+      <tr><td><code>request_a_feature</code></td><td><strong>The only tool here that sends rather than answers.</strong> Files a feature request, a data request or a correction straight to the person who builds this &mdash; when a question lands outside what the server holds, or an answer looks wrong.</td></tr>
     </tbody>
   </table>
 
@@ -190,11 +193,20 @@ export function docsPageHtml(): string {
 
   <h3>Tool safety</h3>
   <p>
-    All ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool annotations and are
-    read-only in practice — none of them write, delete, or modify anything anywhere. A tool call
-    cannot take any action outside of returning a JSON framework object; every actual write action
-    (sending a search query, browsing the web) is performed by the calling AI using its own tools,
-    not by this server.
+    ${TOOL_COUNT - 1} of the ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool
+    annotations and are read-only in practice — they write nothing, delete nothing, and modify
+    nothing anywhere. A call to one of them cannot take any action outside of returning a JSON
+    object; every actual write action (sending a search query, browsing the web) is performed by the
+    calling AI using its own tools, not by this server.
+  </p>
+  <p>
+    <code>request_a_feature</code> is the exception and is annotated
+    <code>readOnlyHint: false</code>, because it does one thing: it sends the request you dictated to
+    a person's inbox. It is not destructive and not idempotent, it reads nothing, and it cannot be
+    used to reach anyone but us — the destination is fixed in the source and is not a parameter. Its
+    payload is bounded, it is rate-limited per caller per day, and the endpoint it posts to refuses
+    anything that does not carry this server's own credential. What it transmits is listed in full on
+    the <a href="/privacy">privacy page</a>.
   </p>
 
   <h3>Transport &amp; hosting</h3>

@@ -1,11 +1,39 @@
 # Privacy Policy — Small Business Intelligence by Brick & Mortar
 
-Last updated: 2026-08-08
+Last updated: 2026-08-31
 
-This is a free [MCP](https://modelcontextprotocol.io) server. It ships analytical
-frameworks, not data — every research step is executed by *your own* AI assistant,
-using *your own* web search. This server never performs research on your behalf,
-and never calls any external API, data provider, or third-party service itself.
+This is a free [MCP](https://modelcontextprotocol.io) server. Most of its tools
+ship analytical frameworks, not data — every research step is executed by *your
+own* AI assistant, using *your own* web search. This server calls no third party
+on your behalf, ever.
+
+Three tools are exceptions, and they are the only places anything leaves your
+session. This page is the authority on what they send; the same text is served at
+`/privacy` and the two are updated together.
+
+## The two that fetch records
+
+`twin_cities_datasets` and `twin_cities_records` call one external service —
+[brickandmortar.dev/api/export](https://brickandmortar.dev/api/export), run by us
+— and send it the dataset you named, the filter and columns you asked for, and,
+only if you supply one, the street address you asked about. Nothing else from
+your conversation is transmitted, and the address is not stored: those tools
+request a bounded preview, and the export service logs only real file downloads.
+
+## The one that sends a message
+
+`request_a_feature` exists so you can tell us what this server should do and does
+not. When — and only when — your assistant calls it, the text of your request is
+sent to us and lands in a person's email inbox, along with the reply address you
+gave if you gave one, the city or sector it concerns, your assistant's one-line
+summary of what you were trying to do, and the name your MCP client reports
+itself as.
+
+That is a message you asked to send, so unlike everything below it is kept: we
+read it, and we keep it while we decide whether to build the thing. If you leave
+no email address we have no way to identify you and will not try. The destination
+is fixed in the source and is not a parameter — this tool cannot be used to reach
+anyone but us.
 
 ## What we log
 
@@ -15,11 +43,14 @@ and never calls any external API, data provider, or third-party service itself.
   (not active today — see below) can enforce a daily free-usage limit without
   storing anything that identifies you across days.
 - Nothing else. No request bodies, no tool arguments, no business names you
-  research, no conversation content, no analytics or tracking pixels.
+  research, no conversation content, no analytics or tracking pixels. The one
+  exception is a request you deliberately send with `request_a_feature`,
+  described above — that one is a message to us, and a message nobody keeps is a
+  message nobody answers.
 
 ## What we never see
 
-- The actual research your AI assistant performs after calling one of our tools —
+- The actual research your AI assistant performs after calling a framework tool —
   that happens entirely in your own AI session, using your own web search. We are
   not in that loop at all.
 - Your real IP address (only a rotating one-way hash, described above).

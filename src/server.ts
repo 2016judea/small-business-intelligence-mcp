@@ -10,6 +10,7 @@ import { registerMarketOpportunityScan } from "./tools/market_opportunity_scan.j
 import { registerComposeReport } from "./tools/compose_report.js";
 import { registerDataSourceAtlas } from "./tools/data_source_atlas.js";
 import { registerTwinCitiesCatalogue, registerTwinCitiesRecords } from "./tools/twin_cities.js";
+import { registerFeatureRequest } from "./tools/feature_request.js";
 
 /**
  * Builds one McpServer instance per HTTP request (see src/index.ts —
@@ -55,6 +56,7 @@ export const TOOL_NAMES = [
   "broker_diligence_prep",
   "market_opportunity_scan",
   "compose_report",
+  "request_a_feature",
 ] as const;
 
 export const TOOL_COUNT = TOOL_NAMES.length;
@@ -86,6 +88,13 @@ export function createServer(env: Env): McpServer {
   registerBrokerDiligencePrep(server, env);
   registerMarketOpportunityScan(server, env);
   registerComposeReport(server, env);
+  // LAST, AND THE ONLY ONE THAT IS NOT AN ANSWER. Registration order is tool
+  // precedence and this is the tool a model should reach for only after the
+  // others have fallen short — a server that offered "tell them what you wish
+  // this did" before it offered to do anything is asking for work instead of
+  // doing it. It also sends something to a person, which is the one thing on
+  // this list a model should never do speculatively.
+  registerFeatureRequest(server, env);
 
   return server;
 }

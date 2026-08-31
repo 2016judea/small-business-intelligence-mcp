@@ -68,13 +68,18 @@ Start with `data_source_atlas`. It is the one that changes what the rest are wor
 | `broker_diligence_prep` | Pre-diligence for brokers and buyers: SDE framing, multiple ranges, red-flag checklist, seller questions — plus the county's own record on the real property. |
 | `market_opportunity_scan` | Gap analysis for a category × metro: underserved demand vs. a spot that is empty for a reason. |
 | `compose_report` | Assembles prior tool outputs into one client-ready report, matched to the audience. |
+| `twin_cities_datasets` | What joined public records we publish for the seven-county Minneapolis–St. Paul metro: row counts, columns, the cuts available, the counties each actually covers. |
+| `twin_cities_records` | Asks those records a question — one property or the whole market. Returns the true matching row count, six example rows, and a link to the complete file. |
+| `request_a_feature` | **The only tool here that sends rather than answers.** Files a feature request, a data request or a correction to the person who builds this, when the server falls short of what the user wanted. |
 
 ## What it will not do
 
 Stated plainly, because the boundary is the design:
 
-- **No remote calls to us.** Every endpoint the tools name is reached by *your*
-  model, directly, with your own keys. Nothing routes through this server.
+- **No remote calls to us, from the nine framework tools.** Every endpoint they
+  name is reached by *your* model, directly, with your own keys. The two Twin
+  Cities tools do call us — that is how they hand over the records — and
+  `request_a_feature` posts the request you dictated to us and nowhere else.
 - **No data.** There is no corpus here, nothing cached, nothing to go stale.
 - **No account, no telemetry about you.** The only thing recorded is an
   aggregate per-tool call counter with no identity attached. See
@@ -124,9 +129,11 @@ npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp
   --tool-arg place="Wichita, KS"
 ```
 
-Or drop `--cli` for the interactive web UI (`npm run inspector`). All tools
-should list with `readOnlyHint: true` and an `outputSchema`, and a `tools/call`
-against each should return `structuredContent` matching it, with no `isError`.
+Or drop `--cli` for the interactive web UI (`npm run inspector`). Every tool
+should list with an `outputSchema`, and a `tools/call` against each should return
+`structuredContent` matching it, with no `isError`. All of them list with
+`readOnlyHint: true` except `request_a_feature`, which sends a message and says
+so.
 
 ### Deploy
 

@@ -42,6 +42,19 @@ export function privacyPageHtml(): string {
   </p>
 
   <p>
+    <strong>One more tool is different, and it is the only one that sends anything about you
+    anywhere.</strong> <code>request_a_feature</code> exists so you can tell us what this server
+    should do and does not. When — and only when — your assistant calls it, the text of your request
+    is sent to us and lands in a person's email inbox, along with the reply address you gave if you
+    gave one, the city or sector the request is about, your assistant's one-line summary of what you
+    were trying to do, and the name your MCP client reports itself as. That is a message you asked to
+    send, so it is kept: we read it, and we keep it while we decide whether to build the thing. If
+    you leave no email address we have no way to identify you and will not try. Nothing else from
+    your conversation is transmitted, and no other tool on this server sends anything about you
+    anywhere at all.
+  </p>
+
+  <p>
     <strong>What those two send:</strong> the dataset you named, the filter (“scope”) and columns you
     asked for, and — only if you supply one — the street address you asked about. Nothing else from
     your conversation is transmitted. <strong>The address is not stored:</strong> those tools request
@@ -67,16 +80,18 @@ export function privacyPageHtml(): string {
   </p>
   <p>
     Nothing else is logged — no request bodies, tool arguments, business names, conversation
-    content, or tracking pixels.
+    content, or tracking pixels. The one exception is the request you deliberately send with
+    <code>request_a_feature</code>, described above: that one is a message to us, and it is kept
+    because a message nobody keeps is a message nobody answers.
   </p>
 
   <h2>What we never see</h2>
   <p>
     The actual research your AI assistant performs after calling a framework tool — that happens
     entirely in your own AI session. Your real IP address. Any account information — there is no
-    account, and no authentication is required to use this server. For the two Twin Cities tools,
-    everything they transmit is listed above and nothing beyond it: not your conversation, not your
-    other questions, not who you are.
+    account, and no authentication is required to use this server. For the two Twin Cities tools and
+    for <code>request_a_feature</code>, everything they transmit is listed above and nothing beyond
+    it: not your conversation, not your other questions, not who you are.
   </p>
 
   <h2>No sale of data</h2>

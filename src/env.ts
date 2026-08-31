@@ -17,4 +17,15 @@ export interface Env {
    * rather than a var so rotating it is `wrangler secret put`, not a deploy.
    */
   OPENAI_APPS_CHALLENGE?: string;
+  /**
+   * Shared secret the `request_a_feature` tool presents to
+   * brickandmortar.dev/api/mcp-feedback, which refuses everything without it.
+   * A SECRET, not a var: it is the only thing standing between a public,
+   * unauthenticated MCP server and an open mail relay, so it must never be
+   * readable in wrangler.jsonc or in this repo's history.
+   *   wrangler secret put MCP_FEEDBACK_TOKEN
+   * Unset, the tool files nothing and says so — it never reports a send that
+   * did not happen.
+   */
+  MCP_FEEDBACK_TOKEN?: string;
 }
