@@ -1,0 +1,11 @@
+{
+  "name": "brick-and-mortar",
+  "version": "0.2.0",
+  "description": "Public property, permit and licence records for Minneapolis-St. Paul, joined and queryable. Free, read-only, no account.",
+  "mcpServers": {
+    "brick-and-mortar": {
+      "httpUrl": "https://brickandmortar.dev/mcp"
+    }
+  },
+  "contextFileName": "GEMINI.md"
+}
