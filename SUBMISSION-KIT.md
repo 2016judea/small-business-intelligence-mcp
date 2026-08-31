@@ -27,7 +27,7 @@ public page and the form say the same thing.
 | --- | --- |
 | Publisher | Brick and Mortar AI LLC — Minnesota, formed 2026-07-24, EIN 42-4059505 |
 | Address | 1651 Eleanor Ave, Saint Paul, MN 55116 |
-| Plugin / connector name | Brick & Mortar Twin Cities Records |
+| Plugin / connector name | Brick & Mortar Public Records — 29 chars; OpenAI caps display_name at 30 |
 | Server name (MCP Registry) | `io.github.2016judea/small-business-intelligence` |
 | **Endpoint** | `https://brickandmortar.dev/mcp` |
 | Transport | Streamable HTTP |
