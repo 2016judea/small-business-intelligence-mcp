@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "Small Business Intelligence by Brick & Mortar",
+    "subtitle": "Public records and teardowns",
+    "description": "Brick & Mortar answers questions about small businesses and commercial property from public records rather than general knowledge. Two tools query 25 joined public-records datasets for the seven-county Minneapolis-St. Paul metro — parcels and lot lines, recorded sale prices, tax-billing owners, rental licences, contamination files, business counts by trade, census tracts — returning true row counts, sample rows and a link to the complete file. Nine more tools work in any US metro and return a research procedure instead of an answer: which administrative record actually settles a question, how to reach it, and what the public record cannot answer at all. Typical workflows are tearing down one named business before buying or advising it, mapping a local competitive set, prepping broker diligence, benchmarking prices, auditing local search visibility, mining public reviews for patterns, and assembling the results into one client-ready report. Free, no account, read-only.",
+    "category": "BUSINESS"
+  },
+  "tools": {
+    "data_source_atlas": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns a static research plan naming which public record settles the question and does not create, update or store anything.",
+        "open_world_justification": "Writes nothing to the public internet or any third-party system; it only names sources the caller may go and read.",
+        "destructive_justification": "Has no delete, overwrite, send or revoke path and holds no account or record to affect."
+      }
+    },
+    "business_teardown": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns a four-quadrant teardown framework as text and echoes the caller's own input back; no state is read or written.",
+        "open_world_justification": "Publishes nothing and contacts no third-party system; the named business is never notified or modified.",
+        "destructive_justification": "Performs no irreversible action of any kind and cannot alter the business it describes."
+      }
+    },
+    "competitor_landscape": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns a positioning and saturation framework for a category and metro without touching any store or record.",
+        "open_world_justification": "Creates no public content and calls no external service; the competitive set is researched by the calling model, not by this tool.",
+        "destructive_justification": "Cannot delete, overwrite or send anything; the result is text the caller may discard freely."
+      }
+    },
+    "review_intelligence": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns a complaint-taxonomy and sentiment-trajectory method; it does not fetch, store or alter any review.",
+        "open_world_justification": "Posts no reviews and writes to no review platform; nothing on any public listing changes.",
+        "destructive_justification": "Has no write path to any review or rating and performs no irreversible action."
+      }
+    },
+    "market_opportunity_scan": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns a gap-analysis procedure using public signals and changes no data anywhere.",
+        "open_world_justification": "Submits no forms and creates no external records; the scan is a method the caller executes.",
+        "destructive_justification": "Nothing it returns can delete, overwrite or commit anything on the caller's behalf."
+      }
+    },
+    "pricing_benchmark": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns a normalisation method for comparing local prices and never records or transmits a price.",
+        "open_world_justification": "Publishes no pricing anywhere and does not contact any merchant or third-party system.",
+        "destructive_justification": "Involves no transaction, purchase or irreversible commitment of any kind."
+      }
+    },
+    "local_visibility_audit": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns a scored checklist of listing and map-pack factors to verify by hand; no listing is read or edited.",
+        "open_world_justification": "Cannot edit a Google Business Profile, a directory listing or a website; it only says what to check.",
+        "destructive_justification": "Has no access to any listing or account and so can neither remove nor overwrite one."
+      }
+    },
+    "broker_diligence_prep": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns SDE framing, a red-flag checklist and a seller-question list as text; no deal, document or record is stored.",
+        "open_world_justification": "Contacts no broker, seller or listing service and creates nothing publicly visible.",
+        "destructive_justification": "Makes no offer and commits to nothing; every output is advisory text the caller reviews first."
+      }
+    },
+    "compose_report": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Returns section order, citation standards and tone guidance for assembling prior results already in the conversation.",
+        "open_world_justification": "Does not publish, email or upload the report; the finished document stays with the caller.",
+        "destructive_justification": "Overwrites no file and sends nothing; the report is produced by the calling model in the conversation."
+      }
+    },
+    "twin_cities_datasets": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Issues a single HTTPS GET to the publisher's own public catalogue and returns dataset titles, row counts and columns.",
+        "open_world_justification": "Reads a public endpoint on brickandmortar.dev over HTTPS; the request changes no state there or anywhere else.",
+        "destructive_justification": "Uses GET only against a read-only catalogue and cannot modify or remove any dataset."
+      }
+    },
+    "twin_cities_records": {
+      "annotations": { "readOnlyHint": true, "openWorldHint": true, "destructiveHint": false },
+      "justifications": {
+        "read_only_justification": "Issues a single HTTPS GET to the publisher's public export endpoint and returns the matching row count, sample rows and a file link.",
+        "open_world_justification": "Reads a public endpoint on brickandmortar.dev over HTTPS; no record is written back and nothing becomes publicly visible.",
+        "destructive_justification": "Uses GET only against published public-records files and has no path to edit or delete a record."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "List the public-records datasets available for the Twin Cities, with real row counts.",
+      "user_prompt": "What Twin Cities datasets do you have?",
+      "file_attachment_urls": null,
+      "tools_triggered": "twin_cities_datasets",
+      "expected_output": "Returns 25 datasets with their titles, true row counts, column names and the counties each covers.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Answer a property question from the joined recorded-sales records.",
+      "user_prompt": "What commercial property sold within half a mile of 2900 Hennepin Ave, Minneapolis?",
+      "file_attachment_urls": null,
+      "tools_triggered": "twin_cities_records",
+      "expected_output": "Returns the true matching row count, up to six example rows with sale price and date, and a link to the complete file.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Tear down one named small business before advising or buying it.",
+      "user_prompt": "Tear down Kramarczuk's Sausage Company in Minneapolis.",
+      "file_attachment_urls": null,
+      "tools_triggered": "business_teardown",
+      "expected_output": "Returns the four-quadrant teardown framework — presence, perception, position and performance — with a research procedure and quality rubric.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Locate the administrative record that settles a question in a metro outside the Twin Cities.",
+      "user_prompt": "Where do I find restaurant health inspections in Denver?",
+      "file_attachment_urls": null,
+      "tools_triggered": "data_source_atlas",
+      "expected_output": "Returns a source-first research plan naming the specific public record, how to reach it, and what it cannot answer.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Build a defensible local price comparison in a category where competitors publish little.",
+      "user_prompt": "Benchmark HVAC pricing in Minneapolis.",
+      "file_attachment_urls": null,
+      "tools_triggered": "pricing_benchmark",
+      "expected_output": "Returns a normalisation framework for comparing differing service bundles, including what to do when prices are not published.",
+      "expected_output_url": null
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "Do not trigger for requests to modify a public record; the app is read-only.",
+      "user_prompt": "Delete the parcel record for 123 Main St.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked. No tool can write to any record, and the assistant should say the records are read-only.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not return records for an address outside the seven-county Minneapolis-St. Paul metro.",
+      "user_prompt": "What did 1600 Pennsylvania Ave in Washington, DC sell for?",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not return a sale price. Its records cover the Twin Cities metro only, and it should say so rather than guess.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not trigger for requests for a private individual's contact details.",
+      "user_prompt": "Give me the owner's phone number and personal email for that parcel.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked for personal contact details. It holds only the county's public tax-billing name and address, and no phone number or email.",
+      "expected_output_url": null
+    }
+  ]
+}
