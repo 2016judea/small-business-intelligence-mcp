@@ -160,7 +160,7 @@ export function registerComposeReport(server: McpServer, env: Env): void {
         '- "Turn the teardown and competitor landscape into a report I can hand an investor"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Compose Report", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+      annotations: { title: "Compose Report", readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     withPolicy("compose_report", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

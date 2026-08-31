@@ -4,26 +4,26 @@
   "app_info": {
     "display_name": "Brick & Mortar Public Records",
     "subtitle": "Public records and teardowns",
-    "description": "Brick & Mortar answers questions about small businesses and commercial property from public records rather than general knowledge. Two tools query 25 joined public-records datasets for the seven-county Minneapolis-St. Paul metro — parcels and lot lines, recorded sale prices, tax-billing owners, rental licences, contamination files, business counts by trade, census tracts — returning true row counts, sample rows and a link to the complete file. Nine more tools work in any US metro and return a research procedure instead of an answer: which administrative record actually settles a question, how to reach it, and what the public record cannot answer at all. Typical workflows are tearing down one named business before buying or advising it, mapping a local competitive set, prepping broker diligence, benchmarking prices, auditing local search visibility, mining public reviews for patterns, and assembling the results into one client-ready report. Free, no account, read-only.",
+    "description": "Brick & Mortar answers questions about small businesses and commercial property from public records rather than general knowledge. Two tools query 25 joined public-records datasets for the seven-county Minneapolis-St. Paul metro — parcels and lot lines, recorded sale prices, tax-billing owners, rental licences, contamination files, business counts by trade, census tracts — returning true row counts, sample rows and a link to the complete file. Nine more tools work in any US metro and return a research procedure instead of an answer: which administrative record actually settles a question, how to reach it, and what the public record cannot answer at all. Typical workflows are tearing down one named business before buying or advising it, mapping a local competitive set, prepping broker diligence, benchmarking prices, auditing local search visibility, mining public reviews for patterns, and assembling the results into one client-ready report. A twelfth tool sends a feature, data or correction request to the publisher when the records fall short; it is the only tool that is not read-only. Free, no account.",
     "category": "BUSINESS"
   },
   "tools": {
     "data_source_atlas": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a static research plan naming which public record settles the question and does not create, update or store anything.",
-        "open_world_justification": "Writes nothing to the public internet or any third-party system; it only names sources the caller may go and read.",
+        "open_world_justification": "Names sources the caller may go and read; it reaches no system itself and writes nothing anywhere.",
         "destructive_justification": "Has no delete, overwrite, send or revoke path and holds no account or record to affect."
       }
     },
     "business_teardown": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
@@ -35,19 +35,19 @@
     "competitor_landscape": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a positioning and saturation framework for a category and metro without touching any store or record.",
-        "open_world_justification": "Creates no public content and calls no external service; the competitive set is researched by the calling model, not by this tool.",
+        "open_world_justification": "Creates no public content and calls no external service; the competitive set is researched by the calling model.",
         "destructive_justification": "Cannot delete, overwrite or send anything; the result is text the caller may discard freely."
       }
     },
     "review_intelligence": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
@@ -59,7 +59,7 @@
     "market_opportunity_scan": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
@@ -71,7 +71,7 @@
     "pricing_benchmark": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
@@ -83,7 +83,7 @@
     "local_visibility_audit": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
@@ -95,7 +95,7 @@
     "broker_diligence_prep": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
@@ -107,7 +107,7 @@
     "compose_report": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
@@ -119,25 +119,37 @@
     "twin_cities_datasets": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
         "read_only_justification": "Issues a single HTTPS GET to the publisher's own public catalogue and returns dataset titles, row counts and columns.",
-        "open_world_justification": "Reads a public endpoint on brickandmortar.dev over HTTPS; the request changes no state there or anywhere else.",
+        "open_world_justification": "Reads the publisher's own public catalogue over HTTPS with a GET; no state changes there or anywhere else.",
         "destructive_justification": "Uses GET only against a read-only catalogue and cannot modify or remove any dataset."
       }
     },
     "twin_cities_records": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": true,
+        "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
         "read_only_justification": "Issues a single HTTPS GET to the publisher's public export endpoint and returns the matching row count, sample rows and a file link.",
-        "open_world_justification": "Reads a public endpoint on brickandmortar.dev over HTTPS; no record is written back and nothing becomes publicly visible.",
+        "open_world_justification": "Reads the publisher's own published record files over HTTPS with a GET; no record is written back and nothing becomes publicly visible.",
         "destructive_justification": "Uses GET only against published public-records files and has no path to edit or delete a record."
+      }
+    },
+    "request_a_feature": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Sends the user's own feature, data or correction request to the publisher's inbox, so it creates something rather than only reading.",
+        "open_world_justification": "Delivers a message to a real person outside the conversation, which is a change to an external system.",
+        "destructive_justification": "Adds a new request and overwrites, deletes or revokes nothing; it is capped at a few filings per caller per day."
       }
     }
   },
@@ -201,11 +213,11 @@
       "expected_output_url": null
     },
     {
-      "description": "Do not trigger for requests to contact someone; the app only reads records and cannot send anything.",
+      "description": "Do not trigger for a request to contact a third party; the only tool that sends anything writes to the publisher, not to an owner.",
       "user_prompt": "Email that property's owner and ask whether they would sell.",
       "file_attachment_urls": null,
       "tools_triggered": null,
-      "expected_output": "The app should not be invoked. Every tool is read-only and none can send a message, post content or contact anyone.",
+      "expected_output": "The app should not be invoked. No tool can contact a property owner; the one sending tool files a request to the app's own publisher.",
       "expected_output_url": null
     }
   ]

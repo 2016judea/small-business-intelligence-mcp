@@ -257,7 +257,7 @@ export function registerMarketOpportunityScan(server: McpServer, env: Env): void
         '- "Where in Wichita, KS is full-service restaurant demand outrunning supply?"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Market Opportunity Scan", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+      annotations: { title: "Market Opportunity Scan", readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     withPolicy("market_opportunity_scan", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

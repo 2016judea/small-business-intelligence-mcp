@@ -176,7 +176,7 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
         '- "What columns are in the recorded-sales dataset?"',
       inputSchema: CatalogueInput,
       outputSchema: TwinCitiesPayloadSchema,
-      annotations: { title: "Twin Cities Datasets", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+      annotations: { title: "Twin Cities Datasets", readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     withPolicy(
       "twin_cities_datasets",
@@ -263,7 +263,7 @@ export function registerTwinCitiesRecords(server: McpServer, env: Env) {
         '- "Does 500 Washington Ave S have a contamination file, and who owns it?"',
       inputSchema: RecordsInput,
       outputSchema: TwinCitiesPayloadSchema,
-      annotations: { title: "Twin Cities Records", readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+      annotations: { title: "Twin Cities Records", readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     withPolicy(
       "twin_cities_records",
