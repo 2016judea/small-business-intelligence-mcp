@@ -17,7 +17,7 @@ That prints `N tools, N datasets, N rows` and rewrites
 single day. Then rebuild `/connect/` (`python3 scripts/build_connect.py`) so the
 public page and the form say the same thing.
 
-**Current: 11 tools · 25 datasets · 1,573,968 rows.**
+**Current: 11 tools · 25 datasets · 1,575,384 rows.**
 
 ---
 
@@ -252,11 +252,12 @@ a field this server has never emitted — escalated by email 08-06 and again 08-
 Whether the portal was fixed or something in the 08-30 pass cleared it is not
 known; do not claim a cause. See SUBMISSION.md for the full history.
 
-### ChatGPT app directory — READY, WAITING ON IDENTITY VERIFICATION
+### ChatGPT app directory — UNBLOCKED 2026-08-31, READY TO FILE
 1. Apps Management = Write at platform.openai.com/settings/organization/people/roles
    (org owners already have it).
-2. **Business verification** — not individual — at
-   platform.openai.com/settings/organization/general, under Brick and Mortar AI LLC.
+2. **Business verification — DONE 2026-08-31**, under Brick and Mortar AI LLC. It
+   must be *business*, not individual, and the submission has to come from the same
+   org that holds the verification.
 3. platform.openai.com/plugins → Create plugin → **With MCP** → URL type
    **Universal** → the endpoint above → auth **none** → CSP **none** (no UI).
 4. Scan Tools finds 11. Domain verification issues a token; then
@@ -265,7 +266,16 @@ known; do not claim a cause. See SUBMISSION.md for the full history.
    **fetched from the ROOT of the host, not beside the MCP path**, which is the
    documented way submissions fail. Unset, the route 404s on purpose: an empty 200
    fails verification while looking fine. Check with
-   `curl https://brickandmortar.dev/.well-known/openai-apps-challenge`.
+   `curl https://brickandmortar.dev/.well-known/openai-apps-challenge`. The route
+   must return that **one** plugin's token as bare text — OpenAI rejects a JSON
+   array or several tokens at one URL.
+5. The form then wants: name, short + long description, logo, category, website /
+   support / privacy / terms URLs (§1), five positive and three negative test
+   cases (§8), starter prompts (§9), release notes, and availability. All of it is
+   above. No CSP and no demo credentials — there is no UI and no account.
+6. Approval does not publish it. Publishing is a second, separate click in the
+   portal, and the listing lands in the one directory ChatGPT and Codex share.
+   OpenAI publishes no review SLA.
 
 ### Glama — AUTOMATIC
 A superset of the official registry. Nothing to file.
