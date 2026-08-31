@@ -245,9 +245,22 @@ Three negative:
 
 ## 9. Starter prompts
 
-* "What public records exist for a property in Minneapolis?"
-* "What did commercial property sell for in Hennepin County last year?"
-* "Which public dataset answers whether a neighbourhood is gaining businesses?"
+Three, the cap. Each fires a different tool and each was run against production
+on 2026-08-31 before being listed — a starter prompt that returns a dull answer
+is worse than none, because it is the first thing a stranger taps.
+
+* "What Twin Cities property records can you pull?" → `twin_cities_datasets`, 25 datasets with real row counts
+* "What commercial property sold near 2900 Hennepin Ave, Minneapolis?" → `twin_cities_records`, 399 sales and five priced comps
+* "Where do I find restaurant health inspections in Denver?" → `data_source_atlas`, and it shows the app is not Twin-Cities-only
+
+Do not name the plugin in the prompt — ChatGPT appends the mention itself.
+
+**Rejected: "Who owns the most commercial property in Minneapolis?"** It reads
+as the best hook here and it is a trap. The `owners` file is sorted by parcels
+held, so the top rows are City of Bloomington (414), City of Minneapolis (399),
+Metropolitan Council (213) and MnDOT (211). A stranger tapping that expects
+landlords and gets municipalities. Checked before listing it, which is the only
+reason it is not listed.
 
 ## 10. Per-platform notes
 
