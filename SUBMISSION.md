@@ -41,6 +41,18 @@ Two things changed here that matter to any reviewer:
 
 ## Status
 
+**2026-08-31 — SUBMITTED AND IN REVIEW.** Filed successfully after 25 days
+blocked. Everything a reviewer needs is in
+[SUBMISSION-KIT.md](SUBMISSION-KIT.md), including the no-credentials test script
+they asked for: the server is public, unauthenticated and read-only, so there is
+no account to provision and a reviewer sees exactly what any user sees.
+
+Do not assert why it went through. The candidates are that Anthropic fixed the
+portal, or that something in the 2026-08-30 pass — `destructiveHint` on all 11
+tools, the endpoint moving to brickandmortar.dev, the registry publish — changed
+the payload enough to pass. Nothing here distinguishes them.
+
+
 **2026-08-09 — submitted, blocked on an Anthropic-side portal bug.** The
 submission form's own validator rejected its own payload:
 `submission_data.server_snapshot.tools.0.visibility: Extra inputs are not

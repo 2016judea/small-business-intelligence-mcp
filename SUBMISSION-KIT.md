@@ -244,12 +244,13 @@ Vercel API, which would make publishing unattended and rename the entry
 `dev.brickandmortar/…`. Not done: it creates a second row rather than renaming
 the first.
 
-### Anthropic Connectors Directory — BLOCKED, ESCALATED TWICE
-Portal validator rejects its own payload:
-`submission_data.server_snapshot.tools.0.visibility: Extra inputs are not permitted`.
-Our server has never emitted a `visibility` field. Emailed
-`mcp-review@anthropic.com` 2026-08-06 and again 2026-08-30. See SUBMISSION.md for
-the full history.
+### Anthropic Connectors Directory — SUBMITTED, IN REVIEW (2026-08-31)
+Unblocked and filed. It had been stuck since 2026-08-06 on the portal's own
+validator rejecting its own payload —
+`submission_data.server_snapshot.tools.0.visibility: Extra inputs are not permitted`,
+a field this server has never emitted — escalated by email 08-06 and again 08-30.
+Whether the portal was fixed or something in the 08-30 pass cleared it is not
+known; do not claim a cause. See SUBMISSION.md for the full history.
 
 ### ChatGPT app directory — READY, WAITING ON IDENTITY VERIFICATION
 1. Apps Management = Write at platform.openai.com/settings/organization/people/roles
