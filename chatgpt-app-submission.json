@@ -201,11 +201,11 @@
       "expected_output_url": null
     },
     {
-      "description": "Do not trigger for requests for a private individual's contact details.",
-      "user_prompt": "Give me the owner's phone number and personal email for that parcel.",
+      "description": "Do not trigger for requests to contact someone; the app only reads records and cannot send anything.",
+      "user_prompt": "Email that property's owner and ask whether they would sell.",
       "file_attachment_urls": null,
       "tools_triggered": null,
-      "expected_output": "The app should not be invoked for personal contact details. It holds only the county's public tax-billing name and address, and no phone number or email.",
+      "expected_output": "The app should not be invoked. Every tool is read-only and none can send a message, post content or contact anyone.",
       "expected_output_url": null
     }
   ]

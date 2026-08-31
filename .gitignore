@@ -7,3 +7,6 @@ dist/
 .DS_Store
 __pycache__/
 *.pyc
+
+# The submission zip is rebuilt from skills/ — never edit it, never commit it.
+chatgpt-app-skills.zip
