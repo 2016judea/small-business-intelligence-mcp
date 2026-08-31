@@ -1,5 +1,10 @@
 # Submission checklist — Anthropic Connectors Directory
 
+> **Filing anywhere? Start at [SUBMISSION-KIT.md](SUBMISSION-KIT.md)** — every
+> answer a directory has asked us for, in one place: URLs, one-liner, description,
+> use cases, connection requirements, reviewer test script, annotations, test
+> cases, and the per-platform quirks. This file is the Anthropic history only.
+
 **2026-08-30 — THIS IS NO LONGER THE ONLY DOOR, AND IT IS THE ONLY BLOCKED ONE.**
 The server is published in the official MCP Registry as
 `io.github.2016judea/small-business-intelligence`, which is what Cursor, VS Code,
