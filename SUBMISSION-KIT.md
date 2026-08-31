@@ -41,8 +41,30 @@ public page and the form say the same thing.
 | Icon 512×512 | https://brickandmortar.dev/brand/icon.png |
 | Icon 256×256 | https://brickandmortar.dev/brand/icon-256.png |
 | Wordmark 900×240 | https://brickandmortar.dev/brand/logo.png |
+| **Composer icon** 64×64 SVG | https://brickandmortar.dev/brand/icon-composer.svg |
+| Composer icon, raster | `/brand/icon-composer-64.png` · `-512.png` · `-64-white.png` |
+| App icon as SVG, colour | https://brickandmortar.dev/favicon.svg — same 64×64 mark as `icon.png` |
 | Social card 1200×630 | https://brickandmortar.dev/brand/mark-og.png |
 | Availability | United States |
+
+**The colour icon cannot serve ChatGPT's composer.** OpenAI's own submission
+guidelines say nothing about icon dimensions at all, and its UI guidelines say only
+*"use either system icons or custom iconography that fits within ChatGPT's visual
+world — monochromatic and outlined"*
+(developers.openai.com/plugins/concepts/ui-guidelines). The 64×64 SVG figure is
+**not** from OpenAI — it comes from a third-party build guide
+(xmcp.dev/blog/build-and-submit-gpt-apps: *"An SVG icon 64x64 pixels in size. Test
+it in dark mode as many icons become invisible on dark backgrounds"*). Treat the
+dimension as a convention, the monochrome-and-outlined rule as the actual
+requirement, and re-check the form at filing time.
+
+`icon-composer.svg` is stroke-only on `currentColor`, so it takes ChatGPT's own
+foreground in both themes — a baked `#111827` is exactly the icon that disappears
+on a dark composer. Same running-bond mark as `icon.png`, cut to three courses
+because five is mud below 20px; QA'd at 16/18/20/24/32/64 on `#fff` and `#212121`.
+The PNGs are transparent-background fallbacks in case the portal refuses an SVG
+upload; `-64-white.png` exists only for a surface that takes a raster and paints
+it on dark. Built 2026-08-31.
 
 **Every policy URL is on brickandmortar.dev on purpose.** `/connect/privacy` and
 `/connect/docs` are Vercel rewrites to the Worker's own pages, added 2026-08-30
