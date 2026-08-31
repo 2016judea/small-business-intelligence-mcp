@@ -46,6 +46,7 @@ public page and the form say the same thing.
 | App icon as SVG, colour | https://brickandmortar.dev/favicon.svg — same 64×64 mark as `icon.png` |
 | Social card 1200×630 | https://brickandmortar.dev/brand/mark-og.png |
 | Availability | United States |
+| Demo recording | https://brickandmortar.dev/demo/chatgpt-app-review.mp4 |
 
 **The colour icon cannot serve ChatGPT's composer.** OpenAI's own submission
 guidelines say nothing about icon dimensions at all, and its UI guidelines say only
@@ -295,7 +296,16 @@ known; do not claim a cause. See SUBMISSION.md for the full history.
    support / privacy / terms URLs (§1), five positive and three negative test
    cases (§8), starter prompts (§9), release notes, and availability. All of it is
    above. No CSP and no demo credentials — there is no UI and no account.
-6. Approval does not publish it. Publishing is a second, separate click in the
+6. **Demo recording** — OpenAI wants a video of the plugin working in Developer
+   mode. Ours is the eight test cases of §8 run in one unbroken take, recorded
+   2026-08-31: 5m33s, 1708x1062, no narration, sidebar collapsed. It is served
+   from `website/demo/` in the bricks repo with `X-Robots-Tag: noindex` and a
+   `Disallow: /demo/` — a public URL is what the form needs, an indexed one is not.
+   Re-record with `scratchpad/take.mjs` against a Chrome on `--remote-debugging-port=9222`.
+   The trap: **a dev-mode plugin is not attached to a chat by default.** Without
+   picking it from the composer's + menu, ChatGPT answers the same prompts from
+   general knowledge and no tool fires, which reads as a broken server.
+7. Approval does not publish it. Publishing is a second, separate click in the
    portal, and the listing lands in the one directory ChatGPT and Codex share.
    OpenAI publishes no review SLA.
 
