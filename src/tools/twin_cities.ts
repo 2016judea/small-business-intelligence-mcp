@@ -250,6 +250,42 @@ const RecordsInput = z.object({
     .describe("Column keys to return. Omit for the dataset's default set."),
 });
 
+// ── the contact block never leaves this server ──────────────────────────────
+//
+// `landlords` carries the owner's and the licence applicant's phone, email,
+// street address and zip, exactly as Minneapolis publishes them. On the data
+// platform that is deliberate: the card's question is "who the landlord is, and
+// how to reach them", and every one of these columns is already `default: false`
+// there, so a person choosing them is making a choice.
+//
+// A CONVERSATION IS NOT THAT PERSON. A model asked "who owns this" will happily
+// pass `columns: ["owner_email", "owner_phone"]` because the schema allows it,
+// and then a named individual's mobile number is read aloud in a chat nobody
+// audited. Some of these rows are companies; "GEORGE E SHERMAN, (612)332-3000"
+// is not. The platform keeps publishing the file; this surface does not serve
+// the four contact fields, which is the narrowest cut that removes the risk
+// without touching a decision made on the platform side.
+//
+// Found 2026-08-31 while writing the ChatGPT skills: the submission's own
+// negative test case claimed this server held no phone or email, and calling it
+// proved otherwise. OpenAI's review criteria check responses for unnecessary
+// personal information.
+const CONTACT_COLUMNS = new Set([
+  "owner_phone",
+  "owner_email",
+  "applicant_phone",
+  "applicant_email",
+]);
+
+/** Drops the contact block from a caller's column list. Returns what was dropped. */
+function withoutContactColumns(columns?: string[]): { columns?: string[]; dropped: string[] } {
+  if (!columns?.length) return { columns, dropped: [] };
+  const dropped = columns.filter((c) => CONTACT_COLUMNS.has(c));
+  if (!dropped.length) return { columns, dropped };
+  const kept = columns.filter((c) => !CONTACT_COLUMNS.has(c));
+  return { columns: kept.length ? kept : undefined, dropped };
+}
+
 export function registerTwinCitiesRecords(server: McpServer, env: Env) {
   server.registerTool(
     "twin_cities_records",
@@ -270,11 +306,12 @@ export function registerTwinCitiesRecords(server: McpServer, env: Env) {
       env,
       async (args: z.infer<typeof RecordsInput>) => {
         const base = origin(env);
+        const { columns: safeColumns, dropped } = withoutContactColumns(args.columns);
         const p = new URLSearchParams({ dataset: args.dataset, format: "preview" });
         if (args.scope) p.set("scope", args.scope);
         if (args.address) p.set("near", args.address);
         if (args.within_ft) p.set("within", String(args.within_ft));
-        if (args.columns?.length) p.set("columns", args.columns.join(","));
+        if (safeColumns?.length) p.set("columns", safeColumns.join(","));
 
         const { status, body } = await getJson(`${base}/api/export?${p}`);
 
@@ -355,7 +392,7 @@ export function registerTwinCitiesRecords(server: McpServer, env: Env) {
         if (args.scope) file.set("scope", args.scope);
         if (args.address) file.set("near", args.address);
         if (args.within_ft) file.set("within", String(args.within_ft));
-        if (args.columns?.length) file.set("columns", args.columns.join(","));
+        if (safeColumns?.length) file.set("columns", safeColumns.join(","));
 
         const where = body.centre?.label
           ? ` within ${body.centre.within_ft} ft of ${body.centre.label}`
@@ -370,12 +407,25 @@ export function registerTwinCitiesRecords(server: McpServer, env: Env) {
           dataset: body.dataset,
           scope_label: body.scope_label,
           matching_rows: body.rows,
-          columns: body.columns,
-          sample: body.preview,
+          // Belt AND braces: the request was already stripped, but scrub the
+          // response too. A default column set could gain a contact field later
+          // and nobody would think to come back here.
+          columns: (body.columns ?? []).filter(
+            (c: { key?: string }) => !CONTACT_COLUMNS.has(c?.key ?? ""),
+          ),
+          sample: (body.preview ?? []).map((row: Record<string, unknown>) =>
+            Object.fromEntries(Object.entries(row).filter(([k]) => !CONTACT_COLUMNS.has(k))),
+          ),
           centre: body.centre ?? null,
           download_url: `${base}/api/export?${file}`,
           documented_at: `${base}/datasets/${args.dataset}/`,
-          caveats: [NOT_A_FILE_CAVEAT, COVERAGE_CAVEAT],
+          caveats: dropped.length
+            ? [
+                `Contact details are not served here. ${dropped.join(", ")} ${dropped.length === 1 ? "was" : "were"} dropped from this request: the owner and applicant phone, email and address blocks are published on the platform at the download link, and are deliberately not read back into a conversation. Do not describe this as the data being absent — it is present in the file and withheld on this surface.`,
+                NOT_A_FILE_CAVEAT,
+                COVERAGE_CAVEAT,
+              ]
+            : [NOT_A_FILE_CAVEAT, COVERAGE_CAVEAT],
         });
       },
       denial("twin_cities_records"),

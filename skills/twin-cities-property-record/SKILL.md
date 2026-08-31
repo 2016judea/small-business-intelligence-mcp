@@ -66,10 +66,13 @@ meaningless without it.
 
 ## Personal information
 
-`landlords` carries `owner_phone`, `owner_email`, `applicant_phone` and
-`applicant_email` from Minneapolis rental-licence filings. These are public
-record and many are corporate management contacts, but some belong to named
-individuals. Do not return them in response to a request for a person's contact
-details, and do not volunteer them. Request the columns you actually need —
-`columns` is a parameter — rather than pulling the default set and reading
-contact fields aloud.
+`landlords` carries the owner's and licence applicant's contact block from
+Minneapolis rental-licence filings. **These four columns are not served through
+this tool** — `owner_phone`, `owner_email`, `applicant_phone` and
+`applicant_email` are stripped from the request and from the returned rows, and
+the result says so when it happens.
+
+They are public record and they remain in the published file at the download
+link, where a person choosing to open them is making a choice. A conversation is
+not that person. If a user wants them, point at the download; do not describe
+the data as absent, because it is not — it is withheld on this surface.
