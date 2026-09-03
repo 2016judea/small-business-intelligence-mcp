@@ -17,7 +17,7 @@ That prints `N tools, N datasets, N rows` and rewrites
 single day. Then rebuild `/connect/` (`python3 scripts/build_connect.py`) so the
 public page and the form say the same thing.
 
-**Current: 11 tools · 25 datasets · 1,575,384 rows.**
+**Current: 12 tools · 25 datasets · 1,575,384 rows.** Re-derived 2026-09-03.
 
 ---
 
@@ -87,13 +87,15 @@ records, joined into one queryable model. Free, read-only, no account."* (94)
 ## 3. Description
 
 > Ask about a building in the Twin Cities and get an answer from the record
-> instead of a guess. Eleven read-only tools: two read 25 joined datasets of
-> Minneapolis–St. Paul public records — 1,573,968 rows of parcels, recorded
+> instead of a guess. Twelve read-only tools: two read 25 joined datasets of
+> Minneapolis–St. Paul public records — 1,575,384 rows of parcels, recorded
 > sales, assessor values, business licences, building permits, inspections,
-> emergency calls, contamination sites, flood zones and wages. The other nine are
+> emergency calls, contamination sites, flood zones and wages. Nine more are
 > research frameworks that work in any US metro: tear down one business, map a
 > competitive set, benchmark local pricing, or find which public record answers a
-> question in a city we don't hold.
+> question in a city we don't hold. The twelfth sends us a feature request and is
+> deliberately not counted among the frameworks — it answers nothing and works in
+> no metro.
 >
 > Free, no account, no key, nothing to sign in to. The underlying files are
 > CC BY 4.0 and downloadable at brickandmortar.dev/datasets.

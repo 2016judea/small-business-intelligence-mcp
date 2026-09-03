@@ -1,0 +1,28 @@
+{
+  "name": "brick-and-mortar-public-records",
+  "displayName": "Brick & Mortar Public Records",
+  "description": "Public property, permit and licence records for Minneapolis-St. Paul, joined and queryable. Free, read-only, no account.",
+  "version": "0.2.0",
+  "author": "Brick and Mortar AI LLC",
+  "homepage": "https://brickandmortar.dev/connect/",
+  "repository": "https://github.com/2016judea/small-business-intelligence-mcp",
+  "license": "MIT",
+  "icon": "https://brickandmortar.dev/brand/icon-256.png",
+  "keywords": [
+    "public-records",
+    "real-estate",
+    "open-data",
+    "minneapolis",
+    "saint-paul",
+    "parcels",
+    "permits",
+    "small-business",
+    "commercial-real-estate",
+    "gis"
+  ],
+  "mcpServers": {
+    "brick-and-mortar": {
+      "url": "https://brickandmortar.dev/mcp"
+    }
+  }
+}
