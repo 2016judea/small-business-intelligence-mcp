@@ -4,8 +4,19 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-08-08",
   "compatibility_flags": ["nodejs_compat"],
+  // Explicit, because the defaults were not what they looked like: with a bare
+  // `enabled: true`, Workers Logs held ~200 request events a day against the
+  // ~2,000 requests GraphQL counted (2026-09-04) — sampled, and every count read
+  // off the logs was a tenth of the truth. Full rate; the free tier is 200k
+  // events a day and we run at ~4k.
   "observability": {
-    "enabled": true
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "head_sampling_rate": 1
+    }
   },
   // Usage ledger for the (currently dormant) metered policy — free KV tier.
   "kv_namespaces": [

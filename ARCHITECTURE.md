@@ -115,6 +115,7 @@ small-business-intelligence-mcp/
 │   ├── middleware/
 │   │   ├── context.ts            # withPolicy() wrapper — the single seam every tool passes through
 │   │   ├── identity.ts           # resolveIdentity(): hashed-IP today, OAuth subject later
+│   │   ├── client_class.ts        # UA → claude/openai/crawler/… (a class, never the string)
 │   │   ├── ledger.ts              # UsageLedger interface + KVUsageLedger impl
 │   │   └── policy.ts              # allow_all (active) / metered (dormant) policy decision
 │   ├── oauth/
@@ -157,6 +158,18 @@ constraint #… (anti-patterns list) calls out explicitly.
    `usage:{identity}:{yyyy-mm-dd}`, 48h TTL (auto-expiring, so the free KV
    tier never fills up). Swappable for Durable Objects/D1 later without
    touching call sites.
+   The identity's IP is `x-vercel-proxied-for` when present, else
+   `cf-connecting-ip` — brickandmortar.dev/mcp is a Vercel rewrite, so the
+   latter is Vercel's proxy for every caller who used the published address
+   (found 2026-09-04: three "identities" were three proxy IPs).
+   **Stats** (`stats.ts`) — `stats:{tool}:{date}:{client}`, no TTL, where
+   `client` is one of eight UA-derived buckets from `client_class.ts`
+   (claude / openai / crawler / cli / …). Added 2026-09-04 when ~80% of
+   ~2,000 daily requests turned out to be registry crawlers and the
+   undivided counter could not answer "has a person used this?". The
+   request-level view (which JSON-RPC method, which tool, from which host)
+   is a `console.log` line per /mcp request in `index.ts`, read back from
+   Workers Logs by `scripts/usage_stats.py --who`.
 3. **Policy** (`policy.ts`) — `POLICY_MODE` env var. `allow_all` (the
    shipped default) always allows. `metered` (implemented, not activated)
    allows N calls/identity/day, then returns a denial.

@@ -10,6 +10,42 @@ import { createServer } from "./server.js";
 import { landingPageHtml } from "./pages/landing.js";
 import { privacyPageHtml } from "./pages/privacy.js";
 import { docsPageHtml } from "./pages/docs.js";
+import { classifyClient } from "./middleware/client_class.js";
+
+/**
+ * One structured log line per /mcp request, read back through Cloudflare's
+ * Workers Logs (observability is on in wrangler.jsonc; `scripts/usage_stats.py
+ * --who` queries it). The request event Cloudflare records already carries the
+ * User-Agent and coarse geography; what it CANNOT see is inside the body — which
+ * JSON-RPC method this was (initialize / tools/list / tools/call) and, for a
+ * call, which tool. Without that, a registry crawler listing tools and a person
+ * running one are the same POST. The body is read from a clone so the handler
+ * still gets it; only the method and tool NAME are logged, never the arguments —
+ * /privacy promises that, and this must keep it true.
+ */
+async function logRpc(request: Request): Promise<void> {
+  const client = classifyClient(request.headers.get("user-agent"));
+  let method = request.method === "GET" ? "GET (sse)" : "";
+  let tool: string | undefined;
+  if (request.method === "POST") {
+    try {
+      const body: unknown = await request.clone().json();
+      const first = Array.isArray(body) ? body[0] : body;
+      if (first && typeof first === "object") {
+        const msg = first as { method?: unknown; params?: { name?: unknown } };
+        method = typeof msg.method === "string" ? msg.method : "(no method)";
+        if (method === "tools/call" && typeof msg.params?.name === "string") tool = msg.params.name;
+      }
+    } catch {
+      method = "(unparseable)";
+    }
+  }
+  // `via`: the hostname the caller actually used. Requests through the Vercel
+  // rewrite carry x-forwarded-host=brickandmortar.dev; direct hits on the
+  // workers.dev address (the older registry listings) do not.
+  const via = request.headers.get("x-forwarded-host") ?? new URL(request.url).hostname;
+  console.log(JSON.stringify({ ev: "rpc", method, tool, client, via }));
+}
 
 // `cache-control` is NOT decoration. Without it these three pages ship with no
 // caching directive at all, and the edge is free to serve a stale copy for an
@@ -92,6 +128,7 @@ export default {
       // mounted" section for why the per-request McpRequestContext arg is
       // otherwise unused here — identity resolution happens per-tool-call
       // inside withPolicy(), not at server construction time.
+      await logRpc(request);
       const handler = createMcpHandler(() => createServer(env));
       return handler.fetch(request);
     }

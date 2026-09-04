@@ -170,9 +170,11 @@ export function docsPageHtml(): string {
     today, unlimited.
   </p>
   <p>
-    Separately, we keep an aggregate, non-identifying count of calls per tool per day (e.g.
-    "business_teardown: 340 calls on 2026-08-09"), used only to understand which tools are useful.
-    It has no connection to the hashed-IP counter and carries no identity of any kind.
+    Separately, we keep an aggregate, non-identifying count of calls per tool per day, split by
+    the kind of client (Claude, ChatGPT, a registry crawler…) read off the User-Agent — e.g.
+    "business_teardown: 340 calls on 2026-08-09, 300 from Claude". It has no connection to the
+    hashed-IP counter and carries no identity of any kind. Cloudflare's own request log additionally
+    holds the JSON-RPC method and tool name (never arguments) for a few days — see /privacy.
   </p>
 
   <h3>Outbound network access</h3>

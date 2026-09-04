@@ -5,6 +5,7 @@ import { resolveIdentity } from "./identity.js";
 import { KVUsageLedger } from "./ledger.js";
 import { checkPolicy } from "./policy.js";
 import { KVToolStats } from "./stats.js";
+import { classifyClient } from "./client_class.js";
 
 type ToolResult = CallToolResult | InputRequiredResult;
 type ToolHandler<Args> = (args: Args, ctx: ServerContext) => ToolResult | Promise<ToolResult>;
@@ -78,7 +79,11 @@ export function withPolicy<Args>(
     await ledger.increment(identity);
     // Aggregate-only, non-identifying — see stats.ts's docstring. Recorded
     // regardless of POLICY_MODE; this is product signal, not rate limiting.
-    await new KVToolStats(env.USAGE_LEDGER).recordCall(toolName);
+    // Split by client CLASS (claude / openai / crawler / …), never the UA string:
+    // 2026-09-04 the undivided counter could not say whether a call came from a
+    // person's AI or a registry scanner exercising the tool once.
+    const client = classifyClient(ctx.http?.req?.headers.get("user-agent"));
+    await new KVToolStats(env.USAGE_LEDGER).recordCall(toolName, client);
     return result;
   };
 }

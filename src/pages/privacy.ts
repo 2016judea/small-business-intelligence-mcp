@@ -74,9 +74,18 @@ export function privacyPageHtml(): string {
   </p>
   <p>
     Separately, we keep an <strong>aggregate, non-identifying</strong> count of how many times each
-    tool is called per day — e.g. "business_teardown: 340 calls on 2026-08-09." This count has no
-    connection to the hashed-IP counter above, carries no identity of any kind, and is used only to
-    understand which tools are actually useful.
+    tool is called per day, split by the <em>kind</em> of client that called it — e.g.
+    "business_teardown: 340 calls on 2026-08-09, 300 from Claude, 40 from registry crawlers." The
+    kind is one of eight coarse buckets read off the User-Agent header (Claude, ChatGPT, a crawler, a
+    browser, a generic HTTP library…), never the header itself. This count has no connection to the
+    hashed-IP counter above, carries no identity of any kind, and is used only to understand which
+    tools are actually useful and whether a person or a scanner is using them.
+  </p>
+  <p>
+    Our host, Cloudflare, keeps its own request log for a few days: the User-Agent header, the coarse
+    geography it derives from the IP (city, country), and — added by us — the JSON-RPC method of the
+    request and, for a tool call, the tool's <em>name</em>. Never the arguments. We read that log to
+    tell people apart from the automated scanners that make up most of our traffic.
   </p>
   <p>
     Nothing else is logged — no request bodies, tool arguments, business names, conversation
