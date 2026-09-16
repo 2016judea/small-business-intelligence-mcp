@@ -202,7 +202,7 @@ export function registerCompetitorLandscape(server: McpServer, env: Env): void {
         '- "Who are the real competitors to a new brewery taproom opening in the North Loop, Minneapolis?"',
       inputSchema: InputSchema,
       outputSchema: FrameworkPayloadSchema,
-      annotations: { title: "Competitor Landscape", readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+      annotations: { title: "Competitor Landscape", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     withPolicy("competitor_landscape", env, async (args) => frameworkResult({ ...PAYLOAD, subject: args })),
   );

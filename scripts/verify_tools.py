@@ -51,7 +51,7 @@ def declared() -> list[str]:
     return re.findall(r'"([a-z_]+)"', block.group(1))
 
 
-def registered(url: str) -> list[str]:
+def registered(url: str) -> list[dict]:
     body = json.dumps({"jsonrpc": "2.0", "id": 1, "method": "tools/list"}).encode()
     req = urllib.request.Request(
         url,
@@ -83,12 +83,75 @@ def registered(url: str) -> list[str]:
         sys.exit(f"response was not JSON (first 200 chars): {raw[:200]!r}")
     if "error" in doc:
         sys.exit(f"server returned an error: {doc['error']}")
-    return [t["name"] for t in doc.get("result", {}).get("tools", [])]
+    return doc.get("result", {}).get("tools", [])
+
+
+# The four hints OpenAI grades. A hint that is absent from a live tools/list
+# response is NULL to a reviewer, not "defaulted" — which is exactly how the
+# 2026-09-15 rejection read: "annotations ... explicitly set to true or false
+# (not null) for every tool". `title` is not graded and is not checked here.
+HINTS = ("readOnlyHint", "destructiveHint", "idempotentHint", "openWorldHint")
+SUBMISSION = ROOT / "chatgpt-app-submission.json"
+
+
+def annotations_ok(live: list[dict]) -> bool:
+    """Every live tool declares all four hints as real booleans, and every one
+    matches what chatgpt-app-submission.json promises the reviewer.
+
+    WHY THIS EXISTS. The first submission shipped `idempotentHint` unset on
+    eleven of twelve tools and was rejected on 2026-09-15 for exactly that. The
+    older name/order check above passed the whole time, because a tool can
+    register perfectly and still be annotated wrong. Nothing compared the running
+    server to the file OpenAI actually reads until this function.
+    """
+    promised = json.loads(SUBMISSION.read_text())["tools"]
+    ok = True
+
+    for tool in live:
+        name = tool["name"]
+        ann = tool.get("annotations") or {}
+        for hint in HINTS:
+            if not isinstance(ann.get(hint), bool):
+                ok = False
+                print(f"  {name}: {hint} is {ann.get(hint)!r}, not an explicit true/false")
+
+        want = promised.get(name)
+        if want is None:
+            ok = False
+            print(f"  {name}: registered live but absent from chatgpt-app-submission.json")
+            continue
+        for hint in HINTS:
+            if hint in ann and ann[hint] != want["annotations"].get(hint):
+                ok = False
+                print(
+                    f"  {name}: {hint} is {ann[hint]} live but the submission "
+                    f"promises {want['annotations'].get(hint)}"
+                )
+        # A hint with no justification is a rejection waiting to happen: the mail
+        # asked for "a clear justification for why the hint is set that way".
+        for hint in HINTS:
+            key = {
+                "readOnlyHint": "read_only_justification",
+                "destructiveHint": "destructive_justification",
+                "idempotentHint": "idempotent_justification",
+                "openWorldHint": "open_world_justification",
+            }[hint]
+            if not (want.get("justifications", {}).get(key) or "").strip():
+                ok = False
+                print(f"  {name}: no {key} in chatgpt-app-submission.json")
+
+    for name in promised:
+        if name not in {t["name"] for t in live}:
+            ok = False
+            print(f"  {name}: promised to OpenAI but not registered live")
+
+    return ok
 
 
 def main() -> int:
     url = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_URL
-    want, got = declared(), registered(url)
+    want, live = declared(), registered(url)
+    got = [t["name"] for t in live]
     print(f"{url}\n  declared in server.ts : {len(want)}\n  registered live       : {len(got)}")
 
     ok = True
@@ -105,6 +168,12 @@ def main() -> int:
     if not missing and not extra and want != got:
         ok = False
         print(f"  ORDER DIFFERS\n    declared:   {want}\n    registered: {got}")
+
+    print("  annotations:")
+    if not annotations_ok(live):
+        ok = False
+    else:
+        print("    all four hints explicit on every tool, and matching the submission")
 
     print("  OK" if ok else "  MISMATCH")
     return 0 if ok else 1

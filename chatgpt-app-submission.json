@@ -11,145 +11,169 @@
     "data_source_atlas": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a static research plan naming which public record settles the question and does not create, update or store anything.",
-        "open_world_justification": "Names sources the caller may go and read; it reaches no system itself and writes nothing anywhere.",
-        "destructive_justification": "Has no delete, overwrite, send or revoke path and holds no account or record to affect."
+        "destructive_justification": "Has no delete, overwrite, send or revoke path and holds no account or record to affect.",
+        "idempotent_justification": "Returns the same research plan for the same arguments and leaves nothing behind, so a repeat call adds no effect of any kind.",
+        "open_world_justification": "Names sources the caller may go and read; it reaches no system itself and writes nothing anywhere."
       }
     },
     "business_teardown": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a four-quadrant teardown framework as text and echoes the caller's own input back; no state is read or written.",
-        "open_world_justification": "Publishes nothing and contacts no third-party system; the named business is never notified or modified.",
-        "destructive_justification": "Performs no irreversible action of any kind and cannot alter the business it describes."
+        "destructive_justification": "Performs no irreversible action of any kind and cannot alter the business it describes.",
+        "idempotent_justification": "Produces the same teardown procedure for the same business and stores nothing, so repeating it changes nothing anywhere.",
+        "open_world_justification": "Publishes nothing and contacts no third-party system; the named business is never notified or modified."
       }
     },
     "competitor_landscape": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a positioning and saturation framework for a category and metro without touching any store or record.",
-        "open_world_justification": "Creates no public content and calls no external service; the competitive set is researched by the calling model.",
-        "destructive_justification": "Cannot delete, overwrite or send anything; the result is text the caller may discard freely."
+        "destructive_justification": "Cannot delete, overwrite or send anything; the result is text the caller may discard freely.",
+        "idempotent_justification": "Returns the same framework for the same category and metro and writes nothing, so a second identical call has no additional effect.",
+        "open_world_justification": "Creates no public content and calls no external service; the competitive set is researched by the calling model."
       }
     },
     "review_intelligence": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a complaint-taxonomy and sentiment-trajectory method; it does not fetch, store or alter any review.",
-        "open_world_justification": "Posts no reviews and writes to no review platform; nothing on any public listing changes.",
-        "destructive_justification": "Has no write path to any review or rating and performs no irreversible action."
+        "destructive_justification": "Has no write path to any review or rating and performs no irreversible action.",
+        "idempotent_justification": "Returns the same review-analysis procedure for the same arguments and holds no state, so repeat calls are indistinguishable from one.",
+        "open_world_justification": "Posts no reviews and writes to no review platform; nothing on any public listing changes."
       }
     },
     "market_opportunity_scan": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a gap-analysis procedure using public signals and changes no data anywhere.",
-        "open_world_justification": "Submits no forms and creates no external records; the scan is a method the caller executes.",
-        "destructive_justification": "Nothing it returns can delete, overwrite or commit anything on the caller's behalf."
+        "destructive_justification": "Nothing it returns can delete, overwrite or commit anything on the caller's behalf.",
+        "idempotent_justification": "Returns the same scan procedure for the same market and records nothing, so calling it twice has the same effect as once: none.",
+        "open_world_justification": "Submits no forms and creates no external records; the scan is a method the caller executes."
       }
     },
     "pricing_benchmark": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a normalisation method for comparing local prices and never records or transmits a price.",
-        "open_world_justification": "Publishes no pricing anywhere and does not contact any merchant or third-party system.",
-        "destructive_justification": "Involves no transaction, purchase or irreversible commitment of any kind."
+        "destructive_justification": "Involves no transaction, purchase or irreversible commitment of any kind.",
+        "idempotent_justification": "Returns the same benchmarking method for the same arguments and keeps no state, so a repeat call adds no effect.",
+        "open_world_justification": "Publishes no pricing anywhere and does not contact any merchant or third-party system."
       }
     },
     "local_visibility_audit": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns a scored checklist of listing and map-pack factors to verify by hand; no listing is read or edited.",
-        "open_world_justification": "Cannot edit a Google Business Profile, a directory listing or a website; it only says what to check.",
-        "destructive_justification": "Has no access to any listing or account and so can neither remove nor overwrite one."
+        "destructive_justification": "Has no access to any listing or account and so can neither remove nor overwrite one.",
+        "idempotent_justification": "Returns the same audit checklist for the same business and writes nothing, so repeating the call changes nothing.",
+        "open_world_justification": "Cannot edit a Google Business Profile, a directory listing or a website; it only says what to check."
       }
     },
     "broker_diligence_prep": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns SDE framing, a red-flag checklist and a seller-question list as text; no deal, document or record is stored.",
-        "open_world_justification": "Contacts no broker, seller or listing service and creates nothing publicly visible.",
-        "destructive_justification": "Makes no offer and commits to nothing; every output is advisory text the caller reviews first."
+        "destructive_justification": "Makes no offer and commits to nothing; every output is advisory text the caller reviews first.",
+        "idempotent_justification": "Returns the same diligence checklist for the same deal and stores nothing, so a second identical call has no additional effect.",
+        "open_world_justification": "Contacts no broker, seller or listing service and creates nothing publicly visible."
       }
     },
     "compose_report": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       },
       "justifications": {
         "read_only_justification": "Returns section order, citation standards and tone guidance for assembling prior results already in the conversation.",
-        "open_world_justification": "Does not publish, email or upload the report; the finished document stays with the caller.",
-        "destructive_justification": "Overwrites no file and sends nothing; the report is produced by the calling model in the conversation."
+        "destructive_justification": "Overwrites no file and sends nothing; the report is produced by the calling model in the conversation.",
+        "idempotent_justification": "Assembles the same report structure from the same inputs and persists nothing, so repeating it has no additional effect.",
+        "open_world_justification": "Does not publish, email or upload the report; the finished document stays with the caller."
       }
     },
     "twin_cities_datasets": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
       },
       "justifications": {
         "read_only_justification": "Issues a single HTTPS GET to the publisher's own public catalogue and returns dataset titles, row counts and columns.",
-        "open_world_justification": "Reads the publisher's own public catalogue over HTTPS with a GET; no state changes there or anywhere else.",
-        "destructive_justification": "Uses GET only against a read-only catalogue and cannot modify or remove any dataset."
+        "destructive_justification": "Uses GET only against a read-only catalogue and cannot modify or remove any dataset.",
+        "idempotent_justification": "Performs an HTTPS GET against a read-only catalogue; the request changes nothing at the publisher, so any number of identical calls has the same effect as one.",
+        "open_world_justification": "TRUE because this tool leaves the server: it makes an outbound HTTPS request across the public internet to the publisher's catalogue at brickandmortar.dev, whose contents change as datasets are added. The interaction is read-only, but the domain is external rather than closed."
       }
     },
     "twin_cities_records": {
       "annotations": {
         "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
       },
       "justifications": {
         "read_only_justification": "Issues a single HTTPS GET to the publisher's public export endpoint and returns the matching row count, sample rows and a file link.",
-        "open_world_justification": "Reads the publisher's own published record files over HTTPS with a GET; no record is written back and nothing becomes publicly visible.",
-        "destructive_justification": "Uses GET only against published public-records files and has no path to edit or delete a record."
+        "destructive_justification": "Uses GET only against published public-records files and has no path to edit or delete a record.",
+        "idempotent_justification": "Performs an HTTPS GET against read-only published files; the request changes nothing at the publisher, so repeat calls have no cumulative effect.",
+        "open_world_justification": "TRUE because this tool leaves the server: it makes an outbound HTTPS request across the public internet to the publisher's export endpoint at brickandmortar.dev, and the records it returns change as the underlying public files are refreshed."
       }
     },
     "request_a_feature": {
       "annotations": {
         "readOnlyHint": false,
-        "openWorldHint": true,
-        "destructiveHint": false
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
       },
       "justifications": {
         "read_only_justification": "Sends the user's own feature, data or correction request to the publisher's inbox, so it creates something rather than only reading.",
-        "open_world_justification": "Delivers a message to a real person outside the conversation, which is a change to an external system.",
-        "destructive_justification": "Adds a new request and overwrites, deletes or revokes nothing; it is capped at a few filings per caller per day."
+        "destructive_justification": "Adds a new request and overwrites, deletes or revokes nothing; it is capped at a few filings per caller per day.",
+        "idempotent_justification": "NOT idempotent: each call files a separate request into the publisher's inbox, so calling twice with identical arguments delivers two requests.",
+        "open_world_justification": "Delivers a message to a real person outside the conversation, which is a change to an external system."
       }
     }
   },
