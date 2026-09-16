@@ -290,7 +290,57 @@ a field this server has never emitted — escalated by email 08-06 and again 08-
 Whether the portal was fixed or something in the 08-30 pass cleared it is not
 known; do not claim a cause. See SUBMISSION.md for the full history.
 
-### ChatGPT app directory — SUBMITTED FOR REVIEW 2026-08-31
+### ChatGPT app directory — REJECTED 2026-09-15, RESUBMITTED the same day
+
+**Read this before touching the submission again.** The 08-31 filing came back
+rejected on one line: *"One or more of your tool's annotations do not appear to
+match the tool's behavior. Please confirm annotations are explicitly set to true
+or false (not null) for every tool."* Four things about that are worth knowing,
+and none of them are guessable from the mail.
+
+1. **The form grades THREE annotations, not four.** Every tool block renders
+   `Read Only`, `Open World` and `Destructive` and nothing else — no idempotent
+   row, not even on `request_a_feature`, the one tool that is not read-only. An
+   `idempotent_justification` key in the JSON imports without complaint and is
+   then silently dropped. Do not read "not null" as being about `idempotentHint`.
+
+2. **The reviewer reads the form's OWN stored snapshot, not your live server.**
+   "Scan Tools" copies the annotations into the version, and that copy is what is
+   submitted. Ours was captured *before* the 08-31 deploy that flipped
+   `openWorldHint` to false on nine tools, so the submission asserted
+   `Open World: True` on nine tools while the server served `False`. That is the
+   whole mismatch. **Rescan after every deploy that touches an annotation**, and
+   treat the deploy and the scan as one operation, never two.
+
+3. **Scan first, THEN upload the JSON — the order is not cosmetic.** The import
+   reconciles against the stored scan and says so:
+   `Imported 12 tool justifications. Skipped 0. Missing 0. Mismatched 0.`
+   Uploading before scanning printed `Imported 3 ... Mismatched 9` and left the
+   stale values in place, with the only warning a grey line reading
+   *"Stale annotations: data_source_atlas, business_teardown, ... and 6 more."*
+   Read that line every time; `Mismatched 0` is the state to submit in.
+
+4. **A rejected version cannot be edited, and the recovery is not signposted.**
+   Opening it says *"Viewing the rejected version. Only draft versions can be
+   edited."* The plugin-level ⋯ menu (`Plugin actions for <name>`) → **Edit**
+   turns it into a draft carrying every field forward — name, version, all four
+   URLs, both icon pairs, the demo recording, all seven policy checkboxes. Nothing
+   needs re-entering. The version-row ⋯ menu offers only Edit/Download and is not
+   the one you want.
+
+**Driving it headless:** `Submit for Review` sits at y≈1139 in a 1200×952
+viewport. A `getBoundingClientRect` click without `scrollIntoView({block:"center"})`
+lands on empty page, returns no error, fires no toast, and leaves the version on
+`Draft` — the silent-submit trap from the `browser-as-aidan` skill, exactly as
+described. Confirm against the list page: `Draft` → `Review` is the only proof.
+The in-page tell is the banner changing to *"Viewing the review version."*
+
+`scripts/verify_tools.py` now holds the live server's annotations against
+`chatgpt-app-submission.json` — every hint an explicit bool, every value matching,
+every hint justified. It does NOT know what the form last scanned, which is the
+one gap left; the form's snapshot has to be refreshed by hand.
+
+### ChatGPT app directory — the original filing, 2026-08-31
 1. Apps Management = Write at platform.openai.com/settings/organization/people/roles
    (org owners already have it).
 2. **Business verification — DONE 2026-08-31**, under Brick and Mortar AI LLC. It
