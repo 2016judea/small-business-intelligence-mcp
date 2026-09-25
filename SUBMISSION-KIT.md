@@ -307,6 +307,13 @@ names sending an irreversible message as destructive. Flipped to `true`
 suspect is `openWorldHint` on the two record tools; reply to the rejection mail
 to appeal and ask which tool, rather than guessing a third time.
 
+**Scan Tools lies for a few seconds.** The first click re-rendered the OLD values
+(`Destructive: False`) and the import then reported `Mismatched 1`. A second
+click, read after its `/mcp/inspect` call returned, showed `True`; re-importing
+the JSON then read `Imported 12 ... Mismatched 0`. Check the changed tool's block
+itself after scanning, not just that a scan ran. Status went `Rejected` → `Review`
+at 2026-09-25.
+
 ### ChatGPT app directory — REJECTED 2026-09-15, RESUBMITTED the same day
 
 **Read this before touching the submission again.** The 08-31 filing came back
