@@ -165,13 +165,13 @@
     "request_a_feature": {
       "annotations": {
         "readOnlyHint": false,
-        "destructiveHint": false,
+        "destructiveHint": true,
         "idempotentHint": false,
         "openWorldHint": true
       },
       "justifications": {
         "read_only_justification": "Sends the user's own feature, data or correction request to the publisher's inbox, so it creates something rather than only reading.",
-        "destructive_justification": "Adds a new request and overwrites, deletes or revokes nothing; it is capped at a few filings per caller per day.",
+        "destructive_justification": "Sends an email to the publisher's inbox that cannot be recalled once delivered, so it is marked destructive and should be confirmed with the user first; it overwrites, deletes or revokes nothing, and is capped at three filings per caller per day.",
         "idempotent_justification": "NOT idempotent: each call files a separate request into the publisher's inbox, so calling twice with identical arguments delivers two requests.",
         "open_world_justification": "Delivers a message to a real person outside the conversation, which is a change to an external system."
       }

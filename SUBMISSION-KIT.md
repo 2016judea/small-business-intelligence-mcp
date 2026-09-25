@@ -212,14 +212,20 @@ credential, and step needed to autonomously access the MCP server."* Ours:
 
 ## 7. Tool annotations, and the justification every platform asks for
 
-All 11 tools: `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: true`.
+As served since 2026-09-25 (`scripts/verify_tools.py` holds the live server to
+`chatgpt-app-submission.json`, which carries the per-tool justifications):
 
-> Every tool is read-only: nine return a research framework as text and change
-> nothing anywhere; two read published public-records files over HTTPS. Nothing in
-> this server writes, posts, sends, purchases or deletes, and there is no account
-> to affect — hence `destructiveHint: false` throughout. `openWorldHint` is true
-> because the two data tools fetch from an external endpoint
-> (brickandmortar.dev) rather than from the conversation.
+| Tools | readOnly | destructive | openWorld | idempotent |
+| --- | --- | --- | --- | --- |
+| the nine frameworks | true | false | false | true |
+| `twin_cities_datasets`, `twin_cities_records` | true | false | **true** | true |
+| `request_a_feature` | **false** | **true** | true | false |
+
+The rubric the grader uses is OpenAI's own `chatgpt-app-submission` skill
+(github.com/openai/plugins, "Hint Rules"), not the MCP spec: `destructiveHint` is
+true for anything that can *"send irreversible messages"*, and `openWorldHint` is
+true for a tool that reaches an external endpoint, even read-only (the CarsXE
+precedent: rejected for `false` on read-only calls to its own API).
 
 **`destructiveHint` was missing until 2026-08-30** and OpenAI's own guidelines
 name missing annotations as a common rejection cause. If a tool is ever added,
@@ -289,6 +295,17 @@ validator rejecting its own payload —
 a field this server has never emitted — escalated by email 08-06 and again 08-30.
 Whether the portal was fixed or something in the 08-30 pass cleared it is not
 known; do not claim a cause. See SUBMISSION.md for the full history.
+
+### ChatGPT app directory — REJECTED AGAIN 2026-09-25, RESUBMITTED the same day
+
+Same one line as 9/15, word for word. The 9/16 resubmission was scanned clean
+(`Mismatched 0`), so a stale snapshot was not the cause this time. The only
+annotation identical in BOTH rejected filings was `request_a_feature`
+`destructiveHint: false` on a tool that sends an email — and OpenAI's rubric
+names sending an irreversible message as destructive. Flipped to `true`
+(deployed `fcae20bb`). If a third rejection arrives with the same line, the next
+suspect is `openWorldHint` on the two record tools; reply to the rejection mail
+to appeal and ask which tool, rather than guessing a third time.
 
 ### ChatGPT app directory — REJECTED 2026-09-15, RESUBMITTED the same day
 

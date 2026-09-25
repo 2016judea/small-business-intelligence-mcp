@@ -197,14 +197,16 @@ export function docsPageHtml(): string {
   <p>
     ${TOOL_COUNT - 1} of the ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool
     annotations and are read-only in practice — they write nothing, delete nothing, and modify
-    nothing anywhere. A call to one of them cannot take any action outside of returning a JSON
-    object; every actual write action (sending a search query, browsing the web) is performed by the
-    calling AI using its own tools, not by this server.
+    nothing anywhere. Nine return a research framework and reach nothing; the two Twin Cities record
+    tools make one HTTPS GET to the published files at brickandmortar.dev, which is why those two carry
+    <code>openWorldHint: true</code>. Any searching or browsing the frameworks call for is done by the
+    calling AI with its own tools, not by this server.
   </p>
   <p>
     <code>request_a_feature</code> is the exception and is annotated
     <code>readOnlyHint: false</code>, because it does one thing: it sends the request you dictated to
-    a person's inbox. It is not destructive and not idempotent, it reads nothing, and it cannot be
+    a person's inbox. It is annotated <code>destructiveHint: true</code> because a sent message cannot be
+    recalled, so a client should confirm with you before it runs; it is not idempotent, it reads nothing, and it cannot be
     used to reach anyone but us — the destination is fixed in the source and is not a parameter. Its
     payload is bounded, it is rate-limited per caller per day, and the endpoint it posts to refuses
     anything that does not carry this server's own credential. What it transmits is listed in full on

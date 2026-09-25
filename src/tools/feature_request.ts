@@ -148,13 +148,16 @@ export function registerFeatureRequest(server: McpServer, env: Env): void {
       inputSchema: Input,
       outputSchema: PayloadSchema,
       // NOT read-only, and it is the only tool here that is not: it sends
-      // something to a person. `destructiveHint: false` because nothing is
-      // overwritten or lost, but a client that hides non-read-only tools behind
-      // a confirmation should hide this one.
+      // something to a person. `destructiveHint: TRUE` — not because anything is
+      // overwritten, but because OpenAI's review rubric counts "send irreversible
+      // messages" as destructive, and a delivered email cannot be recalled. It was
+      // `false` in both rejected ChatGPT submissions (2026-09-15, 2026-09-25), the
+      // one annotation constant across both. It also makes ChatGPT confirm with
+      // the person before sending, which is what a send tool should do.
       annotations: {
         title: "Request a Feature",
         readOnlyHint: false,
-        destructiveHint: false,
+        destructiveHint: true,
         idempotentHint: false,
         openWorldHint: true,
       },
