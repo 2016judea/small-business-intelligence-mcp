@@ -12,6 +12,11 @@ Cline and the aggregators read — one publish, a dozen surfaces, no portal. The
 Anthropic escalation was re-sent to mcp-review@anthropic.com the same day, three
 weeks after the first, asking whether that address is still right.
 
+> **2026-09-25 (palace Scout):** the paragraph below is stale. The registry row is
+> at 0.2.0 with `https://brickandmortar.dev/mcp` (updated 2026-08-30T19:34Z, verified
+> by the curl below). Nothing here needs a publish. The open listing gap is
+> punkpeye/awesome-remote-mcp-servers, filed to the palace outbox.
+
 **ONE THING IS UNFINISHED AND IT NEEDS AIDAN'S GITHUB.** The registry entry is
 published but still says `0.1.0` and still points at the workers.dev address.
 `server.json` in this repo is already at `0.2.0` with the brickandmortar.dev
