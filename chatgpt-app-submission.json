@@ -175,6 +175,62 @@
         "idempotent_justification": "NOT idempotent: each call files a separate request into the publisher's inbox, so calling twice with identical arguments delivers two requests.",
         "open_world_justification": "Delivers a message to a real person outside the conversation, which is a change to an external system."
       }
+    },
+    "what_we_have_for_you": {
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Makes one HTTPS GET to a published JSON file (brickandmortar.dev/connect/roles.json) and returns the roles and cards it lists; creates, updates and stores nothing.",
+        "destructive_justification": "Has no delete, overwrite, send or revoke path; it reads a public file and echoes a role id.",
+        "idempotent_justification": "The same role id returns the same shelf for as long as the published file is unchanged, and a repeat call leaves nothing behind.",
+        "open_world_justification": "Reaches one external system, the published file on brickandmortar.dev, over HTTPS GET."
+      }
+    },
+    "twin_cities_lookup": {
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Makes one HTTPS GET to brickandmortar.dev/api/lookup with the address and returns the parcel's public-record fields; the endpoint stores nothing and so does this tool.",
+        "destructive_justification": "Has no delete, overwrite, send or revoke path; one address in, one read-only record out.",
+        "idempotent_justification": "The same address returns the same record until the underlying county file changes, and a repeat call has no side effect.",
+        "open_world_justification": "Reaches one external system, the lookup endpoint on brickandmortar.dev, over HTTPS GET."
+      }
+    },
+    "bring_your_document": {
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "justifications": {
+        "read_only_justification": "POSTs the document text the caller supplied to brickandmortar.dev/api/tool, which reads it in the request, answers and drops it; neither side writes to a store, a log or a file, so nothing is created or modified anywhere.",
+        "destructive_justification": "Has no delete, overwrite, send-to-a-person or revoke path; the only data transmitted is the caller's own document, and it is not retained.",
+        "idempotent_justification": "Set false because the endpoint may call a language model to read prose, so a repeat call can return differently worded cells; it still leaves no state behind.",
+        "open_world_justification": "Reaches one external system, the tool endpoint on brickandmortar.dev, over HTTPS POST."
+      }
+    },
+    "start_an_engagement": {
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Set false because, when all four fields are supplied, it sends an enquiry to a person's inbox via brickandmortar.dev/api/engagement. Called with no arguments it only reads the published price list.",
+        "destructive_justification": "Set true because a delivered email cannot be recalled; the tool asks the client to confirm before sending and never reports a send that did not happen.",
+        "idempotent_justification": "Set false because each complete call sends another enquiry; a per-caller daily cap of three bounds repeats.",
+        "open_world_justification": "Reaches one external system, the engagement form endpoint on brickandmortar.dev, over HTTPS POST."
+      }
     }
   },
   "test_cases": [
