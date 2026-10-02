@@ -283,7 +283,7 @@ export function registerTwinCitiesLookup(server: McpServer, env: Env) {
         return result({
           tool: "twin_cities_lookup",
           status: "ok",
-          answer: `${body.label}${body.county ? `, ${body.county} County` : ""}${body.pin ? ` (parcel ${body.pin})` : ""}: ${hits} of ${Object.keys(fields).length} fields on file. Read the misses — each says why.`,
+          answer: `${body.label}${body.county ? `, ${body.county}` : ""}${body.pin ? ` (parcel ${body.pin})` : ""}: ${hits} of ${Object.keys(fields).length} fields on file. Read the misses — each says why.`,
           subject: { address: q, label: body.label, county: body.county, pin: body.pin },
           result: fields,
           links: { page },
