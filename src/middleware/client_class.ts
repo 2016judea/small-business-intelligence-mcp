@@ -13,6 +13,14 @@
  * Order matters — the named clients are matched before the crawler regex,
  * because "Claude-User" and "openai-mcp" would otherwise never be reached by
  * anything, and a client string like "mcp-client" must not become a crawler.
+ *
+ * `datagen|synth|trajector` added 2026-10-02: "Toucan-Datagen/1.0" (IBM /
+ * Agent Ark's TOUCAN pipeline, arxiv 2510.01179 — it synthesises training
+ * trajectories by driving real MCP servers from AWS, via Smithery and direct)
+ * made 124 tools/call in one afternoon and filed a fabricated feature request
+ * (a Coconut Grove dog spa, no reply address) that read in the inbox as a
+ * customer. It was landing in "unknown", which is the bucket the "did a
+ * person use it" list trusts.
  */
 export type ClientClass =
   | "claude" // claude.ai / Claude Code connector: UA "Claude-User", Anthropic ASN
@@ -25,7 +33,7 @@ export type ClientClass =
   | "unknown";
 
 const CRAWLER =
-  /bot|probe|monitor|research|census|crawl|collector|audit|scan|watch|observ|harvest|liveness|opt-out|pricing|spike|grader|scraper|verify|registry|checker|archive|study|sync|spider|index|\+https?:|@/i;
+  /bot|probe|monitor|research|census|crawl|datagen|synth|trajector|collector|audit|scan|watch|observ|harvest|liveness|opt-out|pricing|spike|grader|scraper|verify|registry|checker|archive|study|sync|spider|index|\+https?:|@/i;
 
 const CLI = /^(node|undici|curl|python-httpx|python-requests|python-urllib|Go-http-client|Deno|Bun|aiohttp|Ruby|GuzzleHttp|lua-resty|Python|Java|okhttp|axios|got)/i;
 

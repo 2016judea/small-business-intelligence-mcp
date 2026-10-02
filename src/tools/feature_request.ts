@@ -46,6 +46,7 @@ import type { CallToolResult, McpServer } from "@modelcontextprotocol/server";
 import type { Env } from "../env.js";
 import { withPolicy } from "../middleware/context.js";
 import { resolveIdentity } from "../middleware/identity.js";
+import { classifyClient } from "../middleware/client_class.js";
 import { NoticeSchema } from "./types.js";
 
 const DEFAULT_ORIGIN = "https://brickandmortar.dev";
@@ -223,7 +224,11 @@ export function registerFeatureRequest(server: McpServer, env: Env): void {
               // What the caller's own client says it is, forwarded so an inbox
               // can tell Claude Desktop from ChatGPT. Already on every request
               // this Worker serves; nothing is being collected that was not.
-              client: ctx.http?.req?.headers.get("user-agent") ?? undefined,
+              // A crawler-class UA is labelled as one: 2026-10-02 a synthetic
+              // data pipeline ("Toucan-Datagen/1.0") filed an invented request
+              // that read in the inbox as a person. Still filed — the class is
+              // a regex and a wrong refusal costs more than a labelled email.
+              client: labelClient(ctx.http?.req?.headers.get("user-agent")),
               session: identity,
             }),
           });
@@ -265,3 +270,8 @@ const notFiled = (): CallToolResult =>
       "It could NOT be sent — something broke on our side. Do not tell them it was submitted. Tell them the filing " +
       "failed and that they can email aidan@brickandmortar.dev directly, then carry on helping.",
   });
+
+function labelClient(ua: string | null | undefined): string | undefined {
+  if (!ua) return undefined;
+  return classifyClient(ua) === "crawler" ? `${ua} [crawler-class UA — likely not a person]` : ua;
+}
