@@ -100,6 +100,8 @@ export function docsPageHtml(): string {
     <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
     <tbody>
       <tr><td><code>data_source_atlas</code></td><td><strong>Turns a plain-English question about a place into a research plan naming the exact public record that settles it</strong> — the county parcel layer, Census establishment counts, a state licence roster, a BLS series — plus what the public record cannot answer at all. Resolves the jurisdictional fork (does this state even record sale prices?) before anything else.</td></tr>
+      <tr><td><code>what_we_have_for_you</code></td><td><strong>The front door as a tool.</strong> brickandmortar.dev is organised by who you are &mdash; 18 roles, each with a shelf of datasets, bring-your-file tools, the one-address lookup and fixed-fee engagements. Returns the roles, or one role's shelf with every card tagged by which tool here answers it. Read live off the page's own feed; nothing is typed into this server.</td></tr>
+      <tr><td><code>twin_cities_lookup</code></td><td>One address in the seven-county metro &rarr; land use, build year, assessed value, last recorded sale, MPCA file, and the parcels that touch it. Each field is a value or a miss with its reason.</td></tr>
       <tr><td><code>business_teardown</code></td><td>Full structured teardown of one named business — presence, review signal, competitive position, pricing, visibility gaps, prioritized recommendations. Start here for a single-business question.</td></tr>
       <tr><td><code>competitor_landscape</code></td><td>Maps the true competitive set for a category + metro — who's a real competitor vs. an adjacent player, positioning, saturation.</td></tr>
       <tr><td><code>review_intelligence</code></td><td>Mines public reviews for complaint/compliment themes, sentiment trajectory over time, and buyer-relevant red flags.</td></tr>
@@ -110,7 +112,9 @@ export function docsPageHtml(): string {
       <tr><td><code>compose_report</code></td><td>Assembles the outputs of prior tool calls into one client-ready report, tone- and structure-matched to the audience (owner, broker, buyer, investor).</td></tr>
       <tr><td><code>twin_cities_datasets</code></td><td>Lists the joined public-records datasets we publish for the seven-county Minneapolis&ndash;St. Paul metro &mdash; real row counts, column names, the cuts available, and the counties each one actually covers.</td></tr>
       <tr><td><code>twin_cities_records</code></td><td>Answers a question about one Twin Cities property or the whole market from those records &mdash; what it sold for, who owns it, what shares its lot line, whether it has a contamination file. Returns the true row count, six example rows and a link to the whole file.</td></tr>
-      <tr><td><code>request_a_feature</code></td><td><strong>The only tool here that sends rather than answers.</strong> Files a feature request, a data request or a correction straight to the person who builds this &mdash; when a question lands outside what the server holds, or an answer looks wrong.</td></tr>
+      <tr><td><code>bring_your_document</code></td><td>Reads a document the person has &mdash; a P&amp;L, a lease, a comp set, a list of addresses, one claim &mdash; against the Twin Cities public record and returns a table citing the file behind every cell. The document is read, answered and dropped; nothing is stored on either side.</td></tr>
+      <tr><td><code>start_an_engagement</code></td><td><strong>Sends.</strong> Files an enquiry for a fixed-fee engagement &mdash; a site screen, a diligence packet, a register check, a weekly work route &mdash; at the price and turnaround the live page states. A person replies by email; nothing is quoted, charged or scheduled by the server.</td></tr>
+      <tr><td><code>request_a_feature</code></td><td><strong>Sends.</strong> Files a feature request, a data request or a correction straight to the person who builds this &mdash; when a question lands outside what the server holds, or an answer looks wrong.</td></tr>
     </tbody>
   </table>
 
@@ -195,17 +199,18 @@ export function docsPageHtml(): string {
 
   <h3>Tool safety</h3>
   <p>
-    ${TOOL_COUNT - 1} of the ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool
+    ${TOOL_COUNT - 2} of the ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool
     annotations and are read-only in practice — they write nothing, delete nothing, and modify
-    nothing anywhere. Nine return a research framework and reach nothing; the two Twin Cities record
-    tools make one HTTPS GET to the published files at brickandmortar.dev, which is why those two carry
-    <code>openWorldHint: true</code>. Any searching or browsing the frameworks call for is done by the
+    nothing anywhere. Nine return a research framework and reach nothing; the Twin Cities record
+    tools, the lookup, the role shelf and <code>bring_your_document</code> make one HTTPS call to
+    brickandmortar.dev (a GET to published files, or a POST of the document you supplied, which that
+    endpoint reads and drops), which is why those carry <code>openWorldHint: true</code>. Any searching or browsing the frameworks call for is done by the
     calling AI with its own tools, not by this server.
   </p>
   <p>
-    <code>request_a_feature</code> is the exception and is annotated
-    <code>readOnlyHint: false</code>, because it does one thing: it sends the request you dictated to
-    a person's inbox. It is annotated <code>destructiveHint: true</code> because a sent message cannot be
+    <code>request_a_feature</code> and <code>start_an_engagement</code> are the exceptions and are annotated
+    <code>readOnlyHint: false</code>, because each does one thing: it sends what you dictated to
+    a person's inbox. Both are annotated <code>destructiveHint: true</code> because a sent message cannot be
     recalled, so a client should confirm with you before it runs; it is not idempotent, it reads nothing, and it cannot be
     used to reach anyone but us — the destination is fixed in the source and is not a parameter. Its
     payload is bounded, it is rate-limited per caller per day, and the endpoint it posts to refuses

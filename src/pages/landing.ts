@@ -71,6 +71,8 @@ export function landingPageHtml(): string {
   <h2>The ${TOOL_COUNT} tools</h2>
   <ul>
     <li><strong>data_source_atlas</strong> — a plain question becomes a research plan naming the record that settles it, and what no record can</li>
+    <li><strong>what_we_have_for_you</strong> — say what you do; get your shelf on brickandmortar.dev — datasets, tools, the lookup, and what a person does for a fee</li>
+    <li><strong>twin_cities_lookup</strong> — one address, six fields from the county, the state and the neighbours' files</li>
     <li><strong>business_teardown</strong> — full structured teardown of one named business</li>
     <li><strong>competitor_landscape</strong> — map the local competitive set for a category + metro</li>
     <li><strong>review_intelligence</strong> — mine public reviews for complaint/compliment themes and red flags</li>
@@ -81,6 +83,8 @@ export function landingPageHtml(): string {
     <li><strong>compose_report</strong> — assemble prior tool outputs into one client-ready report</li>
     <li><strong>twin_cities_datasets</strong> — what joined public records we hold for the seven-county Minneapolis&ndash;St. Paul metro</li>
     <li><strong>twin_cities_records</strong> — ask those records about one property or the whole market</li>
+    <li><strong>bring_your_document</strong> — your P&amp;L, lease, comp set or address list, read against those records; nothing stored</li>
+    <li><strong>start_an_engagement</strong> — have a person read the record for you, at the price the page states</li>
     <li><strong>request_a_feature</strong> — tell us what this should do and does not; it reaches a person</li>
   </ul>
 

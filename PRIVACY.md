@@ -29,6 +29,14 @@ gave if you gave one, the city or sector it concerns, your assistant's one-line
 summary of what you were trying to do, and the name your MCP client reports
 itself as.
 
+Two more tools transmit something you chose to give (added 2026-10-02).
+`start_an_engagement` sends, when you ask for a person to do paid work, what you
+do, the reply address you gave and the detail you dictated — to the same inbox,
+kept the same way. `bring_your_document` posts the text of a document you
+supplied to brickandmortar.dev/api/tool, which reads it in the request, answers
+and drops it; nothing is stored on either side. `what_we_have_for_you` and
+`twin_cities_lookup` transmit only a role id or an address.
+
 That is a message you asked to send, so unlike everything below it is kept: we
 read it, and we keep it while we decide whether to build the thing. If you leave
 no email address we have no way to identify you and will not try. The destination

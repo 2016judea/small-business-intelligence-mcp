@@ -55,6 +55,17 @@ export function privacyPageHtml(): string {
   </p>
 
   <p>
+    <strong>Two more tools transmit something you chose to give, added 2026-10-02.</strong>
+    <code>start_an_engagement</code> sends, when you ask for a person to do paid work, what you do,
+    the reply address you gave, and the detail you dictated — to the same inbox, kept the same way,
+    for the same reason: it is an enquiry you asked to send. <code>bring_your_document</code> posts
+    the text of a document you supplied (a P&amp;L, a lease, a list of addresses) to
+    brickandmortar.dev/api/tool, which reads it in the request, answers, and drops it — nothing is
+    written to a store or a log on either side. <code>what_we_have_for_you</code> and
+    <code>twin_cities_lookup</code> transmit only a role id or an address, and read published files.
+  </p>
+
+  <p>
     <strong>What those two send:</strong> the dataset you named, the filter (“scope”) and columns you
     asked for, and — only if you supply one — the street address you asked about. Nothing else from
     your conversation is transmitted. <strong>The address is not stored:</strong> those tools request

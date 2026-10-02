@@ -9,7 +9,9 @@ structured framework — a research procedure, an output schema, a quality rubri
 the traps — and the calling model executes the research itself, with its own
 tools and its own keys. Those nine call nothing at all.
 
-**Two ship the records.** `twin_cities_datasets` and `twin_cities_records` answer
+**Six reach the platform.** `what_we_have_for_you` is brickandmortar.dev's front
+door as a tool — say what you do, get your shelf. `twin_cities_lookup`,
+`twin_cities_datasets` and `twin_cities_records` answer
 from joined public records for the seven-county Minneapolis-St. Paul metro —
 parcels and lot lines, recorded sale prices, owners, rental licences,
 contamination files, business counts by trade, census tracts. Ask about one
@@ -60,6 +62,8 @@ Start with `data_source_atlas`. It is the one that changes what the rest are wor
 | Tool | What it does |
 |---|---|
 | **`data_source_atlas`** | **Given a real question and a place, returns a source-first research plan: which public record settles it, how to reach it, and what the public record cannot answer at all.** Handles the jurisdictional fork (does this state even record sale prices?) before anything else. |
+| `what_we_have_for_you` | **The front door as a tool.** brickandmortar.dev is organised by who you are — 18 roles, each a shelf of datasets, bring-your-file tools, the one-address lookup and fixed-fee engagements. Returns the roles, or one role's shelf with each card tagged by which tool here answers it. Read live off the page's feed (`/connect/roles.json`); no price or count is typed here. |
+| `twin_cities_lookup` | One address in the seven-county metro → land use, build year, assessed value, last recorded sale, MPCA file, the parcels that touch it. Each field a value or a miss with its reason. |
 | `business_teardown` | Full structured teardown of one named business — presence, review signal, competitive position, pricing posture, visibility gaps, prioritized evidence-cited recommendations. |
 | `competitor_landscape` | Maps the local competitive set: true competitors vs. adjacent players, positioning matrix, saturation signals — corroborated against an administrative establishment count, not just map results. |
 | `review_intelligence` | Mines public reviews: complaint taxonomy, theme extraction, sentiment trajectory, red flags for buyers. Rates, never raw counts. |
@@ -70,7 +74,9 @@ Start with `data_source_atlas`. It is the one that changes what the rest are wor
 | `compose_report` | Assembles prior tool outputs into one client-ready report, matched to the audience. |
 | `twin_cities_datasets` | What joined public records we publish for the seven-county Minneapolis–St. Paul metro: row counts, columns, the cuts available, the counties each actually covers. |
 | `twin_cities_records` | Asks those records a question — one property or the whole market. Returns the true matching row count, six example rows, and a link to the complete file. |
-| `request_a_feature` | **The only tool here that sends rather than answers.** Files a feature request, a data request or a correction to the person who builds this, when the server falls short of what the user wanted. |
+| `bring_your_document` | Their P&L, lease, comp set, address list or one claim, read against the Twin Cities record; a table citing the file behind every cell. Read, answered, dropped — nothing stored on either side. |
+| `start_an_engagement` | **Sends.** Files an enquiry for a fixed-fee engagement at the price and turnaround the live page states. A person replies; nothing is quoted or charged by the server. |
+| `request_a_feature` | **Sends.** Files a feature request, a data request or a correction to the person who builds this, when the server falls short of what the user wanted. |
 
 ## What it will not do
 
@@ -132,7 +138,7 @@ npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp
 Or drop `--cli` for the interactive web UI (`npm run inspector`). Every tool
 should list with an `outputSchema`, and a `tools/call` against each should return
 `structuredContent` matching it, with no `isError`. All of them list with
-`readOnlyHint: true` except `request_a_feature`, which sends a message and says
+`readOnlyHint: true` except `request_a_feature` and `start_an_engagement`, which send a message and say
 so.
 
 ### Deploy

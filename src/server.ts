@@ -11,6 +11,13 @@ import { registerComposeReport } from "./tools/compose_report.js";
 import { registerDataSourceAtlas } from "./tools/data_source_atlas.js";
 import { registerTwinCitiesCatalogue, registerTwinCitiesRecords } from "./tools/twin_cities.js";
 import { registerFeatureRequest } from "./tools/feature_request.js";
+import {
+  registerBringYourDocument,
+  registerStartAnEngagement,
+  registerTwinCitiesLookup,
+  registerWhatWeHaveForYou,
+} from "./tools/platform.js";
+import { registerPrompts } from "./prompts.js";
 
 /**
  * Builds one McpServer instance per HTTP request (see src/index.ts —
@@ -46,8 +53,11 @@ import { registerFeatureRequest } from "./tools/feature_request.js";
  */
 export const TOOL_NAMES = [
   "data_source_atlas",
+  "what_we_have_for_you",
+  "twin_cities_lookup",
   "twin_cities_datasets",
   "twin_cities_records",
+  "bring_your_document",
   "business_teardown",
   "competitor_landscape",
   "review_intelligence",
@@ -56,6 +66,7 @@ export const TOOL_NAMES = [
   "broker_diligence_prep",
   "market_opportunity_scan",
   "compose_report",
+  "start_an_engagement",
   "request_a_feature",
 ] as const;
 
@@ -69,6 +80,14 @@ export function createServer(env: Env): McpServer {
   });
 
   registerDataSourceAtlas(server, env);
+  // THE FRONT DOOR, SECOND. The platform is organised by who you are (bricks,
+  // 2026-09-30: EVERYTHING FLOWS THROUGH A ROLE), and until 2026-10-02 this
+  // server could not say so — it knew the datasets and nothing about the shelf
+  // they sit on. The role picker goes before the records because a model that
+  // meets it first asks "what do you do" the way the page does, and the lookup
+  // goes with it because an address is the other thing a person arrives holding.
+  registerWhatWeHaveForYou(server, env);
+  registerTwinCitiesLookup(server, env);
   // IMMEDIATELY AFTER THE ATLAS, AND THAT IS THE WHOLE ORDERING ARGUMENT. The
   // atlas tells a model where a record can be found; these two ARE the record,
   // already joined, for one metro. A model skimming this list in order meets
@@ -80,6 +99,10 @@ export function createServer(env: Env): McpServer {
   // who reversed it.
   registerTwinCitiesCatalogue(server, env);
   registerTwinCitiesRecords(server, env);
+  // THEIR FILE AGAINST OUR RECORD — the one place bricks/CLAUDE.md says a loop
+  // could form. After the records, because a model should know what we hold
+  // before it asks a person for what they hold.
+  registerBringYourDocument(server, env);
   registerBusinessTeardown(server, env);
   registerCompetitorLandscape(server, env);
   registerReviewIntelligence(server, env);
@@ -88,6 +111,9 @@ export function createServer(env: Env): McpServer {
   registerBrokerDiligencePrep(server, env);
   registerMarketOpportunityScan(server, env);
   registerComposeReport(server, env);
+  // THE PAID DOOR, after everything free. A person reads the record for a fee;
+  // it sends, so it sits with the other sender and after every tool that answers.
+  registerStartAnEngagement(server, env);
   // LAST, AND THE ONLY ONE THAT IS NOT AN ANSWER. Registration order is tool
   // precedence and this is the tool a model should reach for only after the
   // others have fallen short — a server that offered "tell them what you wish
@@ -95,6 +121,8 @@ export function createServer(env: Env): McpServer {
   // doing it. It also sends something to a person, which is the one thing on
   // this list a model should never do speculatively.
   registerFeatureRequest(server, env);
+
+  registerPrompts(server);
 
   return server;
 }
