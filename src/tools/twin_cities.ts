@@ -135,6 +135,10 @@ const denial = (tool: string) => (message: string, upgrade_url: string): CallToo
     notice: { status: "usage_limit_reached", message, upgrade_url },
   });
 
+const STOP = new Set(
+  "the and for with from any all our your what who which where when how does have has are was were into onto about records record data dataset datasets minnesota minneapolis saint paul twin cities metro county counties public file files information info list lists".split(" "),
+);
+
 /** Words a person uses for a dataset whose title does not contain them. */
 const ALIASES: Record<string, string> = {
   licences: "liquor on-sale off-sale bar restaurant food grocery childcare daycare tobacco health facility licensed business licence license",
@@ -239,13 +243,22 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
         // this tool told them we had none. Words now match independently, and
         // ALIASES carries the words a person uses for a dataset whose title
         // does not contain them.
-        const words = q.split(/[^a-z0-9]+/).filter((w) => w.length > 2);
-        const hit = q
-          ? all.filter((d) => {
-              const hay = `${d.title} ${d.subject ?? ""} ${d.id} ${(d.columns ?? []).map((c: any) => (typeof c === "string" ? c : c?.key ?? "")).join(" ")} ${ALIASES[d.id] ?? ""}`.toLowerCase();
-              return words.some((w) => hay.includes(w));
-            })
-          : all;
+        // Stopwords, or "reviews and ratings" matches every dataset on "and" and
+        // "records" matches seven of them — measured on the first deploy.
+        const words = q.split(/[^a-z0-9()]+/).filter((w) => w.length > 2 && !STOP.has(w));
+        const scored = q
+          ? all
+              .map((d) => {
+                const hay = `${d.title} ${d.subject ?? ""} ${d.id} ${(d.columns ?? []).map((c: any) => (typeof c === "string" ? c : c?.key ?? "")).join(" ")} ${ALIASES[d.id] ?? ""}`.toLowerCase();
+                return { d, hits: words.filter((w) => hay.includes(w)).length };
+              })
+              .filter((x) => x.hits > 0)
+              .sort((a, b) => b.hits - a.hits)
+          : all.map((d) => ({ d, hits: 0 }));
+        // Keep the best tier only: if anything matched two words, a one-word match
+        // on "county" is noise beside it.
+        const best = scored[0]?.hits ?? 0;
+        const hit = scored.filter((x) => q === "" || x.hits === best || x.hits >= 2).map((x) => x.d);
         const notHeld = NOT_HELD.filter((n) => n.pattern.test(q));
         return result({
           tool: "twin_cities_datasets",
