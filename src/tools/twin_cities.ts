@@ -139,6 +139,9 @@ const STOP = new Set(
   "the and for with from any all our your what who which where when how does have has are was were into onto about this that these those here there they them near like much many over under also just only some each every records record data dataset datasets minnesota minneapolis saint paul twin cities metro county counties public file files information info list lists state".split(" "),
 );
 
+/** Nouns that name the whole domain rather than one dataset. */
+const GENERIC = new Set(["building", "buildings", "property", "properties", "parcel", "parcels", "address", "addresses", "business", "businesses", "site", "sites", "commercial"]);
+
 /** Words a person uses for a dataset whose title does not contain them. */
 const ALIASES: Record<string, string> = {
   licences: "liquor on-sale off-sale bar restaurant food grocery childcare daycare tobacco health facility licensed business licence license",
@@ -254,7 +257,14 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
                 // "building" in `building_sqft` outranks "owns" in `owners`.
                 const named = `${d.title} ${d.id} ${ALIASES[d.id] ?? ""}`.toLowerCase();
                 const rest = `${d.subject ?? ""} ${(d.columns ?? []).map((c: any) => (typeof c === "string" ? c : c?.key ?? "")).join(" ")}`.toLowerCase();
-                const hits = words.reduce((n, w) => n + (named.includes(w) ? 2 : 0) + (rest.includes(w) ? 1 : 0), 0);
+                // Each word scores once per dataset (2 in the name, else 1 in the
+                // rest), and a noun that names the whole domain — building,
+                // property, parcel, address — scores 1 wherever it lands, or
+                // "who owns this building" ranks teardowns above owners.
+                const hits = words.reduce((n, w) => {
+                  const score = named.includes(w) ? 2 : rest.includes(w) ? 1 : 0;
+                  return n + (GENERIC.has(w) ? Math.min(score, 1) : score);
+                }, 0);
                 return { d, hits };
               })
               .filter((x) => x.hits > 0)
