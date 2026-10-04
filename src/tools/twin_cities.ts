@@ -136,7 +136,7 @@ const denial = (tool: string) => (message: string, upgrade_url: string): CallToo
   });
 
 const STOP = new Set(
-  "the and for with from any all our your what who which where when how does have has are was were into onto about this that these those here there they them near like much many over under also just only some each every records record data dataset datasets minnesota minneapolis saint paul twin cities metro county counties public file files information info list lists state".split(" "),
+  "the and for with from any all our your what who which where when how does have has are was were into onto about this that these those here there they them near like much many over under also just only some each every records record data dataset datasets minnesota minneapolis saint paul twin cities metro county counties public file files information info list lists state did does will can could should would get got know tell show find need want looking look give ask asked question".split(" "),
 );
 
 /** Nouns that name the whole domain rather than one dataset. */
@@ -147,7 +147,7 @@ const ALIASES: Record<string, string> = {
   licences: "liquor on-sale off-sale bar restaurant food grocery childcare daycare tobacco health facility licensed business licence license",
   landlords: "rental licence landlord owner contact apartment units",
   businesses: "business list directory phone website sector category",
-  sales: "sold price deed transaction comparable comps",
+  sales: "sold sell sells selling sale price paid deed transaction comparable comps worth value",
   owners: "ownership owner portfolio who owns LLC holdings",
   contamination: "MPCA brownfield tank superfund cleanup environmental",
   "sba-loans": "7(a) 504 lender bank loan",
