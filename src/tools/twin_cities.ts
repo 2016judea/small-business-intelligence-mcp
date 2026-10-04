@@ -249,8 +249,13 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
         const scored = q
           ? all
               .map((d) => {
-                const hay = `${d.title} ${d.subject ?? ""} ${d.id} ${(d.columns ?? []).map((c: any) => (typeof c === "string" ? c : c?.key ?? "")).join(" ")} ${ALIASES[d.id] ?? ""}`.toLowerCase();
-                return { d, hits: words.filter((w) => hay.includes(w)).length };
+                // Title, id and alias count double: a word in what we CALL the
+                // dataset outranks the same word buried in a column key, or
+                // "building" in `building_sqft` outranks "owns" in `owners`.
+                const named = `${d.title} ${d.id} ${ALIASES[d.id] ?? ""}`.toLowerCase();
+                const rest = `${d.subject ?? ""} ${(d.columns ?? []).map((c: any) => (typeof c === "string" ? c : c?.key ?? "")).join(" ")}`.toLowerCase();
+                const hits = words.reduce((n, w) => n + (named.includes(w) ? 2 : 0) + (rest.includes(w) ? 1 : 0), 0);
+                return { d, hits };
               })
               .filter((x) => x.hits > 0)
               .sort((a, b) => b.hits - a.hits)
