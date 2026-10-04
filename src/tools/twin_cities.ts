@@ -136,7 +136,7 @@ const denial = (tool: string) => (message: string, upgrade_url: string): CallToo
   });
 
 const STOP = new Set(
-  "the and for with from any all our your what who which where when how does have has are was were into onto about records record data dataset datasets minnesota minneapolis saint paul twin cities metro county counties public file files information info list lists".split(" "),
+  "the and for with from any all our your what who which where when how does have has are was were into onto about this that these those here there they them near like much many over under also just only some each every records record data dataset datasets minnesota minneapolis saint paul twin cities metro county counties public file files information info list lists state".split(" "),
 );
 
 /** Words a person uses for a dataset whose title does not contain them. */
@@ -258,7 +258,13 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
         // Keep the best tier only: if anything matched two words, a one-word match
         // on "county" is noise beside it.
         const best = scored[0]?.hits ?? 0;
-        const hit = scored.filter((x) => q === "" || x.hits === best || x.hits >= 2).map((x) => x.d);
+        const notHeldEarly = NOT_HELD.some((n) => n.pattern.test(q));
+        // One-word matches beside a not-held ask are noise — "entity records" lit
+        // seven datasets on "entity" and "records" while the honest answer was
+        // the Secretary of State. With a stronger match present, keep its tier
+        // and the one below it; a single-word tier stands only on its own.
+        const floor = notHeldEarly && best < 2 ? Number.POSITIVE_INFINITY : Math.max(1, best - 1);
+        const hit = scored.filter((x) => q === "" || x.hits >= floor).map((x) => x.d);
         const notHeld = NOT_HELD.filter((n) => n.pattern.test(q));
         return result({
           tool: "twin_cities_datasets",
