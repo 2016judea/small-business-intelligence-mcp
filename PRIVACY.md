@@ -35,7 +35,10 @@ do, the reply address you gave and the detail you dictated — to the same inbox
 kept the same way. `bring_your_document` posts the text of a document you
 supplied to brickandmortar.dev/api/tool, which reads it in the request, answers
 and drops it; nothing is stored on either side. `what_we_have_for_you` and
-`twin_cities_lookup` transmit only a role id or an address.
+`twin_cities_lookup` transmit only a role id or an address. `watch_teardowns`
+(added 2026-10-04) sends the email address you gave, your city choice and which
+permits you want to scrapwatch.vercel.app, a service we run, which keeps it as a
+subscription until you unsubscribe from any of its emails.
 
 That is a message you asked to send, so unlike everything below it is kept: we
 read it, and we keep it while we decide whether to build the thing. If you leave

@@ -63,6 +63,9 @@ export function privacyPageHtml(): string {
     brickandmortar.dev/api/tool, which reads it in the request, answers, and drops it — nothing is
     written to a store or a log on either side. <code>what_we_have_for_you</code> and
     <code>twin_cities_lookup</code> transmit only a role id or an address, and read published files.
+    <code>watch_teardowns</code> (added 2026-10-04) sends the email address you gave, your city choice
+    and which permits you want to scrapwatch.vercel.app, a service we run, which keeps it as a
+    subscription until you unsubscribe from any of its emails.
   </p>
 
   <p>

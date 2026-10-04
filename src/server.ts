@@ -15,6 +15,7 @@ import {
   registerBringYourDocument,
   registerStartAnEngagement,
   registerTwinCitiesLookup,
+  registerWatchTeardowns,
   registerWhatWeHaveForYou,
 } from "./tools/platform.js";
 import { registerPrompts } from "./prompts.js";
@@ -66,6 +67,7 @@ export const TOOL_NAMES = [
   "broker_diligence_prep",
   "market_opportunity_scan",
   "compose_report",
+  "watch_teardowns",
   "start_an_engagement",
   "request_a_feature",
 ] as const;
@@ -113,6 +115,10 @@ export function createServer(env: Env): McpServer {
   registerComposeReport(server, env);
   // THE PAID DOOR, after everything free. A person reads the record for a fee;
   // it sends, so it sits with the other sender and after every tool that answers.
+  // THE FREE ALERT, before the paid door — it sends too (a confirmation email),
+  // so it sits with the senders, but it costs nothing and the page lists it as
+  // a card on `trade`.
+  registerWatchTeardowns(server, env);
   registerStartAnEngagement(server, env);
   // LAST, AND THE ONLY ONE THAT IS NOT AN ANSWER. Registration order is tool
   // precedence and this is the tool a model should reach for only after the

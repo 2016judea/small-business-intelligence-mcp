@@ -135,6 +135,44 @@ const denial = (tool: string) => (message: string, upgrade_url: string): CallToo
     notice: { status: "usage_limit_reached", message, upgrade_url },
   });
 
+/** Words a person uses for a dataset whose title does not contain them. */
+const ALIASES: Record<string, string> = {
+  licences: "liquor on-sale off-sale bar restaurant food grocery childcare daycare tobacco health facility licensed business licence license",
+  landlords: "rental licence landlord owner contact apartment units",
+  businesses: "business list directory phone website sector category",
+  sales: "sold price deed transaction comparable comps",
+  owners: "ownership owner portfolio who owns LLC holdings",
+  contamination: "MPCA brownfield tank superfund cleanup environmental",
+  "sba-loans": "7(a) 504 lender bank loan",
+  teardowns: "demolition wrecking permit scrap transformer electrical",
+  "code-inspections": "violations inspection housing code",
+  "emergency-calls": "911 fire police calls",
+  "service-requests": "311 complaints",
+};
+
+/**
+ * WHAT WE ARE ASKED FOR AND DO NOT HOLD, with where it lives today. Read off the
+ * request ledger (bricks data/mcp_requests/), 2026-10-03: entity records and a
+ * live review corpus, both asked for during a buyer's diligence on a brewery.
+ * Named here so an assistant answers from the source instead of filing a data
+ * request for a record a state already publishes. Bricks is Minnesota only and
+ * holds no review text; neither entry is a layer we are building.
+ */
+const NOT_HELD: { pattern: RegExp; say: string }[] = [
+  {
+    pattern: /secretary of state|sos|entity|registered agent|formation|incorporat|llc|corporation|officers|business filing/i,
+    say: "Minnesota Secretary of State business entity records (formation date, status, registered agent, filings) are not held here — read them at https://mblsportal.sos.mn.gov/Business/Search, free, by name or file number; data_source_atlas has the access notes.",
+  },
+  {
+    pattern: /review|rating|yelp|google maps|untappd|tripadvisor|sentiment|stars/i,
+    say: "Review text and star ratings are not held here — `businesses` has name, address, sector, phone and website but no ratings; review_intelligence is the method for reading the platforms directly.",
+  },
+  {
+    pattern: /payroll|wages paid|revenue|earnings|p&l|profit/i,
+    say: "No public record holds a private company's revenue, earnings or payroll — bring_your_document reads the person's own P&L against sector benchmarks; `trades` and the QCEW cuts hold the sector averages.",
+  },
+];
+
 const COVERAGE_CAVEAT =
   "Coverage is not uniform. Across these datasets it runs from one county to all seven, and `coverage` on this result is the list this dataset actually holds — do not generalise one dataset's counties to another.";
 
@@ -193,18 +231,30 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
         }
         const q = (args.about ?? "").trim().toLowerCase();
         const all = body.datasets as any[];
+        // ANY WORD, PLUS WHAT PEOPLE CALL IT. The first filter was a substring
+        // test on the whole phrase, so "liquor licence" matched nothing while
+        // `licences` held 6,553 rows of exactly that (its first preview row is a
+        // wine & spirits shop). 2026-10-03 a caller filed a data request for
+        // "Minnesota liquor/licensing records" through request_a_feature after
+        // this tool told them we had none. Words now match independently, and
+        // ALIASES carries the words a person uses for a dataset whose title
+        // does not contain them.
+        const words = q.split(/[^a-z0-9]+/).filter((w) => w.length > 2);
         const hit = q
-          ? all.filter((d) =>
-              `${d.title} ${d.subject ?? ""} ${d.id}`.toLowerCase().includes(q),
-            )
+          ? all.filter((d) => {
+              const hay = `${d.title} ${d.subject ?? ""} ${d.id} ${(d.columns ?? []).map((c: any) => (typeof c === "string" ? c : c?.key ?? "")).join(" ")} ${ALIASES[d.id] ?? ""}`.toLowerCase();
+              return words.some((w) => hay.includes(w));
+            })
           : all;
+        const notHeld = NOT_HELD.filter((n) => n.pattern.test(q));
         return result({
           tool: "twin_cities_datasets",
           subject: args,
           answer:
-            hit.length === 0
+            (hit.length === 0
               ? `Nothing in the catalogue matches "${args.about}". ${all.length} datasets exist; call again with no filter to see them.`
-              : `${hit.length} dataset${hit.length === 1 ? "" : "s"} available, free and without an account. Each row count below is the real number of rows in that file.`,
+              : `${hit.length} dataset${hit.length === 1 ? "" : "s"} available, free and without an account. Each row count below is the real number of rows in that file.`) +
+            (notHeld.length ? ` NOT HELD HERE, and where it lives instead: ${notHeld.map((n) => n.say).join(" ")}` : ""),
           datasets: hit.map((d) => ({
             id: d.id,
             title: d.title,
@@ -215,7 +265,8 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
           })),
           caveats: [
             COVERAGE_CAVEAT,
-            "Each dataset's own stated limits — what it cannot answer — are at https://brickandmortar.dev/system-card/. Read it before quoting a figure as settled.",
+            `Each dataset's source, licence, columns and what to read before quoting it: ${origin(env)}/datasets/doc/<id>.json. Read it before quoting a figure as settled.`,
+            ...(notHeld.length ? ["Do not file a data request for something listed as NOT HELD above unless the person wants us to go and hold it — the source named is where to read it today."] : []),
           ],
         });
       },
@@ -418,7 +469,11 @@ export function registerTwinCitiesRecords(server: McpServer, env: Env) {
           ),
           centre: body.centre ?? null,
           download_url: `${base}/api/export?${file}`,
-          documented_at: `${base}/datasets/${args.dataset}/`,
+          // /datasets/<id>/ has 301'd to / since 2026-09-30 (bricks: everything flows
+          // through a role; the per-dataset pages were deleted). The doc file is
+          // the manifest entry — source, licence, columns, counties, what to read
+          // before quoting — plus the role cards that carry the dataset.
+          documented_at: `${base}/datasets/doc/${args.dataset}.json`,
           caveats: dropped.length
             ? [
                 `Contact details are not served here. ${dropped.join(", ")} ${dropped.length === 1 ? "was" : "were"} dropped from this request: the owner and applicant phone, email and address blocks are published on the platform at the download link, and are deliberately not read back into a conversation. Do not describe this as the data being absent — it is present in the file and withheld on this surface.`,
