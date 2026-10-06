@@ -231,20 +231,6 @@
         "idempotent_justification": "Set false because each complete call sends another enquiry; a per-caller daily cap of three bounds repeats.",
         "open_world_justification": "Reaches one external system, the engagement form endpoint on brickandmortar.dev, over HTTPS POST."
       }
-    },
-    "watch_teardowns": {
-      "annotations": {
-        "readOnlyHint": false,
-        "destructiveHint": true,
-        "idempotentHint": true,
-        "openWorldHint": true
-      },
-      "justifications": {
-        "read_only_justification": "Set false because it creates a subscription and triggers a confirmation email via scrapwatch.vercel.app when a valid address is supplied.",
-        "destructive_justification": "Set true because a delivered confirmation email cannot be recalled; the tool asks the client to confirm the address before sending and never reports a signup that did not happen.",
-        "idempotent_justification": "Set true because the service keys a subscription on the hashed email, so a repeat call updates the one record rather than creating a second subscription or a second stream of mail.",
-        "open_world_justification": "Reaches one external system, the Scrapwatch subscribe endpoint, over HTTPS POST."
-      }
     }
   },
   "test_cases": [

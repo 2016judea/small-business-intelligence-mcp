@@ -113,7 +113,6 @@ export function docsPageHtml(): string {
       <tr><td><code>twin_cities_datasets</code></td><td>Lists the joined public-records datasets we publish for the seven-county Minneapolis&ndash;St. Paul metro &mdash; real row counts, column names, the cuts available, and the counties each one actually covers.</td></tr>
       <tr><td><code>twin_cities_records</code></td><td>Answers a question about one Twin Cities property or the whole market from those records &mdash; what it sold for, who owns it, what shares its lot line, whether it has a contamination file. Returns the true row count, six example rows and a link to the whole file.</td></tr>
       <tr><td><code>bring_your_document</code></td><td>Reads a document the person has &mdash; a P&amp;L, a lease, a comp set, a list of addresses, one claim &mdash; against the Twin Cities public record and returns a table citing the file behind every cell. The document is read, answered and dropped; nothing is stored on either side.</td></tr>
-      <tr><td><code>watch_teardowns</code></td><td><strong>Sends.</strong> Signs the person up for a free morning email of the wrecking, demolition and large electrical permits Minneapolis and Saint Paul filed overnight &mdash; one email per new permit, unsubscribe in every message. Posts the signup to the Scrapwatch service that runs the alert.</td></tr>
       <tr><td><code>start_an_engagement</code></td><td><strong>Sends.</strong> Files an enquiry for a fixed-fee engagement &mdash; a site screen, a diligence packet, a register check, a weekly work route &mdash; at the price and turnaround the live page states. A person replies by email; nothing is quoted, charged or scheduled by the server.</td></tr>
       <tr><td><code>request_a_feature</code></td><td><strong>Sends.</strong> Files a feature request, a data request or a correction straight to the person who builds this &mdash; when a question lands outside what the server holds, or an answer looks wrong.</td></tr>
     </tbody>
@@ -200,7 +199,7 @@ export function docsPageHtml(): string {
 
   <h3>Tool safety</h3>
   <p>
-    ${TOOL_COUNT - 3} of the ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool
+    ${TOOL_COUNT - 2} of the ${TOOL_COUNT} tools are marked <code>readOnlyHint: true</code> in their MCP tool
     annotations and are read-only in practice — they write nothing, delete nothing, and modify
     nothing anywhere. Nine return a research framework and reach nothing; the Twin Cities record
     tools, the lookup, the role shelf and <code>bring_your_document</code> make one HTTPS call to
@@ -209,7 +208,7 @@ export function docsPageHtml(): string {
     calling AI with its own tools, not by this server.
   </p>
   <p>
-    <code>request_a_feature</code>, <code>start_an_engagement</code> and <code>watch_teardowns</code> are the exceptions and are annotated
+    <code>request_a_feature</code> and <code>start_an_engagement</code> are the exceptions and are annotated
     <code>readOnlyHint: false</code>, because each does one thing: it sends what you dictated to
     an inbox (ours, or the alert's confirmation to yours). All three are annotated <code>destructiveHint: true</code> because a sent message cannot be
     recalled, so a client should confirm with you before it runs; it is not idempotent, it reads nothing, and it cannot be

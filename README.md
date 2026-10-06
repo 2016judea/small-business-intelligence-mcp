@@ -75,7 +75,6 @@ Start with `data_source_atlas`. It is the one that changes what the rest are wor
 | `twin_cities_datasets` | What joined public records we publish for the seven-county Minneapolis–St. Paul metro: row counts, columns, the cuts available, the counties each actually covers. |
 | `twin_cities_records` | Asks those records a question — one property or the whole market. Returns the true matching row count, six example rows, and a link to the complete file. |
 | `bring_your_document` | Their P&L, lease, comp set, address list or one claim, read against the Twin Cities record; a table citing the file behind every cell. Read, answered, dropped — nothing stored on either side. |
-| `watch_teardowns` | **Sends.** Free morning email of the demolition and large electrical permits Minneapolis and Saint Paul filed overnight; the signup is posted to the Scrapwatch service, which mails a confirmation and carries an unsubscribe link in every message. |
 | `start_an_engagement` | **Sends.** Files an enquiry for a fixed-fee engagement at the price and turnaround the live page states. A person replies; nothing is quoted or charged by the server. |
 | `request_a_feature` | **Sends.** Files a feature request, a data request or a correction to the person who builds this, when the server falls short of what the user wanted. |
 
@@ -139,7 +138,7 @@ npx @modelcontextprotocol/inspector --cli --server-url http://localhost:8787/mcp
 Or drop `--cli` for the interactive web UI (`npm run inspector`). Every tool
 should list with an `outputSchema`, and a `tools/call` against each should return
 `structuredContent` matching it, with no `isError`. All of them list with
-`readOnlyHint: true` except `request_a_feature`, `start_an_engagement` and `watch_teardowns`, which send a message and say
+`readOnlyHint: true` except `request_a_feature` and `start_an_engagement`, which send a message and say
 so.
 
 ### Deploy
