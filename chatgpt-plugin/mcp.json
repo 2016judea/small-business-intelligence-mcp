@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "brick-and-mortar": {
+      "type": "streamable-http",
+      "url": "https://brickandmortar.dev/mcp"
+    }
+  }
+}

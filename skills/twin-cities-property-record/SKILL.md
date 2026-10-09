@@ -7,8 +7,8 @@ metadata:
 
 # Twin Cities property record
 
-The two data tools query 25 joined public-records files for the seven-county
-Minneapolis–St. Paul metro. Everything below exists because guessing at this
+The data tools query joined public-records files for the seven-county
+Minneapolis–St. Paul metro; `twin_cities_datasets` lists them with today's count. Everything below exists because guessing at this
 data produces answers that look right and are wrong.
 
 ## Quick start

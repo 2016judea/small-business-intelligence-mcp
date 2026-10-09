@@ -4,7 +4,7 @@
   "app_info": {
     "display_name": "Brick & Mortar Public Records",
     "subtitle": "Public records and teardowns",
-    "description": "Brick & Mortar answers questions about small businesses and commercial property from public records rather than general knowledge. Two tools query 25 joined public-records datasets for the seven-county Minneapolis-St. Paul metro — parcels and lot lines, recorded sale prices, tax-billing owners, rental licences, contamination files, business counts by trade, census tracts — returning true row counts, sample rows and a link to the complete file. Nine more tools work in any US metro and return a research procedure instead of an answer: which administrative record actually settles a question, how to reach it, and what the public record cannot answer at all. Typical workflows are tearing down one named business before buying or advising it, mapping a local competitive set, prepping broker diligence, benchmarking prices, auditing local search visibility, mining public reviews for patterns, and assembling the results into one client-ready report. A twelfth tool sends a feature, data or correction request to the publisher when the records fall short; it is the only tool that is not read-only. Free, no account.",
+    "description": "Brick & Mortar answers questions about small businesses and commercial property from public records rather than general knowledge. It has sixteen tools. Five read joined public-records datasets for the seven-county Minneapolis-St. Paul metro — parcels and lot lines, recorded sale prices, tax-billing owners, rental licences, contamination files, business counts by trade, census tracts. They show what is on file for a person's role, answer one address, return true row counts, sample rows and a link to the complete file, and read a document the person brings against those records without storing it. Nine more work in any US metro and return a research procedure instead of an answer: which administrative record actually settles a question, how to reach it, and what the public record cannot answer at all. Typical workflows are tearing down one named business before buying or advising it, mapping a local competitive set, prepping broker diligence, benchmarking prices, auditing local search visibility, mining public reviews for patterns, and assembling the results into one client-ready report. Two tools send something, and only when the person asks: one sends a feature, data or correction request to the publisher, and one files an enquiry asking a person at Brick & Mortar to read the record for them; that person replies by email. Those two are the only tools that are not read-only. No account is needed.",
     "category": "BUSINESS"
   },
   "tools": {
@@ -239,7 +239,7 @@
       "user_prompt": "What Twin Cities datasets do you have?",
       "file_attachment_urls": null,
       "tools_triggered": "twin_cities_datasets",
-      "expected_output": "Returns 25 datasets with their titles, true row counts, column names and the counties each covers.",
+      "expected_output": "Returns every published dataset (39 on 2026-10-09) with its title, true row count, column names and the counties it covers.",
       "expected_output_url": null
     },
     {
@@ -293,11 +293,11 @@
       "expected_output_url": null
     },
     {
-      "description": "Do not trigger for a request to contact a third party; the only tool that sends anything writes to the publisher, not to an owner.",
+      "description": "Do not trigger for a request to contact a third party; the two tools that send anything write only to the publisher, never to an owner.",
       "user_prompt": "Email that property's owner and ask whether they would sell.",
       "file_attachment_urls": null,
       "tools_triggered": null,
-      "expected_output": "The app should not be invoked. No tool can contact a property owner; the one sending tool files a request to the app's own publisher.",
+      "expected_output": "The app should not be invoked. No tool can contact a property owner; the two sending tools file a request or an enquiry with the app's own publisher.",
       "expected_output_url": null
     }
   ]

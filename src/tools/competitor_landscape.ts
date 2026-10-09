@@ -195,7 +195,7 @@ export function registerCompetitorLandscape(server: McpServer, env: Env): void {
     {
       title: "Competitor Landscape",
       description:
-        "Maps the local competitive set for a category + metro: true competitors vs. adjacent players, a positioning matrix, and saturation signals.\n\n" +
+        "Returns a research framework, not the finished analysis: the procedure, output schema and quality rubric for mapping the local competitive set for a category + metro — true competitors vs. adjacent players, a positioning matrix, and saturation signals.. This tool fetches no data; the calling model runs the procedure with its own web search and produces the result.\n\n" +
         "Example invocations:\n" +
         '- "Map the competitive landscape for coffee shops in Saint Paul, MN"\n' +
         '- "How saturated is the nail salon market in Aurora, CO?"\n' +

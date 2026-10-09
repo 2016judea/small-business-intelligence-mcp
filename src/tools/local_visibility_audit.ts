@@ -212,7 +212,7 @@ export function registerLocalVisibilityAudit(server: McpServer, env: Env): void 
     {
       title: "Local Visibility Audit",
       description:
-        "Audits a business's local search presence: map-pack factors, listing consistency, category selection, site fundamentals — what to check, and in what order — returned as a scored checklist.\n\n" +
+        "Returns a research framework, not the finished audit: a scored checklist of what to check in a business's local search presence — map-pack factors, listing consistency, category selection, site fundamentals — and in what order. This tool reads no listing; the calling model runs the checks with its own web search.\n\n" +
         "Example invocations:\n" +
         '- "Run a local visibility audit on Fern & Fig Nail Bar in Cedar Rapids, IA"\n' +
         '- "Why doesn\'t Steel Toe Brewing show up when someone searches \'brewery near me\' in Louisville?"\n' +

@@ -174,7 +174,7 @@ export function registerDataSourceAtlas(server: McpServer, env: Env): void {
     {
       title: "Data Source Atlas",
       description:
-        "Given a real question about a local market or a specific property, returns a source-first RESEARCH PLAN: which public record actually settles the question, how to reach it directly (county parcel GIS, Census CBP/ACS/permits, BLS series, state registries, licences, inspections), what the answer will be worth, and what the public record cannot answer at all. Use this BEFORE researching a local market — it is the difference between reading whatever a search engine surfaced and pulling the administrative record that settles it.\n\n" +
+        "Given a real question about a local market or a specific property, returns a source-first RESEARCH PLAN: which public record actually settles the question, how to reach it directly (county parcel GIS, Census CBP/ACS/permits, BLS series, state registries, licences, inspections), what the answer will be worth, and what the public record cannot answer at all. Use it before researching a local market, to find the administrative record that settles the question.\n\n" +
         "Example invocations:\n" +
         '- "Where would I actually find what 1420 Grand Ave in Saint Paul last sold for?"\n' +
         '- "I want to know if Wichita has room for another dog daycare — what should I pull?"\n' +

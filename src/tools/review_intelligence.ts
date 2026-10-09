@@ -178,7 +178,7 @@ export function registerReviewIntelligence(server: McpServer, env: Env): void {
     {
       title: "Review Intelligence",
       description:
-        "Mines public reviews for signal: a complaint taxonomy, theme extraction, sentiment trajectory over time, the differentiators customers actually cite, and red flags for a buyer.\n\n" +
+        "Returns a research framework, not the finished analysis: the procedure, output schema and quality rubric for mining public reviews for signal — a complaint taxonomy, theme extraction, sentiment trajectory over time, the differentiators customers actually cite, and red flags for a buyer. It does not read any review itself.. This tool fetches no data; the calling model runs the procedure with its own web search and produces the result.\n\n" +
         "Example invocations:\n" +
         '- "Mine the reviews for Al\'s Breakfast in Minneapolis for real patterns, not just a star rating"\n' +
         '- "Perfect Image Salon in Wichita has a 4.6 average — check whether that\'s stable or masking a bad last 90 days"\n' +

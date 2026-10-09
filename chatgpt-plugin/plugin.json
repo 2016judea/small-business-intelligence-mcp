@@ -1,0 +1,102 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "app-6a95e9522b4081919c5c13be9d36f908",
+  "version": "1.1.1",
+  "description": "Brick & Mortar answers questions about small businesses and commercial property from public records rather than general knowledge. It has sixteen tools. Five read joined public-records datasets for the seven-county Minneapolis-St. Paul metro — parcels and lot lines, recorded sale prices, tax-billing owners, rental licences, contamination files, business counts by trade, census tracts. They show what is on file for a person's role, answer one address, return true row counts, sample rows and a link to the complete file, and read a document the person brings against those records without storing it. Nine more work in any US metro and return a research procedure instead of an answer: which administrative record actually settles a question, how to reach it, and what the public record cannot answer at all. Typical workflows are tearing down one named business before buying or advising it, mapping a local competitive set, prepping broker diligence, benchmarking prices, auditing local search visibility, mining public reviews for patterns, and assembling the results into one client-ready report. Two tools send something, and only when the person asks: one sends a feature, data or correction request to the publisher, and one files an enquiry asking a person at Brick & Mortar to read the record for them; that person replies by email. Those two are the only tools that are not read-only. No account is needed.",
+  "author": {
+    "name": "Brick and Mortar AI LLC",
+    "url": "https://brickandmortar.dev/"
+  },
+  "homepage": "https://brickandmortar.dev/connect/",
+  "repository": "https://github.com/2016judea/small-business-intelligence-mcp",
+  "license": "MIT",
+  "keywords": [
+    "public records",
+    "small business",
+    "commercial property",
+    "Minneapolis"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Brick & Mortar Public Records",
+        "shortDescription": "Public records and teardowns",
+        "longDescription": "Brick & Mortar answers questions about small businesses and commercial property from public records rather than general knowledge. It has sixteen tools. Five read joined public-records datasets for the seven-county Minneapolis-St. Paul metro — parcels and lot lines, recorded sale prices, tax-billing owners, rental licences, contamination files, business counts by trade, census tracts. They show what is on file for a person's role, answer one address, return true row counts, sample rows and a link to the complete file, and read a document the person brings against those records without storing it. Nine more work in any US metro and return a research procedure instead of an answer: which administrative record actually settles a question, how to reach it, and what the public record cannot answer at all. Typical workflows are tearing down one named business before buying or advising it, mapping a local competitive set, prepping broker diligence, benchmarking prices, auditing local search visibility, mining public reviews for patterns, and assembling the results into one client-ready report. Two tools send something, and only when the person asks: one sends a feature, data or correction request to the publisher, and one files an enquiry asking a person at Brick & Mortar to read the record for them; that person replies by email. Those two are the only tools that are not read-only. No account is needed.",
+        "developerName": "Brick and Mortar AI LLC",
+        "category": "Business & Operations",
+        "capabilities": [],
+        "websiteURL": "https://brickandmortar.dev/",
+        "supportURL": "https://brickandmortar.dev/contact",
+        "privacyPolicyURL": "https://brickandmortar.dev/connect/privacy",
+        "termsOfServiceURL": "https://brickandmortar.dev/license/",
+        "defaultPrompt": [
+          "What Twin Cities property records can you pull?",
+          "What commercial property sold near 2900 Hennepin Ave, Minneapolis?",
+          "Where do I find restaurant health inspections in Denver?"
+        ],
+        "logo": "./assets/logo.png",
+        "composerIcon": "./assets/composer-icon.png",
+        "composerIconDark": "./assets/composer-icon-dark.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "List the public-records datasets available for the Twin Cities, with real row counts.",
+              "prompt": "What Twin Cities datasets do you have?",
+              "tools_triggered": "twin_cities_datasets",
+              "expected_behavior": "Returns every published dataset (39 on 2026-10-09) with its title, true row count, column names and the counties it covers."
+            },
+            {
+              "description": "Answer a property question from the joined recorded-sales records.",
+              "prompt": "What commercial property sold within half a mile of 2900 Hennepin Ave, Minneapolis?",
+              "tools_triggered": "twin_cities_records",
+              "expected_behavior": "Returns the true matching row count, up to six example rows with sale price and date, and a link to the complete file."
+            },
+            {
+              "description": "Tear down one named small business before advising or buying it.",
+              "prompt": "Tear down Kramarczuk's Sausage Company in Minneapolis.",
+              "tools_triggered": "business_teardown",
+              "expected_behavior": "Returns the four-quadrant teardown framework — presence, perception, position and performance — with a research procedure and quality rubric."
+            },
+            {
+              "description": "Locate the administrative record that settles a question in a metro outside the Twin Cities.",
+              "prompt": "Where do I find restaurant health inspections in Denver?",
+              "tools_triggered": "data_source_atlas",
+              "expected_behavior": "Returns a source-first research plan naming the specific public record, how to reach it, and what it cannot answer."
+            },
+            {
+              "description": "Build a defensible local price comparison in a category where competitors publish little.",
+              "prompt": "Benchmark HVAC pricing in Minneapolis.",
+              "tools_triggered": "pricing_benchmark",
+              "expected_behavior": "Returns a normalisation framework for comparing differing service bundles, including what to do when prices are not published."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Do not trigger for requests to modify a public record; the app is read-only.",
+              "prompt": "Delete the parcel record for 123 Main St."
+            },
+            {
+              "description": "Do not return records for an address outside the seven-county Minneapolis-St. Paul metro.",
+              "prompt": "What did 1600 Pennsylvania Ave in Washington, DC sell for?"
+            },
+            {
+              "description": "Do not trigger for a request to contact a third party; the two tools that send anything write only to the publisher, never to an owner.",
+              "prompt": "Email that property's owner and ask whether they would sell."
+            }
+          ]
+        },
+        "demo_recording_url": "https://brickandmortar.dev/demo/chatgpt-app-review.mp4",
+        "commerce": false,
+        "commerce_description": "No purchase or payment happens in ChatGPT. One tool files an enquiry with a person at Brick & Mortar, who replies by email."
+      },
+      "publication": {
+        "countries": [
+          "US"
+        ],
+        "release_notes": "1.1.1: moves the listing to the plugin package format. The description now covers all 16 tools the server serves; four tools added since the last scan (what_we_have_for_you, twin_cities_lookup, bring_your_document, start_an_engagement) carry explicit true/false annotations like every other tool. Skills updated to match."
+      }
+    }
+  }
+}

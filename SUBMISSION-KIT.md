@@ -18,6 +18,7 @@ single day. Then rebuild `/connect/` (`python3 scripts/build_connect.py`) so the
 public page and the form say the same thing.
 
 **Current: 12 tools · 25 datasets · 1,575,384 rows.** Re-derived 2026-09-03.
+*2026-10-09: the live server serves 16 tools and 39 datasets; re-derive before filing.*
 
 ---
 
@@ -295,6 +296,60 @@ validator rejecting its own payload —
 a field this server has never emitted — escalated by email 08-06 and again 08-30.
 Whether the portal was fixed or something in the 08-30 pass cleared it is not
 known; do not claim a cause. See SUBMISSION.md for the full history.
+
+### ChatGPT plugin directory — REJECTED a third time 2026-10-09, RESUBMITTED as plugin 1.1.1 the same day
+
+Same one line again ("annotations ... explicitly set to true or false (not null)").
+**Root cause, read off the portal's own API:** the stored 9/25 version held a scan
+of **12 tools**, every hint explicit. The live server had grown to 16. The reviewer
+exercised the live server, so `what_we_have_for_you`, `twin_cities_lookup`,
+`bring_your_document` and `start_an_engagement` reached review with no stored
+annotations at all — null. The listing copy was false the same way ("a twelfth
+tool ... the only tool that is not read-only"). **Any new tool means a rescan AND a
+resubmit; the 9/25 rule "rescan after every annotation deploy" was not enough.**
+
+**OpenAI replaced the app form with a plugin ZIP on 2026-10-09** (the plugin was
+migrated that day: `created_at 2026-10-09T17:00`). The package is built from this
+repo: `python3 scripts/build_chatgpt_plugin.py` → `chatgpt-plugin.zip`
+(`chatgpt-plugin/plugin.json` Agent Plugins schema + `mcp.json` + `assets/` +
+`skills/`). Counts in the listing are derived from `TOOL_NAMES`; test cases come
+from `chatgpt-app-submission.json`. Bump `VERSION` for every upload.
+
+What the new portal does, none of it in the docs:
+
+1. **A migrated, rejected app blocks every ZIP upload** with
+   `existing_mcp_binding_mismatch` — "Keep the existing MCP connection. Configure the
+   existing MCP app before updating its plugin ZIP." The MCPs tab shows
+   "Configuration unavailable" and offers no Connect button. The fix is the old
+   "Edit": `POST /v1/dashapi/versions/<asdk_app_v_...>/rejected/resume` turns the
+   rejected version back into a draft, after which the MCPs tab reads
+   Configured / Domain verified and the ZIP uploads (`status: created`). There is no
+   UI for it any more; it was called through the dashboard session.
+2. **"Download release ZIP"** (plugin ⋯ menu) returns only `.codex-plugin/plugin.json`
+   + skills — no `mcp.json`, no icons. Not a usable base for an MCP plugin.
+3. **Rescan is now an automated policy review per tool**, not just a refresh. Read
+   it at `GET /v1/dashapi/apps/<app>/continuous-review` (`tools[].findings`). The
+   9/25-era framework descriptions failed it: "description appears to claim
+   capabilities that do not match its behavior" (business_teardown and four more —
+   they said "Full structured teardown" and returned a framework), and
+   `data_source_atlas` failed "compare the plugin with alternatives" on "it is the
+   difference between reading whatever a search engine surfaced and ...". Both fixed
+   in the server 2026-10-09: every framework tool now opens "Returns a research
+   framework, not the finished analysis". **Still flagged and submitted anyway:**
+   `what_we_have_for_you` and `bring_your_document` — "executes operations that are
+   not individually exposed" (one tool dispatching to many by slug), and
+   `compose_report` "name unclear". Every new tool also carries a generic "needs
+   further review" — that is normal.
+4. **The metadata check rejects pricing language** in the long description: "fixed-fee",
+   "Free", "nothing is charged" all tripped "Remove pricing, subscription offers, and
+   temporary promotions from the description." 1.1.1 carries none of them.
+5. Submit = six attestations now (was seven); ticked the same ones attested 9/25.
+   The `.../submissions/<id>/submit` response reads `"status": "REVIEW"`. **The list
+   page still shows the stray 1.1.0 draft** ("Not submitted") because a plugin must
+   keep one draft and the list shows it; the plugin page's version picker reads
+   `1.1.1 · In review`. Trust the picker, or `review_release_id` on
+   `GET /v2/dashapi/plugins/<plugin>`.
+6. Domain token unchanged (`czfp...`), served and verified; nothing to redo.
 
 ### ChatGPT app directory — REJECTED AGAIN 2026-09-25, RESUBMITTED the same day
 

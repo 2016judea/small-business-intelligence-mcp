@@ -250,7 +250,7 @@ export function registerMarketOpportunityScan(server: McpServer, env: Env): void
     {
       title: "Market Opportunity Scan",
       description:
-        "Gap analysis for a category x metro: detects underserved demand, oversaturation, and genuine whitespace using only public signals — for someone deciding whether/where to open, expand, or invest.\n\n" +
+        "Returns a research framework, not the finished analysis: the procedure, output schema and quality rubric for a gap analysis of a category x metro — how to tell underserved demand, oversaturation and genuine whitespace apart using only public signals, for someone deciding whether/where to open, expand, or invest.. This tool fetches no data; the calling model runs the procedure with its own web search and produces the result.\n\n" +
         "Example invocations:\n" +
         '- "Is there whitespace for a new brewery taproom in the North Loop, Minneapolis?"\n' +
         '- "Scan the nail salon market in Aurora, CO for underserved demand"\n' +

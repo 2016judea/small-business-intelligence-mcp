@@ -169,7 +169,7 @@ export function registerBusinessTeardown(server: McpServer, env: Env): void {
     {
       title: "Business Teardown",
       description:
-        "Full structured teardown of ONE named small business: digital presence, review signal, competitive position, pricing posture, visibility gaps, and prioritized, evidence-cited recommendations. The flagship tool — start here for any single-business question.\n\n" +
+        "Returns a research framework, not the finished analysis: the procedure, output schema and quality rubric for a structured teardown of ONE named small business — digital presence, review signal, competitive position, pricing posture, visibility gaps, and prioritized, evidence-cited recommendations. Start here for any single-business question.. This tool fetches no data; the calling model runs the procedure with its own web search and produces the result.\n\n" +
         "Example invocations:\n" +
         '- "Run a teardown of Mucci\'s Italian in Saint Paul, MN"\n' +
         '- "Tear down The Gray Duck Tavern (bar) in Minneapolis and tell me what\'s actually broken"\n' +

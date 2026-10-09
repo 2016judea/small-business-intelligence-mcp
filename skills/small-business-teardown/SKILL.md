@@ -7,7 +7,7 @@ metadata:
 
 # Small business teardown
 
-Nine of the eleven tools return a **research framework**, not an answer:
+Nine of the sixteen tools return a **research framework**, not an answer:
 `business_teardown`, `competitor_landscape`, `review_intelligence`,
 `market_opportunity_scan`, `pricing_benchmark`, `local_visibility_audit`,
 `broker_diligence_prep`, `data_source_atlas`, `compose_report`.

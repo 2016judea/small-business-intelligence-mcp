@@ -153,7 +153,7 @@ export function registerComposeReport(server: McpServer, env: Env): void {
     {
       title: "Compose Report",
       description:
-        "Assembles the outputs of any prior Small Business Intelligence tool calls into one polished, client-ready report: section order, executive-summary rules, evidence-citation standards, and tone guidance matched to the audience. This is what makes a multi-tool session feel like a finished product, not a pile of separate answers.\n\n" +
+        "Returns a research framework, not the finished analysis: the procedure, output schema and quality rubric for assembling results already in the conversation into one client-ready report — section order, executive-summary rules, evidence-citation standards, and tone guidance matched to the audience. The calling model writes the report; this tool returns only the structure.. This tool fetches no data; the calling model runs the procedure with its own web search and produces the result.\n\n" +
         "Example invocations:\n" +
         '- "I\'ve run a teardown and a review-intelligence pass on this restaurant — compose it into a report for the owner"\n' +
         '- "Assemble everything we\'ve found on this brewery into a broker-facing diligence report"\n' +

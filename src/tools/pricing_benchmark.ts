@@ -200,7 +200,7 @@ export function registerPricingBenchmark(server: McpServer, env: Env): void {
     {
       title: "Pricing Benchmark",
       description:
-        "Builds a defensible local pricing comparison within a category: how to normalize across differing service bundles, and what to do when competitors don't publish prices at all.\n\n" +
+        "Returns a research framework, not the finished analysis: the procedure, output schema and quality rubric for a defensible local pricing comparison within a category — how to normalize across differing service bundles, and what to do when competitors don't publish prices at all. It holds no prices itself.. This tool fetches no data; the calling model runs the procedure with its own web search and produces the result.\n\n" +
         "Example invocations:\n" +
         '- "Benchmark gel manicure pricing across nail salons in Denver, CO"\n' +
         '- "Is this brewery\'s pint pricing in line with the Twin Cities taproom market?"\n' +
