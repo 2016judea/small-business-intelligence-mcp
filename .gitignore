@@ -10,3 +10,4 @@ __pycache__/
 
 # The submission zip is rebuilt from skills/ — never edit it, never commit it.
 chatgpt-app-skills.zip
+.test-build/

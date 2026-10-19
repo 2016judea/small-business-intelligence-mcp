@@ -35,6 +35,10 @@ import { NoticeSchema } from "./types.js";
 const DEFAULT_ORIGIN = "https://brickandmortar.dev";
 const origin = (env: Env) => (env.BRICKS_ORIGIN || DEFAULT_ORIGIN).replace(/\/$/, "");
 const UA = "sbi-mcp (+https://brickandmortar.dev)";
+// Every call out of this file is bounded. A hung bricks lambda must surface as
+// the tool's own "could not be reached" result, not as the client's timeout.
+const FETCH_TIMEOUT_MS = 20_000;
+const bounded = () => AbortSignal.timeout(FETCH_TIMEOUT_MS);
 
 // ── the feed ────────────────────────────────────────────────────────────────
 // One fetch per isolate per ten minutes. The file is ~120 KB and changes once a
@@ -78,7 +82,7 @@ const FEED_TTL_MS = 10 * 60 * 1000;
 async function feed(env: Env): Promise<Feed | null> {
   if (cached && Date.now() - cached.at < FEED_TTL_MS) return cached.feed;
   try {
-    const res = await fetch(`${origin(env)}/connect/roles.json`, { headers: { accept: "application/json", "user-agent": UA } });
+    const res = await fetch(`${origin(env)}/connect/roles.json`, { headers: { accept: "application/json", "user-agent": UA }, signal: bounded() });
     if (!res.ok) return cached?.feed ?? null;
     const f = (await res.json()) as Feed;
     cached = { at: Date.now(), feed: f };
@@ -259,7 +263,7 @@ export function registerTwinCitiesLookup(server: McpServer, env: Env) {
         const page = `${base}/?q=${encodeURIComponent(q)}&src=mcp`;
         let body: any = null;
         try {
-          const res = await fetch(`${base}/api/lookup?q=${encodeURIComponent(q)}`, { headers: { accept: "application/json", "user-agent": UA } });
+          const res = await fetch(`${base}/api/lookup?q=${encodeURIComponent(q)}`, { headers: { accept: "application/json", "user-agent": UA }, signal: bounded() });
           body = await res.json();
         } catch {
           return result({ tool: "twin_cities_lookup", status: "error", answer: "The lookup could not be reached. Nothing was stored; try once more, or send them to the page.", subject: { address: q }, links: { page }, caveats: [] });
@@ -372,6 +376,7 @@ export function registerBringYourDocument(server: McpServer, env: Env) {
             method: "POST",
             headers: { "content-type": "application/json", accept: "application/json", "user-agent": UA },
             body: JSON.stringify(payload),
+            signal: bounded(),
           });
           status = res.status;
           body = await res.json().catch(() => null);
@@ -472,6 +477,7 @@ export function registerStartAnEngagement(server: McpServer, env: Env) {
             method: "POST",
             headers: { "content-type": "application/json", accept: "application/json", "user-agent": UA },
             body: JSON.stringify({ engagement: `${eng!.name} (${eng!.id}) — ${eng!.price}`, who, email, detail, page: "mcp" }),
+            signal: bounded(),
           });
           ok = res.ok;
           if (!ok) {

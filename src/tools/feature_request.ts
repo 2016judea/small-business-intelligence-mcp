@@ -231,6 +231,7 @@ export function registerFeatureRequest(server: McpServer, env: Env): void {
               client: labelClient(ctx.http?.req?.headers.get("user-agent")),
               session: identity,
             }),
+            signal: AbortSignal.timeout(20_000),
           });
           ok = res.ok;
           if (!ok) console.error(`[request_a_feature] filing rejected: HTTP ${res.status} ${(await res.text()).slice(0, 200)}`);

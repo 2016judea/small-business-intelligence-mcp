@@ -2,13 +2,14 @@
   "name": "small-business-intelligence-mcp",
   "version": "0.1.0",
   "private": true,
-  "description": "Small Business Intelligence by Brick & Mortar — a free remote MCP server: analytical methodology for tearing down small businesses anywhere, plus the joined public records themselves for the Twin Cities.",
+  "description": "Small Business Intelligence by Brick & Mortar \u2014 a free remote MCP server: analytical methodology for tearing down small businesses anywhere, plus the joined public records themselves for the Twin Cities.",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "inspector": "npx @modelcontextprotocol/inspector"
+    "inspector": "npx @modelcontextprotocol/inspector",
+    "test": "node scripts/test.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",

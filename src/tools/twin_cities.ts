@@ -186,10 +186,28 @@ const COVERAGE_CAVEAT =
 const NOT_A_FILE_CAVEAT =
   "`sample` is at most six rows and `matching_rows` is the real total. Fetch `download_url` for the complete file; do not present the sample as the whole answer.";
 
-async function getJson(url: string): Promise<any> {
-  const res = await fetch(url, {
-    headers: { accept: "application/json", "user-agent": "sbi-mcp (+https://brickandmortar.dev)" },
-  });
+/**
+ * The wait is BOUNDED and a dead upstream is a VALUE, not a throw. A `near`
+ * query on /api/export runs a spatial cut and has been timed at ~10 s; past
+ * this budget the client's own timeout is the next thing that fires, and it
+ * reports a hung server rather than a slow record. Without the catch, a
+ * rejected fetch (DNS, reset, abort) escaped the handler and the SDK returned
+ * `isError: "fetch failed"` — none of the "this is a fetch failure, not an
+ * empty warehouse" framing below, which is the whole point of those branches.
+ * `status: 0` is the transport-failure marker the callers test for.
+ */
+export const EXPORT_TIMEOUT_MS = 25_000;
+
+async function getJson(url: string): Promise<{ status: number; body: any; raw?: string }> {
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      headers: { accept: "application/json", "user-agent": "sbi-mcp (+https://brickandmortar.dev)" },
+      signal: AbortSignal.timeout(EXPORT_TIMEOUT_MS),
+    });
+  } catch (e) {
+    return { status: 0, body: null, raw: (e as Error)?.message ?? String(e) };
+  }
   const text = await res.text();
   try {
     return { status: res.status, body: JSON.parse(text) };
@@ -227,12 +245,12 @@ export function registerTwinCitiesCatalogue(server: McpServer, env: Env) {
       "twin_cities_datasets",
       env,
       async (args: z.infer<typeof CatalogueInput>) => {
-        const { status, body } = await getJson(`${origin(env)}/api/export`);
+        const { status, body, raw } = await getJson(`${origin(env)}/api/export`);
         if (status !== 200 || !body?.datasets) {
           return result({
             tool: "twin_cities_datasets",
             subject: args,
-            answer: `The catalogue could not be reached (HTTP ${status}). Nothing is being reported as absent — this is a fetch failure, not an empty warehouse.`,
+            answer: `The catalogue could not be reached (${status ? `HTTP ${status}` : `no response: ${raw}`}). Nothing is being reported as absent — this is a fetch failure, not an empty warehouse.`,
             caveats: ["Do not conclude a dataset does not exist from this result."],
           });
         }
@@ -398,7 +416,15 @@ export function registerTwinCitiesRecords(server: McpServer, env: Env) {
         if (args.within_ft) p.set("within", String(args.within_ft));
         if (safeColumns?.length) p.set("columns", safeColumns.join(","));
 
-        const { status, body } = await getJson(`${base}/api/export?${p}`);
+        const { status, body, raw } = await getJson(`${base}/api/export?${p}`);
+        if (status === 0) {
+          return result({
+            tool: "twin_cities_records",
+            subject: args,
+            answer: `The records were not reached (no response: ${raw}). This is a request failure — it does not mean no records exist. Try once more, or hand over the download link for the whole file.`,
+            caveats: ["Do not report this as 'no records found'."],
+          });
+        }
 
         // DISPATCH ON `body.error`, NOT ON THE STATUS CODE. Written against the
         // status first and it was wrong: the endpoint answers an ambiguous address
