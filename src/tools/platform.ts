@@ -125,7 +125,7 @@ const RO = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, o
 // What a card is for, said once. The model reads these instead of guessing
 // which of fifteen tools answers a card.
 const NEXT = [
-  "kind=dataset → twin_cities_records with the card's `dataset` and `scope`, or hand over `download_url` for the whole file.",
+  "kind=dataset → twin_cities_records with the card's `dataset` and `scope`, or hand over `download_url`: a free sample of the file (the full Brick & Mortar files are sold since 2026-10-20; the sample says where to buy).",
   "kind=tool with api_tool=true → bring_your_document with the card's `tool` slug and the text of what `bring` asks for.",
   "kind=tool with api_tool=false → the card runs on the page only; give them `page`.",
   "kind=lookup → twin_cities_lookup with the address.",
@@ -193,7 +193,7 @@ export function registerWhatWeHaveForYou(server: McpServer, env: Env) {
             next: NEXT,
             caveats: [
               "Coverage is not uniform: a card's `cov` line says which counties or years it actually holds. Do not generalise one card's coverage to another.",
-              "Datasets and tools are free with no account. Only kind=hire cards cost money, and a person does that work — nothing is quoted or scheduled by this server.",
+              "Tools and per-address answers are free with no account. Dataset downloads are a free sample; the full files are sold. kind=hire cards are a person's paid work — nothing is quoted or scheduled by this server.",
             ],
           });
         }

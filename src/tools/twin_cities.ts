@@ -88,7 +88,7 @@ export const TwinCitiesPayloadSchema = z.object({
     .array(z.string())
     .optional()
     .describe("The counties this dataset actually holds. Coverage is not uniform across datasets."),
-  download_url: z.string().optional().describe("Fetch this for the complete file."),
+  download_url: z.string().optional().describe("A free sample of the file; the full file is sold (the sample's first line says where)."),
   // NOT `source`. The preview response carries no source string — checked, it
   // returns ok/dataset/scope/scope_label/centre/rows/columns/preview/spec and
   // nothing else — so reading `body.source` would have put `undefined` in a
@@ -184,7 +184,7 @@ const COVERAGE_CAVEAT =
   "Coverage is not uniform. Across these datasets it runs from one county to all seven, and `coverage` on this result is the list this dataset actually holds — do not generalise one dataset's counties to another.";
 
 const NOT_A_FILE_CAVEAT =
-  "`sample` is at most six rows and `matching_rows` is the real total. Fetch `download_url` for the complete file; do not present the sample as the whole answer.";
+  "`sample` is at most six rows and `matching_rows` is the real total. `download_url` returns a free sample too — the full Brick & Mortar files are sold (since 2026-10-20) and the sample says where to buy; do not present any sample as the whole answer.";
 
 /**
  * The wait is BOUNDED and a dead upstream is a VALUE, not a throw. A `near`
@@ -421,7 +421,7 @@ export function registerTwinCitiesRecords(server: McpServer, env: Env) {
           return result({
             tool: "twin_cities_records",
             subject: args,
-            answer: `The records were not reached (no response: ${raw}). This is a request failure — it does not mean no records exist. Try once more, or hand over the download link for the whole file.`,
+            answer: `The records were not reached (no response: ${raw}). This is a request failure — it does not mean no records exist. Try once more, or hand over the download link (a free sample; the full file is sold).`,
             caveats: ["Do not report this as 'no records found'."],
           });
         }
