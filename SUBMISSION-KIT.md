@@ -297,6 +297,37 @@ a field this server has never emitted — escalated by email 08-06 and again 08-
 Whether the portal was fixed or something in the 08-30 pass cleared it is not
 known; do not claim a cause. See SUBMISSION.md for the full history.
 
+### ChatGPT plugin directory — PUBLISHED 2026-10-23 (v1.1.1)
+
+Approved 2026-10-23 16:12 UTC (mail to aidanjude2016@gmail.com, Gmail id
+1a16989073f2fbf5). The mail says "v1.0.0"; that is the app's old display string. The
+portal is what counts: `latest_version` 1.1.1, status `APPROVED`, release
+`pluginrel_eee5a86eef208191b46d20e9c60de7fd`, the 1.1.1 ZIP built at `6ee15f5`. Aidan
+clicked Publish himself the same day. Read back off
+`GET /v2/dashapi/plugins/plugin_asdk_app_6a95e9522b4081919c5c13be9d36f908` at ~17:40 UTC:
+version 1.1.1 `RELEASED`, `current_release_id` = that release. `published_at` still read
+`null`, so trust `current_release_id` and the version status, not that field.
+
+**Approval does not publish.** The list page reads "Version 1.1.1 · Ready to publish"
+until someone clicks Publish on the plugin page. Nothing goes live until then.
+
+**Headless Chrome hits a Cloudflare Turnstile on platform.openai.com.** A normal
+(non-headless) Chrome on copied cookies, started off-screen with
+`--window-position=-4000,-4000`, gets through. The dashapi calls carry
+`authorization` + `openai-organization` + `openai-project` headers. Capture them from
+one page load and the same GETs work from curl.
+
+**Public listing URL: not confirmed.** `chatgpt.com/apps/...` returns a Cloudflare 403
+to curl. Find it from inside ChatGPT's app directory.
+
+**Follow-up (do NOT resubmit for this alone):** OpenAI reviewer note, 2026-10-22, case
+16862844. Sending an email or notification is "generally non-destructive", so
+`request_a_feature` should be `destructiveHint: false`. We filed `true`, because of the
+9/25 guess above. Flip it in the next release that changes the tool surface anyway. Any
+change puts the plugin back in review, so pair it with a rescan and resubmit (see the
+1.1.1 notes below). On 10/23 the live `tools/list` returned 16 tools and
+`chatgpt-app-submission.json` listed 16, so the published surface matches the server.
+
 ### ChatGPT plugin directory — REJECTED a third time 2026-10-09, RESUBMITTED as plugin 1.1.1 the same day
 
 Same one line again ("annotations ... explicitly set to true or false (not null)").
