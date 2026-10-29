@@ -1,5 +1,7 @@
 # Small Business Intelligence
 
+[![Small Business Intelligence by Brick & Mortar MCP server](https://mcprush.com/badge/small-business-intelligence-by-brick-mortar-mcp/card.svg)](https://mcprush.com/to/small-business-intelligence-by-brick-mortar-mcp?ref=badge)
+
 A free, open source [MCP](https://modelcontextprotocol.io) server that teaches
 any AI how to research a small business — and, more usefully, **where the public
 records actually are**.
