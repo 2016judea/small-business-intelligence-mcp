@@ -23,7 +23,7 @@ published but still says `0.1.0` and still points at the workers.dev address.
 endpoint — it just needs a publish, and publishing needs a device login the
 session could not do on his behalf:
 
-    cd ~/Desktop/small-business-intelligence-mcp
+    cd ~/Desktop/workspace/small-business-intelligence-mcp
     mcp-publisher login github     # prints a code; enter it at github.com/login/device
     mcp-publisher publish
 

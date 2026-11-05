@@ -9,7 +9,7 @@ re-derive them — the counts come from the live server, and another session
 shipping a dataset in the bricks repo changes them without touching this one:
 
 ```
-cd ~/Desktop/bricks && python3 scripts/fetch_mcp_snapshot.py
+cd ~/Desktop/workspace/bricks && python3 scripts/fetch_mcp_snapshot.py
 ```
 
 That prints `N tools, N datasets, N rows` and rewrites
